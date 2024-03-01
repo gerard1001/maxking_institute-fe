@@ -69,10 +69,6 @@ const ImageSlider = () => {
                     {values.descr}
                   </h1>
                 </div>
-                {/* <div className="flex items-center justify-end gap-1 hover:underline hover:text-slate-400 cursor-pointer">
-                  Learn more
-                  <IoIosArrowRoundForward className="text-2xl" />
-                </div> */}
               </div>
               <div className="!w-full !h-[50%] fill relative mx-auto">
                 {" "}
@@ -81,7 +77,7 @@ const ImageSlider = () => {
                   alt=""
                   className="object-cover object-center border border-[#afafaf33] w-[100%] md:h-[560px] aspect-[16/9] overl"
                 />
-                <div className="absolute inset-0 bg-black opacity-50"></div>
+                <div className="absolute inset-0 bg-black opacity-50 top-overlay-linear-gradient"></div>
               </div>
             </div>
           );

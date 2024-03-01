@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { navBarLinks } from "@/lib/utils/navBarLinks";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
+  const router = useRouter();
   const [navBar, setNavBar] = useState(false);
 
   const scrollAction = () => {
@@ -19,7 +21,17 @@ const NavBar = () => {
   window.addEventListener("scroll", scrollAction);
 
   const [heading, setHeading] = useState("");
-  const [subHeading, setSubHeading] = useState("");
+
+  useEffect(() => {
+    const onPage = window.location.href.split("/");
+    if (onPage.includes("home")) {
+      setHeading("/home");
+    } else if (onPage.includes("about")) {
+      setHeading("/about");
+    } else {
+      setHeading("/home");
+    }
+  }, []);
 
   return (
     <nav
@@ -35,18 +47,18 @@ const NavBar = () => {
       <div className="w-[90%] flex items-center justify-center space-x-8">
         {navBarLinks.map((link: any) => (
           <div
-            className={`text-gray-600 hover:text-[#D6882D] hover:font-bold ${
-              navBar ? "text-zinc-100" : "text-slate-600"
-            }`}
+            className={`hover:text-[#D6882D] hover:font-bold ${
+              heading === link.link ? "font-bold text-[#D6882D]" : ""
+            } 
+            ${navBar ? "text-zinc-100" : "text-slate-600"}
+            `}
           >
             <div className="text-left group">
               <h1
                 className="flex justify-between items-center cursor-pointer"
                 onClick={() => {
-                  heading !== link.name
-                    ? setHeading(link.name)
-                    : setHeading("");
-                  setSubHeading("");
+                  setHeading(link.link);
+                  router.push(link.link);
                 }}
               >
                 {link.name}
@@ -57,22 +69,22 @@ const NavBar = () => {
                 )}
               </h1>
               {link.submenu && (
-                <div className="absolute top-6 hidden group-hover:md:block hover:md:block z-50">
-                  <div className="py-3">
+                <div className="absolute top-9 hidden group-hover:md:block hover:md:block z-50">
+                  <div className="py-[1px]">
                     <div
                       className="w-4 h-4 left-3 absolute 
-                    mt-1 rotate-45 bg-zinc-50 border-t border-l"
+                    mt-[1px] rotate-45 bg-zinc-50 border-t border-l"
                     ></div>
                   </div>
                   <div
-                    className={`bg-zinc-50 border border-l p-5 flex flex-wrap  max-w-80 max-h-[80%] overflow-y-auto ${
+                    className={`bg-zinc-50 border border-l p-5 flex flex-wrap mt-[8px] max-w-80 max-h-[80%] overflow-y-auto ${
                       link.arrange === "row"
                         ? "flex-row gap-10"
                         : "gap-4 flex-col"
                     }`}
                   >
-                    {link.sublinks?.map((mysublinks: any) => (
-                      <div>
+                    {link.sublinks?.map((mysublinks: any, idx: number) => (
+                      <div key={idx}>
                         <h1 className="font-semibold text-slate-600 cursor-pointer hover:text-[#D6882D] flex items-center">
                           <IoIosArrowForward /> {mysublinks.Head}
                         </h1>
@@ -93,7 +105,7 @@ const NavBar = () => {
                 </div>
               )}
             </div>
-            <div
+            {/* <div
               className={`
             ${heading === link.name ? "md:hidden" : "hidden"}
           `}
@@ -127,7 +139,7 @@ const NavBar = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

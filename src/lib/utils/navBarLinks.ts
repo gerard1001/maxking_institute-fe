@@ -1,13 +1,13 @@
 export const navBarLinks: any = [
   {
     name: "Home",
-    link: "/",
+    link: "/home",
     submenu: false,
     arrange: "row",
   },
   {
     name: "About us",
-    link: "/",
+    link: "/about",
     submenu: true,
     arrange: "row",
     sublinks: [
@@ -16,7 +16,7 @@ export const navBarLinks: any = [
         submenu: false,
       },
       {
-        Head: "More options",
+        Head: "Structure",
         submenu: true,
         sublinks: [
           { name: "Mission and vision", link: "/" },
