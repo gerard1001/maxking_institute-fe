@@ -3,28 +3,45 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IoSearchOutline } from "react-icons/io5";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaXTwitter, FaFacebookF } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { IconButton } from "@mui/material";
 import { IoSearch } from "react-icons/io5";
 
 const navBarLinks = [
-  "Home",
-  "About us",
-  "Training center",
-  "MKI programs",
-  "MKI community",
-  "Contact us",
+  {
+    name: "home",
+    path: "/",
+  },
+  {
+    name: "about us",
+    path: "/about",
+  },
+  {
+    name: "Training center",
+    path: "/1",
+  },
+  {
+    name: "MKI programs",
+    path: "/2",
+  },
+  {
+    name: "MKI community",
+    path: "/3",
+  },
+  {
+    name: "Contact us",
+    path: "/4",
+  },
 ];
 
 const secondaryNavLinks = ["Sign in", "Sign up"];
 
 const NavBar = () => {
-  const router = useRouter();
+  const pathName = usePathname();
   const [navBar, setNavBar] = useState<boolean>(false);
 
   useEffect(() => {
@@ -36,19 +53,6 @@ const NavBar = () => {
       }
     };
     window.addEventListener("scroll", scrollAction);
-  }, []);
-
-  const [heading, setHeading] = useState("");
-
-  useEffect(() => {
-    const onPage = window.location.href.split("/");
-    if (onPage.includes("home")) {
-      setHeading("/home");
-    } else if (onPage.includes("about")) {
-      setHeading("/about");
-    } else {
-      setHeading("/home");
-    }
   }, []);
 
   return (
@@ -130,16 +134,16 @@ const NavBar = () => {
         }  duration-150 ease-in-out`}
       >
         <ul className="flex items-center gap-5">
-          {navBarLinks.map((link: string, index: number) => (
+          {navBarLinks.map((navLink, index: number) => (
             <li
               key={index}
               className={`${
-                heading === `/${link.toLowerCase()}`
+                pathName === `${navLink.path.toLowerCase()}`
                   ? "text-primary-foreground"
                   : "text-white"
               } uppercase`}
             >
-              <Link href={`/${link.toLowerCase()}`}>{link}</Link>
+              <Link href={`${navLink.path.toLowerCase()}`}>{navLink.name}</Link>
             </li>
           ))}
         </ul>
@@ -158,7 +162,7 @@ const NavBar = () => {
               <li
                 key={index}
                 className={`${
-                  heading === `/${link.toLowerCase()}`
+                  pathName === `/${link.toLowerCase()}`
                     ? "text-primary-foreground"
                     : "text-white"
                 } uppercase`}
