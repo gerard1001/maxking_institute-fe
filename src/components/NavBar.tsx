@@ -1,24 +1,42 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { navBarLinks } from "@/lib/utils/navBarLinks";
+import { IoSearchOutline } from "react-icons/io5";
+import { HiOutlineMail } from "react-icons/hi";
+import { FaXTwitter, FaFacebookF } from "react-icons/fa6";
+import { FaLinkedinIn } from "react-icons/fa";
+import { FiPhone } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { IconButton } from "@mui/material";
+import { IoSearch } from "react-icons/io5";
+
+const navBarLinks = [
+  "Home",
+  "About us",
+  "Training center",
+  "MKI programs",
+  "MKI community",
+  "Contact us",
+];
+
+const secondaryNavLinks = ["Sign in", "Sign up"];
 
 const NavBar = () => {
   const router = useRouter();
-  const [navBar, setNavBar] = useState(false);
+  const [navBar, setNavBar] = useState<boolean>(false);
 
-  const scrollAction = () => {
-    if (window.scrollY >= 40) {
-      setNavBar(true);
-    } else {
-      setNavBar(false);
-    }
-  };
-  window.addEventListener("scroll", scrollAction);
+  useEffect(() => {
+    const scrollAction = () => {
+      if (window.scrollY >= 80) {
+        setNavBar(true);
+      } else {
+        setNavBar(false);
+      }
+    };
+    window.addEventListener("scroll", scrollAction);
+  }, []);
 
   const [heading, setHeading] = useState("");
 
@@ -34,116 +52,124 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 w-full py-1 px-8 flex items-center justify-between ${
-        navBar ? "bg-slate-600" : "bg-white"
-      }`}
-    >
-      <div className="flex items-center justify-start">
-        <Link href="/home" className="flex ml-2 md:mr-24">
-          <Image src="/logo.png" alt="logo" width={50} height={50} />
-        </Link>
-      </div>
-      <div className="w-[90%] flex items-center justify-center space-x-8">
-        {navBarLinks.map((link: any) => (
-          <div
-            className={`hover:text-[#D6882D] hover:font-bold ${
-              heading === link.link ? "font-bold text-[#D6882D]" : ""
-            } 
-            ${navBar ? "text-zinc-100" : "text-slate-600"}
-            `}
-          >
-            <div className="text-left group">
-              <h1
-                className="flex justify-between items-center cursor-pointer"
-                onClick={() => {
-                  setHeading(link.link);
-                  router.push(link.link);
+    <div className={`px-10 flex flex-col items-center pb-2`}>
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-start">
+          <Link href="/" className="flex ml-2 md:mr-24">
+            <Image src="/logo.png" alt="logo" width={50} height={50} />
+          </Link>
+        </div>
+        <div className="flex items-center gap-10">
+          <div className={`flex items-center`}>
+            <div className={`flex items-center gap-2 pr-4`}>
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
                 }}
               >
-                {link.name}
-                {link.submenu && (
-                  <span className="text-xl ml-2 md:block hidden group-hover:rotate-180 group-hover:-mt-0 duration-150 ">
-                    <IoIosArrowDown className="w-3 text-slate-500" />
-                  </span>
-                )}
-              </h1>
-              {link.submenu && (
-                <div className="absolute top-9 hidden group-hover:md:block hover:md:block z-50">
-                  <div className="py-[1px]">
-                    <div
-                      className="w-4 h-4 left-3 absolute 
-                    mt-[1px] rotate-45 bg-zinc-50 border-t border-l"
-                    ></div>
-                  </div>
-                  <div
-                    className={`bg-zinc-50 border border-l p-5 flex flex-wrap mt-[8px] max-w-80 max-h-[80%] overflow-y-auto ${
-                      link.arrange === "row"
-                        ? "flex-row gap-10"
-                        : "gap-4 flex-col"
-                    }`}
-                  >
-                    {link.sublinks?.map((mysublinks: any, idx: number) => (
-                      <div key={idx}>
-                        <h1 className="font-semibold text-slate-600 cursor-pointer hover:text-[#D6882D] flex items-center">
-                          <IoIosArrowForward /> {mysublinks.Head}
-                        </h1>
-                        {mysublinks?.submenu &&
-                          mysublinks.sublinks.map((slink: any) => (
-                            <li className="text-sm text-gray-500 hover:text-[#D6882D] font-light cursor-pointer">
-                              <Link
-                                href={slink.link}
-                                className="hover:text-primary"
-                              >
-                                {slink.name}
-                              </Link>
-                            </li>
-                          ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                <FiPhone className="text-accent" />
+              </IconButton>
+              <p className="text-accent-foreground">+250 788 668 657</p>
             </div>
-            {/* <div
-              className={`
-            ${heading === link.name ? "md:hidden" : "hidden"}
-          `}
+            <div
+              className={`flex items-center gap-2 border-l border-muted-foreground pl-4`}
             >
-              {link.sublinks?.map((slinks: any) => (
-                <div>
-                  <h1
-                    onClick={() =>
-                      subHeading !== slinks.Head
-                        ? setSubHeading(slinks.Head)
-                        : setSubHeading("")
-                    }
-                    className="font-semibold flex justify-between items-center group"
-                  >
-                    {slinks.Head}
-                    <span className="text-xl inline">
-                      <IoIosArrowDown className="w-3 text-slate-500" />
-                    </span>
-                  </h1>
-                  <div
-                    className={`pl-10 bg-sky-400 ${
-                      subHeading === slinks.Head ? "md:hidden" : "hidden"
-                    }`}
-                  >
-                    {slinks?.submenu &&
-                      slinks.sublinks.map((slink: any) => (
-                        <li className="pl-0 cursor-pointer hover:text-[#D6882D]">
-                          <Link href={slink.link}>{slink.name}</Link>
-                        </li>
-                      ))}
-                  </div>
-                </div>
-              ))}
-            </div> */}
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
+                }}
+              >
+                <HiOutlineMail className="text-accent" />
+              </IconButton>
+              <p className="text-accent-foreground">
+                info@maxkinginstitute.org
+              </p>
+            </div>
           </div>
-        ))}
+          <div className="flex items-center gap-3">
+            <IconButton
+              size="small"
+              sx={{
+                backgroundColor: "transparent",
+                border: "1px solid #D9D9D9",
+              }}
+            >
+              <FaXTwitter className="text-secondary text-sm" />
+            </IconButton>
+            <IconButton
+              size="small"
+              sx={{
+                backgroundColor: "transparent",
+                border: "1px solid #D9D9D9",
+              }}
+            >
+              <FaLinkedinIn className="text-secondary text-sm" />
+            </IconButton>
+            <IconButton
+              size="small"
+              sx={{
+                backgroundColor: "transparent",
+                border: "1px solid #D9D9D9",
+              }}
+            >
+              <FaFacebookF className="text-secondary text-sm" />
+            </IconButton>
+          </div>
+        </div>
       </div>
-    </nav>
+      <nav
+        className={`bg-primary w-full py-4 px-6 flex items-center justify-between  ${
+          navBar
+            ? // "fixed top-0 z-50 rounded-none"
+              "navbar-animate"
+            : "rounded-[50px] relative"
+        }  duration-150 ease-in-out`}
+      >
+        <ul className="flex items-center gap-5">
+          {navBarLinks.map((link: string, index: number) => (
+            <li
+              key={index}
+              className={`${
+                heading === `/${link.toLowerCase()}`
+                  ? "text-primary-foreground"
+                  : "text-white"
+              } uppercase`}
+            >
+              <Link href={`/${link.toLowerCase()}`}>{link}</Link>
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-5">
+          <IconButton
+            size="small"
+            sx={{
+              backgroundColor: "transparent",
+              border: "1px solid #D9D9D9",
+            }}
+          >
+            <IoSearch className="text-white" />
+          </IconButton>
+          <ul className="flex items-center gap-5">
+            {secondaryNavLinks.map((link: string, index: number) => (
+              <li
+                key={index}
+                className={`${
+                  heading === `/${link.toLowerCase()}`
+                    ? "text-primary-foreground"
+                    : "text-white"
+                } uppercase`}
+              >
+                <Link href={`/${link.toLowerCase()}`}>{link}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </div>
   );
 };
 

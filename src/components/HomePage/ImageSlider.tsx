@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { MdOutlineDoubleArrow } from "react-icons/md";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import Slider from "react-slick";
 import "../../assets/styles/slick-main/slick.styles.css";
 import "../../assets/styles/slick-main/slick-theme.styles.css";
+import { IconButton } from "@mui/material";
 
 const ImageSlider = () => {
   const slides = [
     {
       title: "EXCELLENT EDUCATION",
-      descr: "WE HAVE THE BEST PROGRAMS  AND COURSES FOR YOU",
+      descr: "Ww have the best programs and courses for you",
       img: "/slider4.jpg",
     },
     {
@@ -41,31 +41,47 @@ const ImageSlider = () => {
 
   const PreviousBtn = (props: any) => {
     return (
-      <div className={props.className} onClick={props.onClick}>
-        <MdOutlineDoubleArrow className="text-zinc-50 text-8xl transform -scale-x-100" />
-      </div>
+      <IconButton
+        className={props.className}
+        onClick={props.onClick}
+        sx={{
+          border: "2px solid #A65309",
+          backgroundColor: "#fff",
+          borderRadius: "50%",
+        }}
+      >
+        <FaChevronLeft className="text-primary text-lg" />
+      </IconButton>
     );
   };
 
   const NextBtn = (props: any) => {
     return (
-      <div className={props.className} onClick={props.onClick}>
-        <MdOutlineDoubleArrow className="text-zinc-50 text-8xl" />
-      </div>
+      <IconButton
+        className={props.className}
+        onClick={props.onClick}
+        sx={{
+          border: "2px solid #A65309",
+          backgroundColor: "#fff",
+          borderRadius: "50%",
+        }}
+      >
+        <FaChevronRight className="text-primary text-lg" />
+      </IconButton>
     );
   };
   return (
-    <div className="w-full pt-[49px]">
+    <div className="w-full pb-8">
       <Slider prevArrow={<PreviousBtn />} nextArrow={<NextBtn />} {...settings}>
         {slides.map((values, idx) => {
           return (
             <div key={idx} className="wrapper relative">
-              <div className="flex flex-col justify-center w-[70%] aspect-[16/7] absolute top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10">
+              <div className="flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10 bg-black/65">
                 <div className="flex flex-col items-center justify-center">
-                  <h1 className="text-6xl uppercase text-center">
+                  <h1 className="text-4xl uppercase text-center max-w-[500px] pb-3 border-b">
                     {values.title}
                   </h1>
-                  <h1 className="text-xl font-thin text-zinc-300 uppercase  text-center mt-3 pb-3 border-b">
+                  <h1 className="text-lg font-light text-white/60 text-center mt-3">
                     {values.descr}
                   </h1>
                 </div>

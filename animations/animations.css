@@ -1,0 +1,16 @@
+@keyframes animateNavbar {
+  0% {
+    top: -62px;
+  }
+  100% {
+    top: 0px;
+  }
+}
+
+.navbar-animate {
+  position: fixed;
+  z-index: 100;
+  animation-name: animateNavbar;
+  animation-duration: 1000ms;
+  animation-fill-mode: forwards;
+}

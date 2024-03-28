@@ -14,11 +14,11 @@ export async function POST(req: Request, res: Response) {
 // This is my trial, You can make simple api calls with these functions.
 // NB: the file is always named 'route.ts', and API calls are uppercase
 export async function GET(req: Request, res: Response) {
-  const { host, searchParams, search } = new URL(req.url);
+  const { host } = new URL(req.url);
   const data = [
     {
       id: 23,
-      name: search,
+      name: host,
     },
   ];
 

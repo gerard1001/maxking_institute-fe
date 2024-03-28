@@ -22,7 +22,7 @@ const interceptorErrorResponse = (error: any) => {
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:4000/graphql",
+  baseURL: "http://localhost:5050",
 });
 
 axiosInstance.interceptors.request.use(interceptRequest);
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       localStorage.removeItem("user");
       window.location.href = "/login";
     }
