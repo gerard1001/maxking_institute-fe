@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { GoDash } from "react-icons/go";
 import { BsDot } from "react-icons/bs";
-import { Menu } from "@mui/material";
+import { IconButton, Menu } from "@mui/material";
 import { Tweet } from "react-tweet";
+import { MdOutlineClose } from "react-icons/md";
 
 const members = [
   {
@@ -72,9 +73,9 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="pt-10">
-      <div className="w-full px-10 flex gap-8 items-start">
-        <div className="w-[78%] flex flex-col items-center justify-start gap-5">
+    <div className="lg:pt-10 pt-4">
+      <div className="w-full 2xl:px-10 px-4 flex gap-8 items-start">
+        <div className="2xl:w-[78%] w-full flex flex-col items-center justify-start gap-5">
           <h1 className="text-center text-2xl text-accent font-bold">
             Welcome to Maxking Institute
           </h1>
@@ -124,12 +125,12 @@ const AboutUs = () => {
             className="w-full min-h-96 bg-foreground flex flex-col gap-8 pb-8"
             id="about-section-2"
           >
-            <div className="w-full h-10 grid grid-cols-3 gap-[1px]">
+            <div className="w-full grid xs:grid-cols-3 xs:grid-rows-1 grid-rows-3 gap-[1px]">
               <h1
-                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 ${
+                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 py-3 xs:border-b-none border-b ${
                   structure == 0
                     ? "bg-primary text-white"
-                    : "bg-foreground text-accent"
+                    : "xs:bg-foreground bg-primary-foreground text-accent"
                 }`}
                 onClick={() => {
                   setStructure(0);
@@ -138,10 +139,10 @@ const AboutUs = () => {
                 Mission & Vision
               </h1>
               <h1
-                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 ${
+                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 py-3 xs:border-b-none border-b ${
                   structure == 1
                     ? "bg-primary text-white"
-                    : "bg-foreground text-accent"
+                    : "xs:bg-foreground bg-primary-foreground text-accent"
                 }`}
                 onClick={() => {
                   setStructure(1);
@@ -150,10 +151,10 @@ const AboutUs = () => {
                 Division
               </h1>
               <h1
-                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 ${
+                className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 py-3 xs:border-b-none border-b ${
                   structure == 2
                     ? "bg-primary text-white"
-                    : "bg-foreground text-accent"
+                    : "xs:bg-foreground bg-primary-foreground text-accent"
                 }`}
                 onClick={() => {
                   setStructure(2);
@@ -464,7 +465,13 @@ const AboutUs = () => {
                         },
                       }}
                     >
-                      <div className="w-[280px] p-3">
+                      <div className="sm:w-[280px] sm:max-w-[320px] max-w-[240px] p-3 relative">
+                        <IconButton
+                          onClick={handleClose}
+                          className="absolute top-1 right-2"
+                        >
+                          <MdOutlineClose className="" />
+                        </IconButton>
                         <div className="flex flex-col items-center">
                           <img
                             src={members[clickedPerson].image}
@@ -510,9 +517,9 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-        <div className="w-[22%] max-h-[100px] light text-xs pt-12">
+        <div className="w-[22%] 2xl:block hidden max-h-[100px] light text-xs pt-12">
           <div className="tweet-class">
-            <Tweet id="1773356905701802390" />
+            <Tweet id="1672031185634033665" />
           </div>
         </div>
       </div>

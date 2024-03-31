@@ -12,7 +12,7 @@ import { CiHeart } from "react-icons/ci";
 import { GoComment } from "react-icons/go";
 import { TbTextPlus } from "react-icons/tb";
 import { FaBlog } from "react-icons/fa";
-import SectionTitle from "../SectionTitle";
+import SectionTitle from "../../../components/SectionTitle";
 import { ViewAll } from "./PopularCourses";
 
 const Articles = () => {
@@ -26,7 +26,7 @@ const Articles = () => {
   }, [dispatch]);
 
   return (
-    <div className="p-10">
+    <div className="lg:p-10 p-2">
       <SectionTitle
         title="recent ARTICLES"
         icon={FaBlog}

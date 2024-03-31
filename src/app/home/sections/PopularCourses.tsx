@@ -1,5 +1,5 @@
 import React from "react";
-import SectionTitle from "../SectionTitle";
+import SectionTitle from "../../../components/SectionTitle";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import Link from "next/link";
 
@@ -17,13 +17,13 @@ export const ViewAll = (page: string) => {
 
 const PopularCourses = () => {
   return (
-    <div className="p-10">
+    <div className="lg:p-10 p-2">
       <SectionTitle
         title="POPULAR COURSES"
         image="/icons/popular-dark.svg"
         rightSideActions={ViewAll("/about")}
       />
-      <div className="pt-10 flex items-center gap-5 w-full justify-center min-h-80 bg-emerald-100"></div>
+      <div className="lg:pt-10 pt-2 flex items-center gap-5 w-full justify-center min-h-80 bg-emerald-100"></div>
     </div>
   );
 };

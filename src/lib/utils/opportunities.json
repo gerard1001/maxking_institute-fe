@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Jobs",
+    "description": "Jobs are available for the students who are looking for a job."
+  },
+  {
+    "id": 2,
+    "title": "Trainings",
+    "description": "Trainings are available for the students who are looking for a training."
+  },
+  {
+    "id": 3,
+    "title": "Internships",
+    "description": "Internships are available for the students who are looking for an internship."
+  },
+  {
+    "id": 4,
+    "title": "Career events",
+    "description": "Career events are available for the students who are looking for a career event."
+  }
+]

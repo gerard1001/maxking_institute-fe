@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import SectionTitle from "../SectionTitle";
+import SectionTitle from "../../../components/SectionTitle";
 import { TiInfoOutline } from "react-icons/ti";
 
 const benefits = [
@@ -44,7 +44,7 @@ const benefits = [
 
 const WhyUs = () => {
   return (
-    <div className="p-10">
+    <div className="lg:p-10 p-2">
       <SectionTitle title="Why choose us?" icon={TiInfoOutline} />
       <div
         className="flex flex-wrap content-center pt-16 max-w-[900px] w-fit mx-auto gap-2"
@@ -53,7 +53,7 @@ const WhyUs = () => {
         {benefits.map((values, idx) => {
           return (
             <div
-              className="group flex flex-col relative items-start justify-start gap-5 w-[250px] mx-auto mb-10 bg-sky-400/0 rounded-xl p-4 cursor-default hover:bg-white hover:shadow-xl ease-in transition-all duration-200  hover:scale-105 mt-6"
+              className="group flex flex-col relative items-start justify-start gap-5 max-w-[250px] mx-auto mb-10 bg-sky-400/0 rounded-xl p-4 cursor-default hover:bg-white hover:shadow-xl ease-in transition-all duration-200  hover:scale-105 mt-6"
               key={idx}
             >
               <div className="w-[80px] h-[80px] absolute left-[50%] -top-[32%] -translate-x-[50%] bg-sky-600/0 group-hover:-top-[30%] crazy-round flex flex-col justify-center items-center ease-in transition-all duration-500">

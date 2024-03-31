@@ -11,15 +11,19 @@ interface SectionTitleProps {
 
 const SectionTitle = (props: SectionTitleProps) => {
   return (
-    <div className="py-2 border-b border-muted-foreground/30 flex items-center justify-between">
-      <div className="flex items-start gap-2">
-        <h1 className="text-accent text-xl font-bold uppercase">
+    <div className="py-2 border-b border-muted-foreground/30 flex items-center justify-between flex-wrap">
+      <div className="flex items-start gap-2 mr-10">
+        <h1 className="text-accent lg:text-xl text-sm font-bold uppercase">
           {props.title}
         </h1>
         {props.icon ? (
-          <props.icon className="text-xl" />
+          <props.icon className="lg:text-xl text-sm xxs:block hidden" />
         ) : (
-          <Image src={`${props.image}`} width={25} height={25} alt="Norman" />
+          <img
+            src={`${props.image}`}
+            alt="ison image"
+            className="lg:w-[20px] w-[16px] aspect-square xxs:block hidden"
+          />
         )}
       </div>
       <div>{props.rightSideActions}</div>

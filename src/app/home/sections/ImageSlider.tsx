@@ -3,15 +3,16 @@
 import React from "react";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import Slider from "react-slick";
-import "../../assets/styles/slick-main/slick.styles.css";
-import "../../assets/styles/slick-main/slick-theme.styles.css";
+import "../styles/slick.styles.css";
+import "../styles/slick-theme.styles.css";
 import { IconButton } from "@mui/material";
 
 const ImageSlider = () => {
   const slides = [
     {
       title: "EXCELLENT EDUCATION",
-      descr: "Ww have the best programs and courses for you",
+      descr:
+        "We strive for making and ensuring that everyone, anywhere, at any time, has access to quality MKI education services",
       img: "/slider4.jpg",
     },
     {
@@ -78,10 +79,10 @@ const ImageSlider = () => {
             <div key={idx} className="wrapper relative">
               <div className="flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10 bg-black/65">
                 <div className="flex flex-col items-center justify-center">
-                  <h1 className="text-4xl uppercase text-center max-w-[500px] pb-3 border-b">
+                  <h1 className="sm:text-4xl text-xl uppercase text-center max-w-[500px] pb-3 border-b">
                     {values.title}
                   </h1>
-                  <h1 className="text-lg font-light text-white/60 text-center mt-3">
+                  <h1 className="md:text-lg text-sm font-light text-white/60 text-center mt-3">
                     {values.descr}
                   </h1>
                 </div>
@@ -91,7 +92,7 @@ const ImageSlider = () => {
                 <img
                   src={values.img}
                   alt=""
-                  className="object-cover object-center border border-[#afafaf33] w-[100%] md:h-[560px] aspect-[16/9] overl"
+                  className="object-cover object-center border border-[#afafaf33] w-[100%] md:h-[560px] xs:aspect-[16/9] aspect-square"
                 />
                 <div className="absolute inset-0 bg-black opacity-50 top-overlay-linear-gradient"></div>
               </div>

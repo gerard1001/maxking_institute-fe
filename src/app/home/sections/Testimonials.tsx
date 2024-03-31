@@ -1,12 +1,12 @@
 import React from "react";
-import SectionTitle from "../SectionTitle";
+import SectionTitle from "../../../components/SectionTitle";
 import { GrBlockQuote } from "react-icons/gr";
 
 const Testimonials = () => {
   return (
-    <div className="p-10">
+    <div className="lg:p-10 p-2">
       <SectionTitle title="WHAT PEOPLE SAY" icon={GrBlockQuote} />
-      <div className="pt-10 flex items-center gap-5 w-full justify-center min-h-80 bg-emerald-100"></div>
+      <div className="lg:pt-10 pt-4 flex items-center gap-5 w-full justify-center min-h-80 bg-emerald-100"></div>
     </div>
   );
 };
