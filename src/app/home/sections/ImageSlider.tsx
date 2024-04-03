@@ -77,7 +77,7 @@ const ImageSlider = () => {
         {slides.map((values, idx) => {
           return (
             <div key={idx} className="wrapper relative">
-              <div className="flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute top-[50%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10 bg-black/65">
+              <div className="flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute xxs:top-[50%] top-[60%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10 bg-black/65">
                 <div className="flex flex-col items-center justify-center">
                   <h1 className="sm:text-4xl text-xl uppercase text-center max-w-[500px] pb-3 border-b">
                     {values.title}

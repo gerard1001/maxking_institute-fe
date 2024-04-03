@@ -3,8 +3,8 @@ import opportunities from "@/lib/utils/opportunities.json";
 
 const OpportunitiesSection = () => {
   return (
-    <div className="flex flex-col items-start gap-6 mt-10">
-      <h1 className="text-accent text-xl font-bold uppercase mx-auto">
+    <div className="flex flex-col items-start lg:gap-4 gap-2 mt-10">
+      <h1 className="text-primary-foreground text-xl font-bold uppercase mx-auto">
         Opportunities
       </h1>
       <div className="flex items-center flex-wrap gap-8 lg:justify-start justify-center w-full pt-6">

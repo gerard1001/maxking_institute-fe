@@ -84,12 +84,26 @@ body {
     --pink-foreground: 342 72% 66%;
   }
 }
-/* 
-@layer base {
-  * {
-    @apply border-border;
+@layer utilities {
+  .clip-featured {
+    clip-path: polygon(100% 0%, 95% 53%, 100% 100%, 0 100%, 0 51%, 0 0);
   }
-  body {
-    @apply bg-background text-foreground;
+  .linear-gradient-featured {
+    /* background: rgb(221, 255, 224); */
+    background: linear-gradient(
+      90deg,
+      rgb(0, 0, 0) 0%,
+      rgb(53, 118, 203) 0%,
+      rgb(167, 211, 255) 44%,
+      rgb(233, 248, 255) 63%,
+      rgb(255, 255, 255) 85%,
+      rgba(255, 255, 255, 1) 100%
+    );
   }
-} */
+
+  @media (max-width: 640px) {
+    .linear-gradient-featured {
+      background: none;
+    }
+  }
+}

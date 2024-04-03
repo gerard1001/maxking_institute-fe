@@ -4,7 +4,7 @@ import OpportunitiesSection from "./sections/OpportunitiesSection";
 
 const TrainingCenter = () => {
   return (
-    <div className="lg:p-10 p-4">
+    <div className="lg:p-10 p-4 pt-14">
       <ServicesSection />
       <OpportunitiesSection />
     </div>

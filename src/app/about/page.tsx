@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { GoDash } from "react-icons/go";
 import { BsDot } from "react-icons/bs";
 import { IconButton, Menu } from "@mui/material";
@@ -73,7 +72,7 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="lg:pt-10 pt-4">
+    <div className="lg:pt-10 pt-14">
       <div className="w-full 2xl:px-10 px-4 flex gap-8 items-start">
         <div className="2xl:w-[78%] w-full flex flex-col items-center justify-start gap-5">
           <h1 className="text-center text-2xl text-accent font-bold">

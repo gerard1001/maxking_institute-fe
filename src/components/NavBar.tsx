@@ -72,7 +72,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className={`lg:px-10 px-0 flex flex-col items-center lg:pb-10 pb-0`}>
+    <div className={`lg:px-10 px-0 flex flex-col items-center `}>
       <div className="lg:flex hidden items-center justify-between w-full">
         <div className="flex items-center justify-start">
           <Link href="/" className="flex ml-2 md:mr-24">
@@ -247,6 +247,7 @@ const NavBar = () => {
                     setOpen(false);
                   }}
                   href={`${navLink.path.toLowerCase()}`}
+                  key={index}
                 >
                   <ListItem
                     disablePadding
@@ -271,7 +272,7 @@ const NavBar = () => {
           <List>
             {secondaryNavLinks?.map((navLink, index: number) => {
               return (
-                <ListItem disablePadding>
+                <ListItem disablePadding key={index}>
                   <ListItemButton>
                     <ListItemText primary={navLink} />
                   </ListItemButton>

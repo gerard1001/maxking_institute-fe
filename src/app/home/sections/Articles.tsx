@@ -14,6 +14,7 @@ import { TbTextPlus } from "react-icons/tb";
 import { FaBlog } from "react-icons/fa";
 import SectionTitle from "../../../components/SectionTitle";
 import { ViewAll } from "./PopularCourses";
+import { Divider } from "@mui/material";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -30,49 +31,54 @@ const Articles = () => {
       <SectionTitle
         title="recent ARTICLES"
         icon={FaBlog}
-        rightSideActions={ViewAll("/about")}
+        rightSideActions={ViewAll("/articles")}
       />
-      <div className="flex items-center flex-wrap p-10">
+      <div className="flex items-center justify-evenly flex-wrap py-6 gap-4">
         {state.articles.map((article) => {
           return (
-            <div key={article.id} className="max-w-[350px]">
-              <img
-                src={article.coverImage}
-                alt=""
-                className="w-full aspect-video"
-              />
-              <div className="flex items-end gap-3 py-2 text-slate-900 text-sm font-bold">
+            <div key={article.id} className="max-w-[350px] sm:pb-6 pb-2">
+              <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
                 <img
-                  src={article.author.profile.picture}
-                  alt="author image"
-                  className="w-8 aspect-square rounded-full object-cover"
+                  src={article.coverImage}
+                  alt=""
+                  className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105"
                 />
-                <h1>
-                  {article.author.firstName} {article.author.lastName}
-                </h1>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
+                  <img
+                    src={article.author.profile.picture}
+                    alt="author image"
+                    className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                  />
+                  <h1>
+                    {article.author.firstName} {article.author.lastName}
+                  </h1>
+                </div>
+                <p className="my-2 text-xs font-semibold text-black/75">
+                  {format(article.createdAt, "PP")}
+                </p>
               </div>
               <h1 className="text-slate-900 font-bold text-xl">
                 {article.title}
               </h1>
-              <p className="line-clamp-2">{article.description}</p>
-              <p className="my-2 text-sm font-semibold text-black/75">
-                {format(article.createdAt, "PP")}
-              </p>
+              <p className="line-clamp-3 my-2">{article.description}</p>
               <div className="flex items-center gap-3 justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-[2px] text-black/75">
                     <CiHeart className="text-2xl" />
-                    <span className="">12</span>
+                    <span className="">12 likes</span>
                   </div>
                   <div className="flex items-center gap-[4px] text-black/75">
                     <GoComment className="text-xl" />
-                    <span className=""> 5</span>
+                    <span className=""> 5 comments</span>
                   </div>
                 </div>
                 <div className="text-black/75">
                   <TbTextPlus className="text-xl" />
                 </div>
               </div>
+              <Divider className="sm:hidden block mt-4" />
             </div>
           );
         })}
