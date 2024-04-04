@@ -1,6 +1,8 @@
 export interface ArticleSliceState {
   articles: Article[];
   featuredArticles: Article[];
+  relatedArticles: Article[];
+  singleArticle: Article;
   loading: boolean;
   error: any;
 }

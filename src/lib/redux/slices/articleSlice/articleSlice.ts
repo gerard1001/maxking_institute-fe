@@ -1,10 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchArticles, fetchFeaturedArticles } from "./thunks";
-import { ArticleSliceState } from "@/lib/interfaces/article.interface";
+import {
+  fetchArticles,
+  fetchFeaturedArticles,
+  fetchRelatedArticles,
+  fetchSingleArticle,
+} from "./thunks";
+import { Article, ArticleSliceState } from "@/lib/interfaces/article.interface";
 
 const initialState: ArticleSliceState = {
   articles: [],
   featuredArticles: [],
+  relatedArticles: [],
+  singleArticle: {} as Article,
   loading: false,
   error: {},
 };
@@ -36,6 +43,32 @@ export const articleSlice = createSlice({
         state.featuredArticles = action.payload;
       })
       .addCase(fetchFeaturedArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchSingleArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSingleArticle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleArticle = action.payload;
+      })
+      .addCase(fetchSingleArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchRelatedArticles.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchRelatedArticles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.relatedArticles = action.payload;
+      })
+      .addCase(fetchRelatedArticles.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
