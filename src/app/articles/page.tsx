@@ -111,7 +111,10 @@ const ArticlesPage = () => {
                             variant="contained"
                             size="small"
                             endIcon={<IoArrowForward />}
-                            className="xs:mt-5 mt-1 bg-secondary"
+                            className="xs:mt-5 mt-1 bg-primary"
+                            onClick={() => {
+                              window.location.href = `/articles/${article.id}`;
+                            }}
                           >
                             Read more
                           </Button>
@@ -129,7 +132,7 @@ const ArticlesPage = () => {
                             <Button
                               variant="contained"
                               endIcon={<IoArrowForward />}
-                              className="mt-5 bg-secondary"
+                              className="mt-5 bg-primary"
                               onClick={() => {
                                 window.location.href = `/articles/${article.id}`;
                               }}

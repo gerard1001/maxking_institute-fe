@@ -59,7 +59,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
           </div>
           <div className="flex items-start">
             {" "}
-            <div className="w-[100%] min-h-screen px-4 xs:mt-2 mt-0">
+            <div className="w-[100%] min-h-screen px-4 xs:mt-2 mt-0 bg-yellow-100">
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex xs:items-center items-start xs:flex-row flex-col gap-2 py-4">
                   <h1 className="text-accent font-semibold">Author:</h1>

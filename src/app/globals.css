@@ -91,7 +91,7 @@ body {
   .linear-gradient-featured {
     /* background: rgb(221, 255, 224); */
     background: linear-gradient(
-      90deg,
+      160deg,
       rgb(0, 0, 0) 0%,
       rgb(53, 118, 203) 0%,
       rgb(167, 211, 255) 44%,
