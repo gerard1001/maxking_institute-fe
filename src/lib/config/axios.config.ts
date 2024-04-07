@@ -22,7 +22,7 @@ const interceptorErrorResponse = (error: any) => {
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:5050",
+  baseURL: "http://localhost:5050/api/v1",
 });
 
 axiosInstance.interceptors.request.use(interceptRequest);

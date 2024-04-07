@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 
 const HomePage = () => {
   return (
-    <div className="">
+    <div className="pt-4">
       <ImageSlider />
       <WhyUs />
       <CourseCategories />

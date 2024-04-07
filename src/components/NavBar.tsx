@@ -20,7 +20,25 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Modal,
+  TextField,
+  Box,
+  FormControl,
+  InputLabel,
+  FilledInput,
+  InputAdornment,
+  OutlinedInput,
+  Button,
+  Container,
+  Grid,
+  Card,
+  Typography,
 } from "@mui/material";
+import { IoEyeOff, IoEye } from "react-icons/io5";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { FcGoogle } from "react-icons/fc";
 
 const navBarLinks = [
   {
@@ -51,10 +69,425 @@ const navBarLinks = [
 
 const secondaryNavLinks = ["SIGN IN", "SIGN UP"];
 
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
+
+const SignInForm = () => {
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleLogin = (data: any) => {
+    console.log(data);
+  };
+  return (
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(handleLogin)}
+      className=""
+    >
+      <Controller
+        name="email"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="Email"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.email}
+            helperText={errors.email ? errors.email.message : ""}
+          />
+        )}
+      />
+
+      <Controller
+        name="password"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="Password"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.email}
+            helperText={errors.password ? errors.password.message : ""}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <IoEyeOff /> : <IoEye />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
+      />
+      {/* <Controller
+        name="password"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <FormControl
+            {...field}
+            fullWidth
+            variant="outlined"
+            size="small"
+            sx={{
+              mt: 2,
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+            }}
+          >
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <IoEyeOff /> : <IoEye />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+        )}
+      /> */}
+
+      <Button
+        type="submit"
+        variant="contained"
+        className="bg-primary hover:bg-primary/90 w-full mt-4"
+        size="large"
+      >
+        Sign In
+      </Button>
+    </Box>
+  );
+};
+
+const signUpSchema = yup.object().shape({
+  firstName: yup.string().required().min(4).max(40).label("First name"),
+  lastName: yup.string().required().min(4).max(40).label("Last name"),
+  email: yup.string().email().required().label("Email"),
+  password: yup.string().required().min(4).max(16).label("Password"),
+});
+
+const SignUpForm = () => {
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(signUpSchema),
+  });
+
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleSignUp = (data: any) => {
+    console.log("********");
+    console.log(data);
+  };
+  return (
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(handleSignUp)}
+      className=""
+    >
+      <Controller
+        name="firstName"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="First Name"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.firstName}
+            helperText={errors.firstName ? errors.firstName.message : ""}
+          />
+        )}
+      />
+      <Controller
+        name="lastName"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="Last Name"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.lastName}
+            helperText={errors.lastName ? errors.lastName.message : ""}
+          />
+        )}
+      />
+
+      <Controller
+        name="email"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="Email"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.email}
+            helperText={errors.email ? errors.email.message : ""}
+          />
+        )}
+      />
+      <Controller
+        name="password"
+        defaultValue={""}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            sx={{
+              input: {
+                color: "#021527",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+              mt: 2,
+              color: "#242E8F",
+              "& label.Mui-focused": {
+                color: "#242E8F",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  border: "1.5px solid #242E8F",
+                },
+              },
+              "& .MuiOutlinedInput-input": {
+                py: "14px",
+              },
+              "& .MuiFormLabel-root": {
+                mt: "3px",
+                fontFamily: '"Source Sans 3", sans-serif',
+              },
+            }}
+            inputProps={{ style: { height: 18 } }}
+            label="Password"
+            variant="outlined"
+            fullWidth
+            size="small"
+            className="text-xs"
+            error={!!errors.email}
+            helperText={errors.password ? errors.password.message : ""}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <IoEyeOff /> : <IoEye />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        className="bg-primary hover:bg-primary/90 w-full mt-4"
+        size="large"
+      >
+        Sign Up
+      </Button>
+    </Box>
+  );
+};
+
 const NavBar = () => {
   const pathName = usePathname();
   const [navBar, setNavBar] = useState<boolean>(false);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const [signStep, setSignStep] = React.useState<string>("in");
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   useEffect(() => {
     const scrollAction = () => {
@@ -178,9 +611,13 @@ const NavBar = () => {
                   pathName === `/${link.toLowerCase()}`
                     ? "text-primary-foreground"
                     : "text-white"
-                } uppercase`}
+                } uppercase cursor-pointer`}
+                onClick={() => {
+                  handleOpenModal();
+                  index === 0 ? setSignStep("in") : setSignStep("up");
+                }}
               >
-                <Link href={`/${link.toLowerCase()}`}>{link}</Link>
+                {link}
               </li>
             ))}
           </ul>
@@ -272,7 +709,15 @@ const NavBar = () => {
           <List>
             {secondaryNavLinks?.map((navLink, index: number) => {
               return (
-                <ListItem disablePadding key={index}>
+                <ListItem
+                  disablePadding
+                  key={index}
+                  onClick={() => {
+                    index === 0 ? setSignStep("in") : setSignStep("up");
+                    setOpen(false);
+                    handleOpenModal();
+                  }}
+                >
                   <ListItemButton>
                     <ListItemText primary={navLink} />
                   </ListItemButton>
@@ -282,6 +727,87 @@ const NavBar = () => {
           </List>
         </nav>
       </Drawer>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute" as "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxHeight: "98vh",
+            width: {
+              sm: 500,
+              xs: "95%",
+            },
+            overflowY: "auto",
+            bgcolor: "background.paper",
+            border: "none",
+            borderRadius: "10px",
+            boxShadow: 24,
+            p: {
+              md: 4,
+              sm: 2,
+              xs: 1,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "20px",
+              position: "relative",
+            }}
+          >
+            <Box className="flex items-center justify-end absolute top-0 right-0">
+              <IconButton onClick={handleCloseModal} size="medium">
+                <MdOutlineClose />
+              </IconButton>
+            </Box>
+            <Typography className="text-2xl font-semibold text-accent">
+              {signStep === "in" ? "Sign In" : "Sign Up"}
+            </Typography>
+            {signStep === "in" ? <SignInForm /> : <SignUpForm />}
+
+            <Typography>
+              {signStep === "in"
+                ? "Don’t have an account? "
+                : "Already have an account? "}
+              <span
+                className="text-secondary font-semibold cursor-pointer"
+                onClick={() => {
+                  setSignStep(signStep === "in" ? "up" : "in");
+                }}
+              >
+                Sign {signStep === "in" ? "Up" : "In"}
+              </span>
+            </Typography>
+
+            <div className="flex items-center justify-center w-full">
+              {" "}
+              <hr className="w-full border border-accent-foreground" />
+              <p className="mx-2 text-accent font-semibold">OR</p>
+              <hr className="w-full border border-accent-foreground" />
+            </div>
+            <Button
+              variant="contained"
+              className="bg-secondary hover:bg-secondary/90 w-full"
+              size="large"
+              startIcon={<FcGoogle />}
+            >
+              Continue with Google
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 };
