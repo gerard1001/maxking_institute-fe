@@ -1,3 +1,3 @@
 import { ReduxState } from "../../store";
 
-export const selectArticles = (state: ReduxState) => state.article;
+export const selectUsers = (state: ReduxState) => state.user;

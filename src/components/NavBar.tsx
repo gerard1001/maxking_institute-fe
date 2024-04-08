@@ -33,12 +33,16 @@ import {
   Grid,
   Card,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FcGoogle } from "react-icons/fc";
+import { loginUser, registerUser, useDispatch } from "@/lib/redux";
+import { ICreateUser, ILoginUser } from "@/lib/interfaces/user.interface";
+import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
 
 const navBarLinks = [
   {
@@ -74,7 +78,17 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
+function LoadinProgress() {
+  return (
+    <React.Fragment>
+      <CircularProgress sx={{ color: "#F8A51B" }} />
+    </React.Fragment>
+  );
+}
+
 const SignInForm = () => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
     control,
@@ -86,11 +100,29 @@ const SignInForm = () => {
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loginLoading, setLoginLoading] = React.useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickVariant = (variant: VariantType, message: string) => () => {
+  //   enqueueSnackbar(message, { variant });
+  // };
 
-  const handleLogin = (data: any) => {
-    console.log(data);
+  const handleLogin = (data: ILoginUser) => {
+    setLoginLoading(true);
+    dispatch(loginUser(data))
+      .then((res) => {
+        if (res.payload.statusCode === 200) {
+          enqueueSnackbar(res.payload.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+        } else {
+          enqueueSnackbar(res.payload.message, { variant: "error" });
+        }
+      })
+      .finally(() => {
+        setLoginLoading(false);
+      });
   };
   return (
     <Box
@@ -109,7 +141,6 @@ const SignInForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -126,7 +157,6 @@ const SignInForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -151,7 +181,6 @@ const SignInForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -168,7 +197,6 @@ const SignInForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -196,59 +224,15 @@ const SignInForm = () => {
           />
         )}
       />
-      {/* <Controller
-        name="password"
-        defaultValue={""}
-        control={control}
-        render={({ field }) => (
-          <FormControl
-            {...field}
-            fullWidth
-            variant="outlined"
-            size="small"
-            sx={{
-              mt: 2,
-              "& label.Mui-focused": {
-                color: "#242E8F",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused fieldset": {
-                  border: "1.5px solid #242E8F",
-                },
-              },
-            }}
-          >
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <IoEyeOff /> : <IoEye />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-        )}
-      /> */}
 
       <Button
         type="submit"
         variant="contained"
-        className="bg-primary hover:bg-primary/90 w-full mt-4"
+        className="bg-primary hover:bg-primary/90 w-full mt-4 !h-[46px]"
         size="large"
+        disabled={loginLoading}
       >
-        Sign In
+        {loginLoading ? <LoadinProgress /> : "Sign In"}
       </Button>
     </Box>
   );
@@ -262,23 +246,39 @@ const signUpSchema = yup.object().shape({
 });
 
 const SignUpForm = () => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
     control,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(signUpSchema),
   });
 
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = React.useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleSignUp = (data: any) => {
-    console.log("********");
-    console.log(data);
+  const handleSignUp = (data: ICreateUser) => {
+    setRegisterLoading(true);
+    dispatch(registerUser(data))
+      .then((res) => {
+        console.log("************************************");
+        console.log(data);
+        if (res.payload.statusCode === 201) {
+          enqueueSnackbar(res.payload.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+        } else {
+          enqueueSnackbar(res.payload.message, { variant: "error" });
+        }
+      })
+      .finally(() => {
+        setRegisterLoading(false);
+      });
   };
   return (
     <Box
@@ -297,7 +297,6 @@ const SignUpForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -314,7 +313,6 @@ const SignUpForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -338,7 +336,6 @@ const SignUpForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -355,7 +352,6 @@ const SignUpForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -380,7 +376,6 @@ const SignUpForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -397,7 +392,6 @@ const SignUpForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -421,7 +415,6 @@ const SignUpForm = () => {
             sx={{
               input: {
                 color: "#021527",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
               mt: 2,
               color: "#242E8F",
@@ -438,7 +431,6 @@ const SignUpForm = () => {
               },
               "& .MuiFormLabel-root": {
                 mt: "3px",
-                fontFamily: '"Source Sans 3", sans-serif',
               },
             }}
             inputProps={{ style: { height: 18 } }}
@@ -470,10 +462,11 @@ const SignUpForm = () => {
       <Button
         type="submit"
         variant="contained"
-        className="bg-primary hover:bg-primary/90 w-full mt-4"
+        className="bg-primary hover:bg-primary/90 w-full mt-4 !h-[46px]"
         size="large"
+        disabled={registerLoading}
       >
-        Sign Up
+        {registerLoading ? <LoadinProgress /> : "Sign Up"}
       </Button>
     </Box>
   );
@@ -732,10 +725,13 @@ const NavBar = () => {
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{
+          borderRadius: "30px",
+        }}
       >
         <Box
           sx={{
-            position: "absolute" as "absolute",
+            position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -744,6 +740,7 @@ const NavBar = () => {
               sm: 500,
               xs: "95%",
             },
+            maxWidth: 500,
             overflowY: "auto",
             bgcolor: "background.paper",
             border: "none",
@@ -765,6 +762,7 @@ const NavBar = () => {
               flexDirection: "column",
               gap: "20px",
               position: "relative",
+              pb: 2,
             }}
           >
             <Box className="flex items-center justify-end absolute top-0 right-0">

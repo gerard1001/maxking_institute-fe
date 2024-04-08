@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Article, ArticleSliceState } from "@/lib/interfaces/article.interface";
-import { registerUser } from "./thunks";
+import { loginUser, registerUser } from "./thunks";
 
 const initialState = {
   allUsers: [],
@@ -10,7 +9,7 @@ const initialState = {
   error: {},
 };
 
-export const articleSlice = createSlice({
+export const userSlice = createSlice({
   name: "article",
   initialState,
   reducers: {},
@@ -24,6 +23,20 @@ export const articleSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loggedInUser = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        console.log(action);
         state.loading = false;
         state.error = action.error;
       });
