@@ -8,7 +8,6 @@ export const fetchArticles = createAppAsyncThunk(
       const res = await axios.get("/article");
       return res.data.data;
     } catch (error: any) {
-      console.log(error);
       throw new Error(error);
     }
   }
@@ -21,7 +20,6 @@ export const fetchFeaturedArticles = createAppAsyncThunk(
       const res = await axios.get("/article/featured");
       return res.data.data;
     } catch (error: any) {
-      console.log(error);
       throw new Error(error);
     }
   }
@@ -34,7 +32,6 @@ export const fetchSingleArticle = createAppAsyncThunk(
       const res = await axios.get(`/article/${articleId}`);
       return res.data.data;
     } catch (error: any) {
-      console.log(error);
       throw new Error(error);
     }
   }
@@ -47,7 +44,6 @@ export const fetchRelatedArticles = createAppAsyncThunk(
       const res = await axios.get(`/article/${articleId}/related`);
       return res.data.data;
     } catch (error: any) {
-      console.log(error);
       throw new Error(error);
     }
   }

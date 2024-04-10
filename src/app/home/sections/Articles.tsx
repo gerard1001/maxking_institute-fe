@@ -20,8 +20,6 @@ const Articles = () => {
   const dispatch = useDispatch();
   const state = useSelector(selectArticles);
 
-  console.log(state.articles);
-
   useEffect(() => {
     dispatch(fetchArticles());
   }, [dispatch]);

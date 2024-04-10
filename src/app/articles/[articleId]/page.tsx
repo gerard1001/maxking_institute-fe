@@ -38,8 +38,6 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const article = state.singleArticle;
   const relatedArticles = state.relatedArticles;
 
-  console.log(state.relatedArticles);
-
   useEffect(() => {
     dispatch(fetchSingleArticle(articleId));
     dispatch(fetchRelatedArticles(articleId));

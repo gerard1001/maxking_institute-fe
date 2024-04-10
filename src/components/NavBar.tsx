@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HiOutlineMail } from "react-icons/hi";
 import { FaXTwitter, FaFacebookF } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { MdOutlineClose } from "react-icons/md";
@@ -42,7 +42,6 @@ import * as yup from "yup";
 import { FcGoogle } from "react-icons/fc";
 import {
   fetchUserByToken,
-  googleLogin,
   loginUser,
   registerUser,
   selectUsers,
@@ -50,7 +49,9 @@ import {
   useSelector,
 } from "@/lib/redux";
 import { ICreateUser, ILoginUser } from "@/lib/interfaces/user.interface";
-import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
+import { LoginContext } from "@/lib/context/LoginContext";
+import { objectIsEmpty } from "@/lib/functions/object_check.function";
 
 const navBarLinks = [
   {
@@ -78,8 +79,6 @@ const navBarLinks = [
     path: "/contact-us",
   },
 ];
-
-const secondaryNavLinks = ["SIGN IN", "SIGN UP"];
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -121,20 +120,30 @@ const SignInForm = ({ closeModal }: SignInProps) => {
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [loginLoading, setLoginLoading] = React.useState<boolean>(false);
+  const { loginData, setLoginData } = useContext(LoginContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  // const handleClickVariant = (variant: VariantType, message: string) => () => {
-  //   enqueueSnackbar(message, { variant });
-  // };
 
   const handleLogin = (data: ILoginUser) => {
     setLoginLoading(true);
     dispatch(loginUser(data))
       .then((res) => {
         if (res.payload.statusCode === 200) {
-          enqueueSnackbar(res.payload.message, {
-            variant: "success",
-            preventDuplicate: true,
+          localStorage.setItem(
+            "loginData",
+            JSON.stringify({ login_token: res.payload.data.token })
+          );
+          dispatch(fetchUserByToken(res.payload.data.token)).then((nextRes) => {
+            if (nextRes.payload.statusCode === 200) {
+              enqueueSnackbar(res.payload.message, {
+                variant: "success",
+                preventDuplicate: true,
+              });
+              setLoginData(nextRes.payload.data);
+            } else {
+              enqueueSnackbar(nextRes.payload.message, { variant: "error" });
+              localStorage.removeItem("loginData");
+            }
           });
           setTimeout(() => {
             reset();
@@ -517,6 +526,7 @@ const SignUpForm = ({ closeModal }: SignUpProps) => {
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const searchParams = useSearchParams();
   const pathName = usePathname();
@@ -524,10 +534,14 @@ const NavBar = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
+  const { loginData, setLoginData } = useContext(LoginContext);
+
+  const userLoggedIn = !objectIsEmpty(loginData);
+  const secondaryNavLinks = userLoggedIn
+    ? ["DASHBOARD"]
+    : ["SIGN IN", "SIGN UP"];
 
   const state = useSelector(selectUsers);
-
-  console.log(state);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -548,56 +562,48 @@ const NavBar = () => {
   };
 
   const handleGoogleLogin = ({}) => {
-    // window.location.href = "http://localhost:5050/api/v1/auth/google";
     window.open("http://localhost:5050/api/v1/auth/google", "_self");
-    // dispatch(googleLogin()).then((res) => {
-    //   console.log("******CANDANCE******");
-    //   console.log(res);
-
-    // if (res.payload.statusCode === 200) {
-    //   alert(res.payload.message);
-    //   enqueueSnackbar(res.payload.message, {
-    //     variant: "success",
-    //     preventDuplicate: true,
-    //   });
-    //   setTimeout(() => {
-    //     handleOpenModal();
-    //   }, 500);
-    // } else {
-    //   enqueueSnackbar(res.payload.message, { variant: "error" });
-    // }
-    // });
   };
 
   const googleLoginError = searchParams.get("error");
   const googleLoginToken = searchParams.get("token");
 
   useEffect(() => {
-    if (googleLoginError === "manual_user-google_signin-conflict") {
+    if (googleLoginError === "manual_user_google_signin_conflict") {
       enqueueSnackbar(
         "This email was registered manually, please proceed with email and password",
         { variant: "warning" }
       );
     }
     if (googleLoginToken) {
-      enqueueSnackbar("Verifying user...", { variant: "info" });
-      dispatch(fetchUserByToken(googleLoginToken))
-        .then((res) => {
-          if (res.payload.statusCode === 200) {
-            enqueueSnackbar(res.payload.message, {
-              variant: "success",
-              preventDuplicate: true,
-            });
-            setTimeout(() => {
-              // window.location.href = "/";
-            }, 500);
-          } else {
-            enqueueSnackbar(res.payload.message, { variant: "error" });
-          }
-        })
-        .finally(() => {
-          // setVerifyLoading(false);
-        });
+      localStorage.setItem(
+        "loginData",
+        JSON.stringify({ login_token: googleLoginToken })
+      );
+      const loginToken = JSON.parse(
+        (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
+          "{}"
+      );
+
+      dispatch(fetchUserByToken(loginToken?.login_token)).then((res) => {
+        if (res.payload.statusCode === 200) {
+          enqueueSnackbar(res.payload.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          localStorage.setItem(
+            "loginData",
+            JSON.stringify({ login_token: loginToken?.login_token })
+          );
+          setLoginData(res.payload.data);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 500);
+        } else {
+          enqueueSnackbar(res.payload.message, { variant: "error" });
+          localStorage.removeItem("loginData");
+        }
+      });
     }
   }, [googleLoginError, googleLoginToken]);
 
@@ -709,14 +715,13 @@ const NavBar = () => {
             {secondaryNavLinks.map((link: string, index: number) => (
               <li
                 key={index}
-                className={`${
-                  pathName === `/${link.toLowerCase()}`
-                    ? "text-primary-foreground"
-                    : "text-white"
-                } uppercase cursor-pointer`}
+                className={`text-white uppercase cursor-pointer`}
                 onClick={() => {
-                  handleOpenModal();
-                  index === 0 ? setSignStep("in") : setSignStep("up");
+                  !userLoggedIn && handleOpenModal();
+                  !userLoggedIn && index === 0
+                    ? setSignStep("in")
+                    : setSignStep("up");
+                  userLoggedIn && router.push("/dashboard");
                 }}
               >
                 {link}
@@ -815,9 +820,12 @@ const NavBar = () => {
                   disablePadding
                   key={index}
                   onClick={() => {
-                    index === 0 ? setSignStep("in") : setSignStep("up");
+                    !userLoggedIn && index === 0
+                      ? setSignStep("in")
+                      : setSignStep("up");
+                    !userLoggedIn && handleOpenModal();
                     setOpen(false);
-                    handleOpenModal();
+                    userLoggedIn && router.push("/dashboard");
                   }}
                 >
                   <ListItemButton>

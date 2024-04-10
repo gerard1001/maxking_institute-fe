@@ -24,8 +24,6 @@ const ArticlesPage = () => {
   const dispatch = useDispatch();
   const state = useSelector(selectArticles);
 
-  console.log(state.featuredArticles);
-
   const articles = state.articles;
   const featuredArticles = state.featuredArticles;
 

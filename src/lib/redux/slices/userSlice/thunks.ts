@@ -13,7 +13,6 @@ export const registerUser = createAppAsyncThunk(
         email,
         password,
       });
-      console.log(res);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -30,7 +29,6 @@ export const loginUser = createAppAsyncThunk(
         email,
         password,
       });
-      console.log(res);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -43,7 +41,6 @@ export const googleLogin = createAppAsyncThunk(
   async (): Promise<any> => {
     try {
       const res = await axios.get(`/auth/google`);
-      console.log(res);
       return res.data;
     } catch (error: any) {
       // return rejectWithValue(error.response.data);
@@ -57,7 +54,6 @@ export const verifyUser = createAppAsyncThunk(
   async (token: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/auth/verify/${token}`);
-      console.log(res);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -70,7 +66,6 @@ export const fetchUserByToken = createAppAsyncThunk(
   async (token: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/user/token/${token}`);
-      console.log(res);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

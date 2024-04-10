@@ -42,7 +42,6 @@ export const userSlice = createSlice({
         state.loggedInUser = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        console.log(action);
         state.loading = false;
         state.error = action.error;
       });
@@ -56,7 +55,6 @@ export const userSlice = createSlice({
         // state.loggedInUser = action.payload;
       })
       .addCase(verifyUser.rejected, (state, action) => {
-        console.log(action);
         state.loading = false;
         state.error = action.error;
       });
@@ -69,7 +67,6 @@ export const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(googleLogin.rejected, (state, action) => {
-        console.log(action);
         state.loading = false;
         state.error = action.error;
       });
@@ -83,7 +80,6 @@ export const userSlice = createSlice({
         state.loggedInUser = action.payload;
       })
       .addCase(fetchUserByToken.rejected, (state, action) => {
-        console.log(action);
         state.loading = false;
         state.error = action.error;
       });
