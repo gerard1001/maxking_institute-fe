@@ -37,3 +37,43 @@ export const loginUser = createAppAsyncThunk(
     }
   }
 );
+
+export const googleLogin = createAppAsyncThunk(
+  "user/googleLogin",
+  async (): Promise<any> => {
+    try {
+      const res = await axios.get(`/auth/google`);
+      console.log(res);
+      return res.data;
+    } catch (error: any) {
+      // return rejectWithValue(error.response.data);
+      throw new Error(error);
+    }
+  }
+);
+
+export const verifyUser = createAppAsyncThunk(
+  "user/verifyUser",
+  async (token: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/auth/verify/${token}`);
+      console.log(res);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchUserByToken = createAppAsyncThunk(
+  "user/fetchUserByToken",
+  async (token: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user/token/${token}`);
+      console.log(res);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

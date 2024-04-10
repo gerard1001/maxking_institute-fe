@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import ImageSlider from "./sections/ImageSlider";
 import WhyUs from "./sections/WhyUs";
 import CourseCategories from "./sections/CourseCategories";

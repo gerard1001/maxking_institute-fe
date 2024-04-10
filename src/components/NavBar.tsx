@@ -7,7 +7,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { FaXTwitter, FaFacebookF } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { MdOutlineClose } from "react-icons/md";
@@ -40,7 +40,15 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FcGoogle } from "react-icons/fc";
-import { loginUser, registerUser, useDispatch } from "@/lib/redux";
+import {
+  fetchUserByToken,
+  googleLogin,
+  loginUser,
+  registerUser,
+  selectUsers,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
 import { ICreateUser, ILoginUser } from "@/lib/interfaces/user.interface";
 import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
 
@@ -78,25 +86,37 @@ const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
-function LoadinProgress() {
+interface SignInInputs {
+  email: string;
+  password: string;
+}
+
+interface SignInProps {
+  closeModal: () => void;
+}
+
+export const LoadinProgress = () => {
   return (
     <React.Fragment>
       <CircularProgress sx={{ color: "#F8A51B" }} />
     </React.Fragment>
   );
-}
+};
 
-const SignInForm = () => {
+const SignInForm = ({ closeModal }: SignInProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
     control,
-    setValue,
-    getValues,
+    reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<SignInInputs>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -116,6 +136,12 @@ const SignInForm = () => {
             variant: "success",
             preventDuplicate: true,
           });
+          setTimeout(() => {
+            reset();
+          }, 500);
+          setTimeout(() => {
+            closeModal();
+          }, 1000);
         } else {
           enqueueSnackbar(res.payload.message, { variant: "error" });
         }
@@ -124,6 +150,7 @@ const SignInForm = () => {
         setLoginLoading(false);
       });
   };
+
   return (
     <Box
       component="form"
@@ -133,7 +160,6 @@ const SignInForm = () => {
     >
       <Controller
         name="email"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -173,7 +199,6 @@ const SignInForm = () => {
 
       <Controller
         name="password"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -245,15 +270,33 @@ const signUpSchema = yup.object().shape({
   password: yup.string().required().min(4).max(16).label("Password"),
 });
 
-const SignUpForm = () => {
+interface SignUpInputs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+interface SignUpProps {
+  closeModal: () => void;
+}
+
+const SignUpForm = ({ closeModal }: SignUpProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<SignUpInputs>({
     resolver: yupResolver(signUpSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
   });
 
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -265,13 +308,17 @@ const SignUpForm = () => {
     setRegisterLoading(true);
     dispatch(registerUser(data))
       .then((res) => {
-        console.log("************************************");
-        console.log(data);
         if (res.payload.statusCode === 201) {
           enqueueSnackbar(res.payload.message, {
             variant: "success",
             preventDuplicate: true,
           });
+          setTimeout(() => {
+            reset();
+          }, 500);
+          setTimeout(() => {
+            closeModal();
+          }, 1000);
         } else {
           enqueueSnackbar(res.payload.message, { variant: "error" });
         }
@@ -289,7 +336,6 @@ const SignUpForm = () => {
     >
       <Controller
         name="firstName"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -328,7 +374,6 @@ const SignUpForm = () => {
       />
       <Controller
         name="lastName"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -368,7 +413,6 @@ const SignUpForm = () => {
 
       <Controller
         name="email"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -407,7 +451,6 @@ const SignUpForm = () => {
       />
       <Controller
         name="password"
-        defaultValue={""}
         control={control}
         render={({ field }) => (
           <TextField
@@ -473,11 +516,18 @@ const SignUpForm = () => {
 };
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const searchParams = useSearchParams();
   const pathName = usePathname();
   const [navBar, setNavBar] = useState<boolean>(false);
   const [open, setOpen] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
+
+  const state = useSelector(selectUsers);
+
+  console.log(state);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -497,8 +547,66 @@ const NavBar = () => {
     setOpen(newOpen);
   };
 
+  const handleGoogleLogin = ({}) => {
+    // window.location.href = "http://localhost:5050/api/v1/auth/google";
+    window.open("http://localhost:5050/api/v1/auth/google", "_self");
+    // dispatch(googleLogin()).then((res) => {
+    //   console.log("******CANDANCE******");
+    //   console.log(res);
+
+    // if (res.payload.statusCode === 200) {
+    //   alert(res.payload.message);
+    //   enqueueSnackbar(res.payload.message, {
+    //     variant: "success",
+    //     preventDuplicate: true,
+    //   });
+    //   setTimeout(() => {
+    //     handleOpenModal();
+    //   }, 500);
+    // } else {
+    //   enqueueSnackbar(res.payload.message, { variant: "error" });
+    // }
+    // });
+  };
+
+  const googleLoginError = searchParams.get("error");
+  const googleLoginToken = searchParams.get("token");
+
+  useEffect(() => {
+    if (googleLoginError === "manual_user-google_signin-conflict") {
+      enqueueSnackbar(
+        "This email was registered manually, please proceed with email and password",
+        { variant: "warning" }
+      );
+    }
+    if (googleLoginToken) {
+      enqueueSnackbar("Verifying user...", { variant: "info" });
+      dispatch(fetchUserByToken(googleLoginToken))
+        .then((res) => {
+          if (res.payload.statusCode === 200) {
+            enqueueSnackbar(res.payload.message, {
+              variant: "success",
+              preventDuplicate: true,
+            });
+            setTimeout(() => {
+              // window.location.href = "/";
+            }, 500);
+          } else {
+            enqueueSnackbar(res.payload.message, { variant: "error" });
+          }
+        })
+        .finally(() => {
+          // setVerifyLoading(false);
+        });
+    }
+  }, [googleLoginError, googleLoginToken]);
+
   return (
-    <div className={`lg:px-10 px-0 flex flex-col items-center `}>
+    <div
+      className={`lg:px-10 px-0 flex-col items-center ${
+        pathName === "/verify" ? "hidden" : "flex"
+      }`}
+    >
       <div className="lg:flex hidden items-center justify-between w-full">
         <div className="flex items-center justify-start">
           <Link href="/" className="flex ml-2 md:mr-24">
@@ -567,6 +675,7 @@ const NavBar = () => {
           </div>
         </div>
       </div>
+      {}
       <nav
         className={`bg-primary w-full py-4 px-6 lg:flex hidden items-center justify-between ${
           navBar ? "navbar-animate" : "lg:rounded-[50px] rounded-none relative"
@@ -773,7 +882,11 @@ const NavBar = () => {
             <Typography className="text-2xl font-semibold text-accent">
               {signStep === "in" ? "Sign In" : "Sign Up"}
             </Typography>
-            {signStep === "in" ? <SignInForm /> : <SignUpForm />}
+            {signStep === "in" ? (
+              <SignInForm closeModal={handleCloseModal} />
+            ) : (
+              <SignUpForm closeModal={handleCloseModal} />
+            )}
 
             <Typography>
               {signStep === "in"
@@ -800,6 +913,7 @@ const NavBar = () => {
               className="bg-secondary hover:bg-secondary/90 w-full"
               size="large"
               startIcon={<FcGoogle />}
+              onClick={handleGoogleLogin}
             >
               Continue with Google
             </Button>

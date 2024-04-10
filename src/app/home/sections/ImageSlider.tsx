@@ -71,6 +71,7 @@ const ImageSlider = () => {
       </IconButton>
     );
   };
+
   return (
     <div className="w-full pb-8">
       <Slider prevArrow={<PreviousBtn />} nextArrow={<NextBtn />} {...settings}>

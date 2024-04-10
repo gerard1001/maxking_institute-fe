@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser } from "./thunks";
+import {
+  fetchUserByToken,
+  googleLogin,
+  loginUser,
+  registerUser,
+  verifyUser,
+} from "./thunks";
 
 const initialState = {
   allUsers: [],
@@ -36,6 +42,47 @@ export const userSlice = createSlice({
         state.loggedInUser = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        console.log(action);
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(verifyUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.loggedInUser = action.payload;
+      })
+      .addCase(verifyUser.rejected, (state, action) => {
+        console.log(action);
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(googleLogin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
+        console.log(action);
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchUserByToken.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUserByToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loggedInUser = action.payload;
+      })
+      .addCase(fetchUserByToken.rejected, (state, action) => {
         console.log(action);
         state.loading = false;
         state.error = action.error;
