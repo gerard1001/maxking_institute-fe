@@ -16,6 +16,7 @@ import { TbTextPlus } from "react-icons/tb";
 import Drawer from "@mui/material/Drawer";
 import { MdOutlineClose } from "react-icons/md";
 import { IconButton } from "@mui/material";
+import { useRouter } from "next/navigation";
 interface SingleArticleProps {
   params: {
     articleId: string;
@@ -24,6 +25,7 @@ interface SingleArticleProps {
 
 const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const state = useSelector(selectArticles);
 
   const [open, setOpen] = React.useState(false);
@@ -131,7 +133,8 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
                           alt=""
                           className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105"
                           onClick={() => {
-                            window.location.href = `/articles/${article.id}`;
+                            // window.location.href = `/articles/${article.id}`;
+                            router.push(`/articles/${article.id}`);
                           }}
                         />
                       </div>

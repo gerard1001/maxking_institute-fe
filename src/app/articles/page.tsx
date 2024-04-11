@@ -19,9 +19,11 @@ import "./styles/slick-theme.styles.css";
 import { Button, IconButton } from "@mui/material";
 import { IoArrowForward } from "react-icons/io5";
 import { SuspenseLoading } from "@/components/SuspenseLoading";
+import { useRouter } from "next/navigation";
 
 const ArticlesPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const state = useSelector(selectArticles);
 
   const articles = state.articles;
@@ -111,7 +113,8 @@ const ArticlesPage = () => {
                             endIcon={<IoArrowForward />}
                             className="xs:mt-5 mt-1 bg-primary"
                             onClick={() => {
-                              window.location.href = `/articles/${article.id}`;
+                              // window.location.href = `/articles/${article.id}`;
+                              router.push(`/articles/${article.id}`);
                             }}
                           >
                             Read more
@@ -132,7 +135,8 @@ const ArticlesPage = () => {
                               endIcon={<IoArrowForward />}
                               className="mt-5 bg-primary"
                               onClick={() => {
-                                window.location.href = `/articles/${article.id}`;
+                                // window.location.href = `/articles/${article.id}`;
+                                router.push(`/articles/${article.id}`);
                               }}
                             >
                               Read more
@@ -168,7 +172,8 @@ const ArticlesPage = () => {
                       alt=""
                       className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105"
                       onClick={() => {
-                        window.location.href = `/articles/${article.id}`;
+                        // window.location.href = `/articles/${article.id}`;
+                        router.push(`/articles/${article.id}`);
                       }}
                     />
                   </div>

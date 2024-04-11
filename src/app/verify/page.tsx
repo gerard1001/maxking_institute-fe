@@ -1,14 +1,15 @@
 "use client";
 
 import React from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, verifyUser } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { LoadinProgress } from "@/components/NavBar";
+import LoadinProgress from "@/components/LoadingProgess";
 
 const VerifyPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const searchParams = useSearchParams();
 
@@ -26,7 +27,7 @@ const VerifyPage = () => {
               variant: "success",
               preventDuplicate: true,
             });
-            window.location.href = "/";
+            router.push("/");
           } else if (res.payload.statusCode === 409) {
             setAlreadyVerified(true);
           } else {
@@ -73,7 +74,8 @@ const VerifyPage = () => {
                       className="bg-primary hover:bg-primary/90 w-full mt-4 !h-[46px]"
                       size="large"
                       onClick={() => {
-                        window.location.href = "/";
+                        // window.location.href = "/";
+                        router.push("/");
                       }}
                     >
                       go to main page
