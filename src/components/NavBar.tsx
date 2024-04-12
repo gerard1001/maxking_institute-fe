@@ -11,9 +11,7 @@ const Navbar = () => {
   const { userLoggedIn } = useContext(LoginContext);
 
   const isDashboard = pathName.split("/")[1] === "dashboard";
-  return (
-    <>{userLoggedIn && isDashboard ? <DashboardNavbar /> : <MainNavbar />}</>
-  );
+  return <>{userLoggedIn && isDashboard ? null : <MainNavbar />}</>;
 };
 
 export default Navbar;
