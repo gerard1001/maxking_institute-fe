@@ -16,6 +16,8 @@
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
     "date-fns": "^3.6.0",
+    "jodit": "^4.1.8",
+    "jodit-react": "^4.0.20",
     "jsonwebtoken": "^9.0.2",
     "next": "14.1.0",
     "notistack": "^3.0.1",

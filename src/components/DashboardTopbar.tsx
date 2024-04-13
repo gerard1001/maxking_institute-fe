@@ -5,8 +5,10 @@ import LoadinProgress from "./LoadingProgess";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { FaRegBell } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const DashboardTopbar = ({ navBar }: any) => {
+  const router = useRouter();
   const {
     loginData,
     userLoggedIn,
@@ -35,6 +37,7 @@ const DashboardTopbar = ({ navBar }: any) => {
               localStorage.removeItem("loginData");
               setLoginData({});
               setUserLoggedIn(false);
+              router.push("/");
             }}
           />
         )}

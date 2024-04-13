@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { LoginContext } from "@/lib/context/LoginContext";
@@ -9,7 +11,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   const { loginData, userLoggedIn } = useContext(LoginContext);
   React.useEffect(() => {
     if (!userLoggedIn) {
-      router.push("/");
+      // router.push("/");
+      window.location.href = "/";
     }
   }, [userLoggedIn, loginData]);
 

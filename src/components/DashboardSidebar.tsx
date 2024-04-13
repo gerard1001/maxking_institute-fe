@@ -14,7 +14,11 @@ import { AiOutlineLogout } from "react-icons/ai";
 import ProtectedRoute from "./ProtectedRoute";
 import { usePathname, useRouter } from "next/navigation";
 
-export const SidebarContext = createContext({ expanded: false });
+export const SidebarContext = createContext({
+  expanded: false,
+  // showDropdown: { 0: false },
+  // setShowDropdown: (val: any) => {},
+});
 
 const sidebarItems = [
   {
@@ -38,7 +42,7 @@ const sidebarItems = [
     icon: <TbCertificate className="text-xl" />,
     text: "Certifications",
     active: false,
-    to: "/dashboard",
+    to: "/dashboard/certificates",
   },
   {
     listkey: "Users",
@@ -54,7 +58,7 @@ const sidebarItems = [
     active: true,
     hasDropdown: true,
     dropDownItems: ["All Articles", "Article categories", "Saved Articles"],
-    to: "/dashboard",
+    to: "/dashboard/articles",
   },
   {
     listkey: "Schedule",
@@ -79,15 +83,21 @@ const sidebarItems = [
   },
 ];
 
-const DashboardSidebar: React.FC = (
-  {
-    //   children,
-  }
-) => {
+const DashboardSidebar: React.FC = ({}) => {
   const router = useRouter();
   const pathName = usePathname();
   const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [showDropdown, setShowDropdown] = useState<any>({
+    0: false,
+  });
+
+  console.log(showDropdown);
+  console.log(showDropdown[0]);
+  console.log(showDropdown[1]);
+  console.log(showDropdown[2]);
+  console.log(showDropdown[3]);
+  console.log(showDropdown[4]);
 
   const handleSetActiveIndex = (index: number) => {
     setActiveIndex(index);
@@ -96,21 +106,22 @@ const DashboardSidebar: React.FC = (
   useEffect(() => {
     const activePage = pathName.split("/");
 
-    switch (activePage[2]) {
-      case "courses":
-        setActiveIndex(1);
-        break;
-      case "articles":
-        setActiveIndex(4);
-        break;
-      case "users":
-        setActiveIndex(3);
-        break;
-      default:
-        setActiveIndex(0);
-        break;
+    console.log(activePage[2]);
+
+    if (activePage[2] === "courses") {
+      setActiveIndex(1);
+      setShowDropdown({ 1: true });
+    } else if (activePage[2] === "articles") {
+      setActiveIndex(4);
+      setShowDropdown({ 4: true });
+    } else if (activePage[2] === "users") {
+      setActiveIndex(3);
+    } else if (activePage[2] === "certificates") {
+      setActiveIndex(2);
+    } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
+      setActiveIndex(0);
     }
-  }, [pathName]);
+  }, []);
 
   return (
     <ProtectedRoute>
@@ -145,6 +156,7 @@ const DashboardSidebar: React.FC = (
                   onClick={() => {
                     handleSetActiveIndex(index);
                     router.push(`${item.to}`);
+                    // setShowDropdown({ [index]: !showDropdown[index] });
                   }}
                 >
                   <SidebarItem
@@ -153,6 +165,9 @@ const DashboardSidebar: React.FC = (
                     active={index === activeIndex}
                     hasDropdown={item.hasDropdown}
                     dropDownItems={item.dropDownItems}
+                    showDropdown={showDropdown}
+                    setShowDropdown={setShowDropdown}
+                    index={index}
                   />
                 </div>
               ))}

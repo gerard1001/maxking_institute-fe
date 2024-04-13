@@ -17,6 +17,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.slick-initialized {
+  padding: 0;
+}
+
 .slick-list {
   position: relative;
   width: 100%;

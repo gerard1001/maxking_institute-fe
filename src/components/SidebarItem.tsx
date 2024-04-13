@@ -10,17 +10,17 @@ const SidebarItem = ({
   active,
   hasDropdown,
   dropDownItems,
+  showDropdown,
+  setShowDropdown,
+  index,
 }: any) => {
   const { expanded } = useContext(SidebarContext);
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  // const sampleList = ["All Courses", "Course categories", "Course subjects"];
 
   return (
     <li
       className={`
     transition-all ${
-      active && hasDropdown ? "bg-secondary text-white" : ""
+      active && hasDropdown ? "bg-white text-white" : ""
     } rounded-md w-full
     `}
     >
@@ -32,7 +32,7 @@ const SidebarItem = ({
             ? "bg-secondary text-white"
             : "hover:bg-secondary/80 text-accent hover:text-primary-foreground"
         }`}
-        onClick={() => setShowDropdown((curr) => !curr)}
+        onClick={() => setShowDropdown({ [index]: !showDropdown[index] })}
       >
         <div className="flex items-center">
           {" "}
@@ -59,23 +59,31 @@ const SidebarItem = ({
         </div>
       </div>
 
-      {active && hasDropdown && showDropdown && expanded && <hr />}
-      {active && hasDropdown && showDropdown && expanded && (
-        <div className="flex flex-col gap-1 transition-all bg-white/50 py-1 px-2">
-          {dropDownItems.map((item: string, index: number) => (
+      <div
+        className={`flex flex-col gap-1 transition-all bg-white ease-in-out duration-150 h-0 ${
+          active && hasDropdown && showDropdown[index] && expanded
+            ? "h-fit py-2"
+            : "py-0 h-0"
+        } pl-3`}
+      >
+        {active &&
+          hasDropdown &&
+          showDropdown[index] &&
+          expanded &&
+          dropDownItems.map((item: string, index: number) => (
             <div
               key={index}
-              className={`left-full rounded-md px-2 py-1 ml-6 hover:bg-secondary/90 hover:text-white cursor-pointer flex items-center gap-2
+              className={`left-full rounded-md px-2 py-1 ml-6 text-accent cursor-pointer flex items-center gap-2
                `}
             >
-              <div
+              {/* <div
                 className={`w-2 aspect-square rounded-full bg-accent-foreground`}
-              />
+              /> */}
               <span>{item}</span>
             </div>
           ))}
-        </div>
-      )}
+      </div>
+      {/* )} */}
     </li>
   );
 };
