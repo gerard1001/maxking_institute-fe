@@ -69,11 +69,8 @@ const MainNavbar = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
-  const { loginData, setLoginData, userLoggedIn } = useContext(LoginContext);
-
-  console.log({ userLoggedIn });
-
-  console.log({ loginData });
+  const { loginData, setLoginData, userLoggedIn, loginUserFetchLoading } =
+    useContext(LoginContext);
 
   const secondaryNavLinks = userLoggedIn
     ? ["DASHBOARD"]
