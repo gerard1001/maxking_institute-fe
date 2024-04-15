@@ -7,14 +7,13 @@ import {
   Box,
   InputAdornment,
   Button,
-  CircularProgress,
 } from "@mui/material";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { registerUser, useDispatch } from "@/lib/redux";
-import { ICreateUser } from "@/lib/interfaces/user.interface";
+import { IUserSignUp } from "@/lib/interfaces/user.interface";
 import { useSnackbar } from "notistack";
 import LoadinProgress from "./LoadingProgess";
 
@@ -59,7 +58,7 @@ const SignUpForm = ({ closeModal }: SignUpProps) => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleSignUp = (data: ICreateUser) => {
+  const handleSignUp = (data: IUserSignUp) => {
     setRegisterLoading(true);
     dispatch(registerUser(data))
       .then((res) => {

@@ -51,7 +51,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [loginLoading, setLoginLoading] = React.useState<boolean>(false);
-  const { setLoginData } = useContext(LoginContext);
+  const { setLoginData, setLoginUserFetchLoading } = useContext(LoginContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -65,6 +65,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
             JSON.stringify({ login_token: res.payload.data.token })
           );
           dispatch(fetchUserByToken(res.payload.data.token)).then((nextRes) => {
+            setLoginUserFetchLoading(true);
             if (nextRes.payload.statusCode === 200) {
               enqueueSnackbar(res.payload.message, {
                 variant: "success",
@@ -88,6 +89,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
       })
       .finally(() => {
         setLoginLoading(false);
+        setLoginUserFetchLoading(false);
       });
   };
 

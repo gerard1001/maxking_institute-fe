@@ -92,21 +92,12 @@ const DashboardSidebar: React.FC = ({}) => {
     0: false,
   });
 
-  console.log(showDropdown);
-  console.log(showDropdown[0]);
-  console.log(showDropdown[1]);
-  console.log(showDropdown[2]);
-  console.log(showDropdown[3]);
-  console.log(showDropdown[4]);
-
   const handleSetActiveIndex = (index: number) => {
     setActiveIndex(index);
   };
 
   useEffect(() => {
     const activePage = pathName.split("/");
-
-    console.log(activePage[2]);
 
     if (activePage[2] === "courses") {
       setActiveIndex(1);

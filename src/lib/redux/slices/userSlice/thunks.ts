@@ -1,10 +1,14 @@
 import axios from "@/lib/config/axios.config";
 import { createAppAsyncThunk } from "../../createAppAsyncThunk";
-import { ICreateUser, ILoginUser } from "@/lib/interfaces/user.interface";
+import {
+  IUserSignUp,
+  ILoginUser,
+  ICreateUser,
+} from "@/lib/interfaces/user.interface";
 
 export const registerUser = createAppAsyncThunk(
   "user/registerUser",
-  async (userData: ICreateUser, { rejectWithValue }): Promise<any> => {
+  async (userData: IUserSignUp, { rejectWithValue }): Promise<any> => {
     try {
       const { firstName, lastName, email, password } = userData;
       const res = await axios.post(`/auth/register`, {
@@ -12,6 +16,24 @@ export const registerUser = createAppAsyncThunk(
         lastName,
         email,
         password,
+      });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createUser = createAppAsyncThunk(
+  "user/createUser",
+  async (userData: ICreateUser, { rejectWithValue }): Promise<any> => {
+    try {
+      const { firstName, lastName, email, roleId } = userData;
+      const res = await axios.post(`/auth/create-user`, {
+        firstName,
+        lastName,
+        email,
+        roleId,
       });
       return res.data;
     } catch (error: any) {
@@ -66,6 +88,18 @@ export const fetchUserByToken = createAppAsyncThunk(
   async (token: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/user/token/${token}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchAllUsers = createAppAsyncThunk(
+  "user/fetchAllUsers",
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user`);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

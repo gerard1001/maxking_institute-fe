@@ -7,6 +7,7 @@ import {
   useDispatch,
   useSelector,
 } from "../redux";
+import { User } from "../interfaces/user.interface";
 
 type LoginContextType = {
   loginData: any;
@@ -33,7 +34,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const dispatch = useDispatch();
   const state = useSelector(selectUsers);
 
-  const [loginData, setLoginData] = useState(state.loggedInUser);
+  const [loginData, setLoginData] = useState<User | any>(state.loggedInUser);
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(true);
   const [loginUserFetchLoading, setLoginUserFetchLoading] =
     useState<boolean>(false);

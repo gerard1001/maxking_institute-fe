@@ -25,6 +25,19 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:5050/api/v1",
 });
 
+axiosInstance.interceptors.request.use(
+  (request) => {
+    const loginToken = JSON.parse(
+      (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
+        "{}"
+    );
+    request.headers.authorization = `${"Bearer" + " "}${
+      loginToken?.login_token
+    }`;
+    return request;
+  },
+  (error) => Promise.reject(error)
+);
 axiosInstance.interceptors.request.use(interceptRequest);
 axiosInstance.interceptors.response.use(
   interceptSuccessResponse,

@@ -69,8 +69,13 @@ const MainNavbar = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
-  const { loginData, setLoginData, userLoggedIn, loginUserFetchLoading } =
-    useContext(LoginContext);
+  const {
+    loginData,
+    setLoginData,
+    userLoggedIn,
+    loginUserFetchLoading,
+    setLoginUserFetchLoading,
+  } = useContext(LoginContext);
 
   const secondaryNavLinks = userLoggedIn
     ? ["DASHBOARD"]
@@ -118,25 +123,30 @@ const MainNavbar = () => {
           "{}"
       );
 
-      dispatch(fetchUserByToken(loginToken?.login_token)).then((res) => {
-        if (res.payload.statusCode === 200) {
-          enqueueSnackbar(res.payload.message, {
-            variant: "success",
-            preventDuplicate: true,
-          });
-          localStorage.setItem(
-            "loginData",
-            JSON.stringify({ login_token: loginToken?.login_token })
-          );
-          setLoginData(res.payload.data);
-          setTimeout(() => {
-            router.push("/dashboard");
-          }, 500);
-        } else {
-          enqueueSnackbar(res.payload.message, { variant: "error" });
-          localStorage.removeItem("loginData");
-        }
-      });
+      dispatch(fetchUserByToken(loginToken?.login_token))
+        .then((res) => {
+          setLoginUserFetchLoading(true);
+          if (res.payload.statusCode === 200) {
+            enqueueSnackbar(res.payload.message, {
+              variant: "success",
+              preventDuplicate: true,
+            });
+            localStorage.setItem(
+              "loginData",
+              JSON.stringify({ login_token: loginToken?.login_token })
+            );
+            setLoginData(res.payload.data);
+            setTimeout(() => {
+              router.push("/dashboard");
+            }, 500);
+          } else {
+            enqueueSnackbar(res.payload.message, { variant: "error" });
+            localStorage.removeItem("loginData");
+          }
+        })
+        .finally(() => {
+          setLoginUserFetchLoading(false);
+        });
     }
   }, [googleLoginError, googleLoginToken]);
 

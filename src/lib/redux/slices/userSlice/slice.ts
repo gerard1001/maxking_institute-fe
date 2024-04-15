@@ -1,16 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  createUser,
+  fetchAllUsers,
   fetchUserByToken,
   googleLogin,
   loginUser,
   registerUser,
   verifyUser,
 } from "./thunks";
+import { User, UserSliceState } from "@/lib/interfaces/user.interface";
 
-const initialState = {
+const initialState: UserSliceState = {
   allUsers: [],
-  user: {},
-  loggedInUser: {},
+  user: {} as User,
+  loggedInUser: {} as User,
   loading: false,
   error: {},
 };
@@ -29,6 +32,18 @@ export const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(createUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(createUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
@@ -77,9 +92,22 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserByToken.fulfilled, (state, action) => {
         state.loading = false;
-        state.loggedInUser = action.payload;
+        state.loggedInUser = action.payload.data;
       })
       .addCase(fetchUserByToken.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allUsers = action.payload.data;
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
