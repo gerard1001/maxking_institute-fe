@@ -7,6 +7,7 @@ import { SuspenseLoading } from "@/components/SuspenseLoading";
 import CustomThemeProvider from "@/lib/theme/mui.theme";
 import SnackProvider from "@/lib/providers/snack.provider";
 import LoginContextProvider from "@/lib/context/LoginContext";
+import TimeLocalProvider from "@/lib/providers/localization.provider";
 
 const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
 const source = Source_Sans_3({ subsets: ["latin"] });
@@ -20,16 +21,18 @@ export default function RootLayout(props: React.PropsWithChildren) {
       </head>
       <body className={source.className}>
         <Suspense fallback={<SuspenseLoading />}>
-          <Providers>
-            <LoginContextProvider>
-              <CustomThemeProvider>
-                <SnackProvider>
-                  <NavBar />
-                  {props.children}
-                </SnackProvider>
-              </CustomThemeProvider>
-            </LoginContextProvider>
-          </Providers>
+          <TimeLocalProvider>
+            <Providers>
+              <LoginContextProvider>
+                <CustomThemeProvider>
+                  <SnackProvider>
+                    <NavBar />
+                    {props.children}
+                  </SnackProvider>
+                </CustomThemeProvider>
+              </LoginContextProvider>
+            </Providers>
+          </TimeLocalProvider>
         </Suspense>
       </body>
     </html>

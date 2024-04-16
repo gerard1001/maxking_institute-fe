@@ -139,7 +139,7 @@ body {
 
 .users-table-cell {
   text-align: left;
-  padding: 6px;
+  padding: 4px;
 }
 
 /* thead tr th {
@@ -153,8 +153,9 @@ thead {
   top: 0;
   z-index: 10;
   overflow: hidden;
-  background: #ffffff;
   /* border-bottom: 1px solid #dadada; */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   box-shadow: 0 4px 2px -2px #b4b4b4be;
 }
 thead tr th {
@@ -174,3 +175,10 @@ tbody tr {
   overflow: hidden;
   background-color: #eaf3ff;
 } */
+.form-control {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dadada;
+  width: 100% !important;
+  margin-bottom: 10px;
+}

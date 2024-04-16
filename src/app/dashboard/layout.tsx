@@ -27,7 +27,7 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="w-full h-full overflow-y-auto" onScroll={scrollDiv}>
           <DashboardTopbar navBar={navBar} />
 
-          <div className="px-4">{children}</div>
+          <div className="px-4 bg-zinc-100 min-h-screen pt-6">{children}</div>
         </div>
       </div>
     </ProtectedRoute>

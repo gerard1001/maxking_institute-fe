@@ -18,9 +18,11 @@ const DashboardTopbar = ({ navBar }: any) => {
   } = useContext(LoginContext);
   return (
     <div
-      className={`h-10 sticky top-0 left-0 bottom-0 ${
+      className={`h-10 sticky z-10 top-0 left-0 bottom-0
+       ${
         navBar ? "backdrop-blur-sm bg-white/30" : "bg-white"
-      } flex items-center justify-between px-3`}
+      }
+       flex items-center justify-between px-3`}
     >
       <div className=""></div>
       <div className="flex items-center gap-6">

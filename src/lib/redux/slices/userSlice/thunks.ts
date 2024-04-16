@@ -95,11 +95,67 @@ export const fetchUserByToken = createAppAsyncThunk(
   }
 );
 
+export const fetchUserById = createAppAsyncThunk(
+  "user/fetchUserById",
+  async (id: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user/${id}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchAllUsers = createAppAsyncThunk(
   "user/fetchAllUsers",
   async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/user`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteUser = createAppAsyncThunk(
+  "user/deletUser",
+  async (id: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.delete(`/user/${id}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateUser = createAppAsyncThunk(
+  "user/updateUser",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/user/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProfile = createAppAsyncThunk(
+  "user/updateProfile",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      console.log(data, "0000");
+      const res = await axios.patch(`/profile/${id}`, data);
+      console.log(res, "0000");
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

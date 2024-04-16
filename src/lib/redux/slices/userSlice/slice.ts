@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createUser,
+  deleteUser,
   fetchAllUsers,
+  fetchUserById,
   fetchUserByToken,
   googleLogin,
   loginUser,
   registerUser,
+  updateProfile,
+  updateUser,
   verifyUser,
 } from "./thunks";
 import { User, UserSliceState } from "@/lib/interfaces/user.interface";
@@ -67,7 +71,6 @@ export const userSlice = createSlice({
       })
       .addCase(verifyUser.fulfilled, (state, action) => {
         state.loading = false;
-        // state.loggedInUser = action.payload;
       })
       .addCase(verifyUser.rejected, (state, action) => {
         state.loading = false;
@@ -100,6 +103,19 @@ export const userSlice = createSlice({
       });
 
     builder
+      .addCase(fetchUserById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
       .addCase(fetchAllUsers.pending, (state) => {
         state.loading = true;
       })
@@ -108,6 +124,43 @@ export const userSlice = createSlice({
         state.allUsers = action.payload.data;
       })
       .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

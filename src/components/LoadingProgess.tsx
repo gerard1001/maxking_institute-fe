@@ -1,9 +1,15 @@
 import React from "react";
 import { CircularProgress } from "@mui/material";
+import clsx from "clsx";
 
-const LoadinProgress = () => {
+const LoadinProgress = ({ className }: any) => {
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center">
+    <div
+      className={clsx(
+        `h-full w-full flex flex-col justify-center items-center`,
+        className
+      )}
+    >
       <CircularProgress sx={{ color: "#F8A51B" }} />
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   useReactTable,
   flexRender,
@@ -16,6 +16,7 @@ import { columnDef } from "../../../lib/utils/columns";
 import dataJSON from "../../../lib/data/dummyData.json";
 import {
   createUser,
+  deleteUser,
   fetchAllUsers,
   fetchRoles,
   selectRoles,
@@ -29,6 +30,11 @@ import { format } from "date-fns";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormHelperText,
   IconButton,
@@ -47,25 +53,29 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadinProgress from "@/components/LoadingProgess";
 import { MdOutlineClose } from "react-icons/md";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
+import { IoWarningOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const options = [
-  "None",
-  "Atria",
-  "Callisto",
-  "Dione",
-  "Ganymede",
-  "Hangouts Call",
-  "Luna",
-  "Oberon",
-  "Phobos",
-  "Pyxis",
-  "Sedna",
-  "Titania",
-  "Triton",
-  "Umbriel",
+  {
+    key: "edit",
+    content: (
+      <div className="flex items-center gap-3">
+        <FaEdit /> Edit
+      </div>
+    ),
+  },
+  {
+    key: "delete",
+    content: (
+      <div className="flex items-center gap-3">
+        <FaTrashCan /> Delete
+      </div>
+    ),
+  },
 ];
-
-const ITEM_HEIGHT = 48;
 
 const columnHelper = createColumnHelper<User>();
 const createUserSchema = yup.object().shape({
@@ -83,6 +93,7 @@ interface CreateUserInputs {
 
 const Users = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
@@ -103,18 +114,31 @@ const Users = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [age, setAge] = React.useState("");
   const [registerLoading, setRegisterLoading] = React.useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [userId, setUserId] = useState<string>("");
   const { loginUserFetchLoading } = useContext(LoginContext);
+
+  console.log(userId, "7777");
 
   // const loggedInUserRole =
   //   state?.loggedInUser?.roles && state?.loggedInUser?.roles[0].type;
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleShowMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   const columns = useMemo(
@@ -139,7 +163,7 @@ const Users = () => {
           </p>
         ),
         cell: (info) => (
-          <div className="pl-2 pr-2 min-w-30 max-w-44 bg-green-200">
+          <div className="pl-2 pr-2 min-w-30 max-w-44">
             <p className="line-clamp-1">{info.getValue()}</p>
           </div>
         ),
@@ -152,7 +176,7 @@ const Users = () => {
         ),
         size: 20,
         cell: (info) => (
-          <div className="pl-2 pr-2 min-w-20 max-w-44 bg-sky-200">
+          <div className="pl-2 pr-2 min-w-20 max-w-44">
             <p className="line-clamp-1">{info.getValue()}</p>
           </div>
         ),
@@ -190,7 +214,7 @@ const Users = () => {
         ),
       }),
       columnHelper.accessor(
-        (row) => `${row.profile.country} ${row.profile.city}`,
+        (row) => `${row.profile.country} / ${row.profile.city}`,
         {
           id: "Country/City",
           header: () => (
@@ -199,9 +223,12 @@ const Users = () => {
             </p>
           ),
           cell: (info) => (
-            <div className="pl-2 pr-2 min-w-40 max-w-44 bg-yellow-200">
+            <div className="pl-2 pr-2 min-w-40 max-w-44">
               <p className="line-clamp-1">
-                {info.getValue() ? info.getValue() : "--"}
+                {info.row.original.profile.country &&
+                info.row.original.profile.city
+                  ? info.getValue()
+                  : "--"}
               </p>
             </div>
           ),
@@ -241,43 +268,23 @@ const Users = () => {
         cell: (info) => (
           <div className="pl-2 pr-2">
             <p className="line-clamp-1">
-              {info.getValue() ? format(info.getValue(), "PPP") : "--"}
+              {info.getValue() ? format(info.getValue(), "PP") : "--"}
             </p>
           </div>
         ),
       }),
       columnHelper.display({
         id: "actions",
-        cell: (props) => (
+        cell: (info) => (
           <div className="text-black/75 pl-2 pr-4 rounded-md">
-            <IconButton onClick={handleClick}>
-              <HiOutlineDotsVertical />
-            </IconButton>
-            <Menu
-              id="long-menu"
-              MenuListProps={{
-                "aria-labelledby": "long-button",
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: "20ch",
-                },
+            <IconButton
+              onClick={(e: React.MouseEvent<HTMLElement>) => {
+                setUserId(info.row.original.id);
+                handleShowMenu(e);
               }}
             >
-              {options.map((option) => (
-                <MenuItem
-                  key={option}
-                  selected={option === "Pyxis"}
-                  onClick={handleClose}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
+              <HiOutlineDotsVertical />
+            </IconButton>
           </div>
         ),
       }),
@@ -357,9 +364,50 @@ const Users = () => {
       });
   };
 
+  const handleDeleteUser = () => {
+    setDeleteLoading(true);
+    dispatch(deleteUser(userId))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          setTimeout(() => {
+            handleCloseDialog();
+          }, 1000);
+        } else {
+          enqueueSnackbar(res.message, { variant: "error" });
+        }
+      })
+      .catch((error) => {
+        enqueueSnackbar(error.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+        setTimeout(() => {
+          handleCloseDialog();
+        }, 1000);
+      })
+      .finally(() => {
+        setDeleteLoading(false);
+        dispatch(fetchAllUsers())
+          .unwrap()
+          .then((res) => {
+            if (res.statusCode !== 200) {
+              enqueueSnackbar("Failed to fetch users", { variant: "error" });
+            }
+          })
+          .catch((_) => {
+            enqueueSnackbar("Failed to fetch users", { variant: "error" });
+          });
+      });
+  };
+
   return (
     <ProtectedRoute>
-      <div className="pt-10 flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <div className="">
           {" "}
           <div className="flex justify-between w-full py-2">
@@ -376,7 +424,7 @@ const Users = () => {
               </Button>
             </div>
           </div>
-          <div className="boxshadow px-1">
+          <div className="boxshadow px-1 bg-white">
             <table className="users-table inset-0">
               <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -651,8 +699,10 @@ const Users = () => {
                     <MenuItem value={20}>Twenty</MenuItem>
                     <MenuItem value={30}>Thirty</MenuItem> */}
 
-                    {roleState?.roles?.map((role) => (
-                      <MenuItem value={role.id}>{role.type}</MenuItem>
+                    {roleState?.roles?.map((role, index) => (
+                      <MenuItem value={role.id} key={index}>
+                        {role.type}
+                      </MenuItem>
                     ))}
                   </Select>
                   <FormHelperText error>
@@ -667,13 +717,94 @@ const Users = () => {
               variant="contained"
               className="bg-secondary hover:bg-secondary/90 w-full mt-4 !h-[46px]"
               size="large"
-              // disabled={registerLoading}
+              disabled={registerLoading}
             >
               {registerLoading ? <LoadinProgress /> : "Create User"}
             </Button>
           </Box>
         </Box>
       </Modal>
+      <Menu
+        id="long-menu"
+        MenuListProps={{
+          "aria-labelledby": "long-button",
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseMenu}
+        PaperProps={{
+          style: {
+            width: "120px",
+          },
+        }}
+      >
+        {options.map((option) => (
+          <MenuItem
+            key={option.key}
+            onClick={() => {
+              handleCloseMenu();
+              option.key === "edit" &&
+                router.push(`/dashboard/users/${userId}/edit`);
+              option.key === "delete" && handleOpenDialog();
+            }}
+          >
+            {option.content}
+          </MenuItem>
+        ))}
+      </Menu>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+          <div className="w-fit p-4 rounded-full bg-red-200">
+            <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
+          </div>
+          <h1 className="text-xl font-semibold">Are you sure?</h1>
+          <p className="text-center">
+            This action will completely remove this user and cannot be undone.
+            Still wish to proceed?
+          </p>
+          <Button
+            fullWidth
+            onClick={handleDeleteUser}
+            className="bg-red-500 text-white hover:bg-red-400 !h-9"
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? (
+              <LoadinProgress className="!h-8 !w-8" />
+            ) : (
+              "Delete"
+            )}
+          </Button>
+          <Button
+            fullWidth
+            onClick={handleCloseDialog}
+            autoFocus
+            variant="contained"
+            className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
+          >
+            Cancel
+          </Button>
+        </Box>
+        {/* <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Disagree</Button>
+          <Button onClick={handleCloseDialog} autoFocus>
+            Agree
+          </Button>
+        </DialogActions> */}
+      </Dialog>
     </ProtectedRoute>
   );
 };
