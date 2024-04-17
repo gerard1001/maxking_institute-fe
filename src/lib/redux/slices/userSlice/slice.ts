@@ -9,6 +9,7 @@ import {
   loginUser,
   registerUser,
   updateProfile,
+  updatePublicDisplay,
   updateUser,
   verifyUser,
 } from "./thunks";
@@ -161,6 +162,18 @@ export const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updatePublicDisplay.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePublicDisplay.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updatePublicDisplay.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

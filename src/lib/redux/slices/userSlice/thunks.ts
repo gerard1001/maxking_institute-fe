@@ -153,9 +153,23 @@ export const updateProfile = createAppAsyncThunk(
     { rejectWithValue }
   ): Promise<any> => {
     try {
-      console.log(data, "0000");
       const res = await axios.patch(`/profile/${id}`, data);
-      console.log(res, "0000");
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updatePublicDisplay = createAppAsyncThunk(
+  "user/updatePublicDisplay",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      console.log(id, data);
+      const res = await axios.patch(`/user/public/${id}`, data);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

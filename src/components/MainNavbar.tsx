@@ -124,10 +124,11 @@ const MainNavbar = () => {
       );
 
       dispatch(fetchUserByToken(loginToken?.login_token))
+        .unwrap()
         .then((res) => {
           setLoginUserFetchLoading(true);
-          if (res.payload.statusCode === 200) {
-            enqueueSnackbar(res.payload.message, {
+          if (res.statusCode === 200) {
+            enqueueSnackbar(res.message, {
               variant: "success",
               preventDuplicate: true,
             });
@@ -135,12 +136,12 @@ const MainNavbar = () => {
               "loginData",
               JSON.stringify({ login_token: loginToken?.login_token })
             );
-            setLoginData(res.payload.data);
+            setLoginData(res.data);
             setTimeout(() => {
               router.push("/dashboard");
             }, 500);
           } else {
-            enqueueSnackbar(res.payload.message, { variant: "error" });
+            enqueueSnackbar(res.message, { variant: "error" });
             localStorage.removeItem("loginData");
           }
         })

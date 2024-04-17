@@ -19,9 +19,7 @@ const DashboardTopbar = ({ navBar }: any) => {
   return (
     <div
       className={`h-10 sticky z-10 top-0 left-0 bottom-0
-       ${
-        navBar ? "backdrop-blur-sm bg-white/30" : "bg-white"
-      }
+       ${navBar ? "backdrop-blur-sm bg-white/30" : "bg-white"}
        flex items-center justify-between px-3`}
     >
       <div className=""></div>
@@ -34,7 +32,7 @@ const DashboardTopbar = ({ navBar }: any) => {
           <img
             src={loginData?.profile?.picture}
             alt="profile"
-            className="w-8 aspect-square rounded-full cursor-pointer"
+            className="w-8 aspect-square rounded-full cursor-pointer object-cover border border-primary"
             onClick={() => {
               localStorage.removeItem("loginData");
               setLoginData({});

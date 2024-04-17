@@ -6,14 +6,8 @@ import {
   useReactTable,
   flexRender,
   getCoreRowModel,
-  getFacetedUniqueValues,
-  getFacetedRowModel,
-  Column,
   createColumnHelper,
-  CellContext,
 } from "@tanstack/react-table";
-import { columnDef } from "../../../lib/utils/columns";
-import dataJSON from "../../../lib/data/dummyData.json";
 import {
   createUser,
   deleteUser,
@@ -26,10 +20,10 @@ import {
 } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { format } from "date-fns";
 import {
   Box,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -55,8 +49,12 @@ import LoadinProgress from "@/components/LoadingProgess";
 import { MdOutlineClose } from "react-icons/md";
 import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
-import { IoWarningOutline } from "react-icons/io5";
+import { IoChevronDown, IoWarningOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import {
+  fetchUserById,
+  updatePublicDisplay,
+} from "@/lib/redux/slices/userSlice/thunks";
 
 const options = [
   {
@@ -114,17 +112,18 @@ const Users = () => {
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [age, setAge] = React.useState("");
   const [registerLoading, setRegisterLoading] = React.useState<boolean>(false);
+  const [openMenuLoading, setOpenMenuLoading] = React.useState<boolean>(true);
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [publicAnchorEl, setPublicAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const openPublicMenu = Boolean(publicAnchorEl);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [userId, setUserId] = useState<string>("");
   const { loginUserFetchLoading } = useContext(LoginContext);
 
   console.log(userId, "7777");
-
-  // const loggedInUserRole =
-  //   state?.loggedInUser?.roles && state?.loggedInUser?.roles[0].type;
 
   const handleShowMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -139,6 +138,40 @@ const Users = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOpenPublicMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setPublicAnchorEl(event.currentTarget);
+  };
+  const handleClosePublicMenu = () => {
+    setPublicAnchorEl(null);
+  };
+
+  const openPublicStatusMenu = (
+    id: string,
+    e: React.MouseEvent<HTMLElement>
+  ) => {
+    setOpenMenuLoading(true);
+    dispatch(fetchUserById(id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          // enqueueSnackbar(res.message, {
+          //   variant: "success",
+          //   preventDuplicate: true,
+          // });
+        } else {
+          enqueueSnackbar(res.message, { variant: "error" });
+        }
+      })
+      .catch((error) => {
+        enqueueSnackbar(error.message || "Error on Public display", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setOpenMenuLoading(false);
+      });
   };
 
   const columns = useMemo(
@@ -183,9 +216,7 @@ const Users = () => {
       }),
       columnHelper.accessor("roles", {
         header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
-            Roles
-          </p>
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">Role</p>
         ),
         size: 20,
         cell: (info) => (
@@ -258,17 +289,61 @@ const Users = () => {
       //     </div>
       //   ),
       // }),
-      columnHelper.accessor("profile.birthDate", {
+      // columnHelper.accessor("profile.birthDate", {
+      //   header: () => (
+      //     <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
+      //       Birth date
+      //     </p>
+      //   ),
+      //   size: 20,
+      //   cell: (info) => (
+      //     <div className="pl-2 pr-2">
+      //       <p className="line-clamp-1">
+      //         {info.getValue() ? format(info.getValue(), "PP") : "--"}
+      //       </p>
+      //     </div>
+      //   ),
+      // }),
+      columnHelper.accessor("publicDisplay", {
         header: () => (
           <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
-            Birth date
+            Public view
           </p>
         ),
         size: 20,
         cell: (info) => (
           <div className="pl-2 pr-2">
             <p className="line-clamp-1">
-              {info.getValue() ? format(info.getValue(), "PP") : "--"}
+              {info.getValue() ? (
+                <div
+                  className={`border-[1px] flex items-center gap-1 justify-center rounded-md border-sky-500 bg-sky-500/10 text-sm px-2 text-sky-500 w-fit cursor-pointer`}
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                    setUserId(info.row.original.id);
+                    openPublicStatusMenu(info.row.original.id, e);
+                    handleOpenPublicMenu(e);
+                  }}
+                >
+                  public
+                  <IoChevronDown
+                    className={`group-hover:text-primary-foreground`}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`border-[1px] flex items-center gap-1 justify-center rounded-md border-yellow-500 bg-yellow-500/10 text-sm px-2 text-yellow-500 w-fit cursor-pointer`}
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                    setUserId(info.row.original.id);
+                    // handleOpenPublicMenu(e);
+                    openPublicStatusMenu(info.row.original.id, e);
+                    handleOpenPublicMenu(e);
+                  }}
+                >
+                  hidden{" "}
+                  <IoChevronDown
+                    className={`group-hover:text-primary-foreground`}
+                  />
+                </div>
+              )}
             </p>
           </div>
         ),
@@ -292,21 +367,16 @@ const Users = () => {
     []
   );
 
-  const MenuItems = () =>
-    roleState.roles.map((role) => (
-      <MenuItem value={role.id}>{role.type}</MenuItem>
-    ));
-
   const users = state.allUsers;
+  const focusUser = state.user;
+
+  console.log(focusUser, "focusUser");
+
   const table = useReactTable({
     data: users,
     columns,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
-    // state: {
-    //   sorting,
-    // },
-    // onSortingChange: setSorting,
   });
 
   useEffect(() => {
@@ -324,6 +394,10 @@ const Users = () => {
       .then((res) => {})
       .catch((error: any) => {});
   }, []);
+
+  // useEffect(() => {
+
+  // }, [userId]);
 
   const handleSignUp = (data: ICreateUser) => {
     setRegisterLoading(true);
@@ -402,6 +476,35 @@ const Users = () => {
           .catch((_) => {
             enqueueSnackbar("Failed to fetch users", { variant: "error" });
           });
+      });
+  };
+
+  const handlePublicDisplay = (status: boolean) => {
+    setPublicAnchorEl(null);
+    dispatch(
+      updatePublicDisplay({ id: userId, data: { publicDisplay: status } })
+    )
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, { variant: "success" });
+          dispatch(fetchAllUsers())
+            .unwrap()
+            .then((res) => {
+              if (res.statusCode !== 200) {
+                enqueueSnackbar("Failed to fetch users", {
+                  variant: "error",
+                });
+                setUserId("");
+              }
+            })
+            .catch((error) => {});
+        }
+      })
+      .catch((error: any) => {
+        enqueueSnackbar("Failed to update public status", {
+          variant: "success",
+        });
       });
   };
 
@@ -789,22 +892,37 @@ const Users = () => {
             Cancel
           </Button>
         </Box>
-        {/* <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Disagree</Button>
-          <Button onClick={handleCloseDialog} autoFocus>
-            Agree
-          </Button>
-        </DialogActions> */}
       </Dialog>
+      <Menu
+        id="basic-menu"
+        anchorEl={publicAnchorEl}
+        open={openPublicMenu && !openMenuLoading}
+        onClose={handleClosePublicMenu}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            handlePublicDisplay(true);
+          }}
+          className={`${
+            focusUser?.publicDisplay ? "bg-sky-500/55" : "bg-none"
+          }`}
+        >
+          Public
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handlePublicDisplay(false);
+          }}
+          className={`${
+            focusUser?.publicDisplay ? "bg-none" : "bg-yellow-500/55"
+          }`}
+        >
+          Hidden
+        </MenuItem>
+      </Menu>
     </ProtectedRoute>
   );
 };

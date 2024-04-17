@@ -32,6 +32,8 @@ export interface User {
   email: string;
   profile: Profile;
   roles: Role[];
+  isVerified: boolean;
+  publicDisplay: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

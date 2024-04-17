@@ -18,6 +18,7 @@ import { ILoginUser } from "@/lib/interfaces/user.interface";
 import { useSnackbar } from "notistack";
 import { LoginContext } from "@/lib/context/LoginContext";
 import LoadinProgress from "./LoadingProgess";
+import { useRouter } from "next/navigation";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -35,6 +36,7 @@ interface SignInProps {
 
 const SignInForm = ({ closeModal }: SignInProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
@@ -51,32 +53,42 @@ const SignInForm = ({ closeModal }: SignInProps) => {
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [loginLoading, setLoginLoading] = React.useState<boolean>(false);
-  const { setLoginData, setLoginUserFetchLoading } = useContext(LoginContext);
+  const { setLoginData, setLoginUserFetchLoading, setUserLoggedIn } =
+    useContext(LoginContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleLogin = (data: ILoginUser) => {
     setLoginLoading(true);
+    setLoginUserFetchLoading(true);
     dispatch(loginUser(data))
+      .unwrap()
       .then((res) => {
-        if (res.payload.statusCode === 200) {
-          localStorage.setItem(
-            "loginData",
-            JSON.stringify({ login_token: res.payload.data.token })
-          );
-          dispatch(fetchUserByToken(res.payload.data.token)).then((nextRes) => {
-            setLoginUserFetchLoading(true);
-            if (nextRes.payload.statusCode === 200) {
-              enqueueSnackbar(res.payload.message, {
-                variant: "success",
-                preventDuplicate: true,
-              });
-              setLoginData(nextRes.payload.data);
-            } else {
-              enqueueSnackbar(nextRes.payload.message, { variant: "error" });
-              localStorage.removeItem("loginData");
-            }
-          });
+        if (res.statusCode === 200) {
+          dispatch(fetchUserByToken(res.data.token))
+            .unwrap()
+            .then((nextRes) => {
+              if (nextRes.statusCode === 200) {
+                enqueueSnackbar(res.message, {
+                  variant: "success",
+                  preventDuplicate: true,
+                });
+                localStorage.setItem(
+                  "loginData",
+                  JSON.stringify({
+                    login_token: res.data.token,
+                  })
+                );
+                setUserLoggedIn(true);
+                setLoginData(nextRes.data);
+                setTimeout(() => {
+                  router.push("/dashboard");
+                }, 500);
+              } else {
+                enqueueSnackbar(nextRes.message, { variant: "error" });
+                localStorage.removeItem("loginData");
+              }
+            });
           setTimeout(() => {
             reset();
           }, 500);
@@ -84,7 +96,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
             closeModal();
           }, 1000);
         } else {
-          enqueueSnackbar(res.payload.message, { variant: "error" });
+          enqueueSnackbar(res.message, { variant: "error" });
         }
       })
       .finally(() => {

@@ -51,13 +51,15 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     dispatch(fetchUserByToken(loginToken?.login_token))
+      .unwrap()
       .then((res) => {
         setLoginUserFetchLoading(true);
-        if (res.payload.statusCode === 200) {
-          setLoginData(res.payload.data);
+        if (res.statusCode === 200) {
+          setLoginData(res.data);
           setUserLoggedIn(true);
         } else {
           setUserLoggedIn(false);
+          localStorage.removeItem("loginData");
           setLoginData({});
         }
       })

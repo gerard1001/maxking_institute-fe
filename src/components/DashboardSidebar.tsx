@@ -72,7 +72,7 @@ const sidebarItems = [
     icon: <CgProfile className="text-xl" />,
     text: "Profile",
     active: false,
-    to: "/dashboard",
+    to: "/dashboard/profile",
   },
   {
     listkey: "Sign out",
@@ -109,6 +109,8 @@ const DashboardSidebar: React.FC = ({}) => {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
       setActiveIndex(2);
+    } else if (activePage[2] === "profile") {
+      setActiveIndex(6);
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }
