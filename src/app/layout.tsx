@@ -8,6 +8,10 @@ import CustomThemeProvider from "@/lib/theme/mui.theme";
 import SnackProvider from "@/lib/providers/snack.provider";
 import LoginContextProvider from "@/lib/context/LoginContext";
 import TimeLocalProvider from "@/lib/providers/localization.provider";
+import "@/styles/home/slick.style.scss";
+import "@/styles/home/slick-theme.style.scss";
+import "@/styles/articles/slick.style.scss";
+import "@/styles/articles/slick-theme.style.scss";
 
 const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
 const source = Source_Sans_3({ subsets: ["latin"] });

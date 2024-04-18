@@ -3,8 +3,6 @@
 import React from "react";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import Slider from "react-slick";
-import "../styles/slick.styles.css";
-import "../styles/slick-theme.styles.css";
 import { IconButton } from "@mui/material";
 
 const ImageSlider = () => {
@@ -73,7 +71,7 @@ const ImageSlider = () => {
   };
 
   return (
-    <div className="w-full pb-8">
+    <div className="w-full pb-8 wrapper1">
       <Slider prevArrow={<PreviousBtn />} nextArrow={<NextBtn />} {...settings}>
         {slides.map((values, idx) => {
           return (

@@ -14,8 +14,6 @@ import { GoComment } from "react-icons/go";
 import { TbTextPlus } from "react-icons/tb";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import Slider from "react-slick";
-import "./styles/slick.styles.css";
-import "./styles/slick-theme.styles.css";
 import { Button, IconButton } from "@mui/material";
 import { IoArrowForward } from "react-icons/io5";
 import { SuspenseLoading } from "@/components/SuspenseLoading";

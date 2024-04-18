@@ -24,10 +24,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
   baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
 });
-console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
-console.log(process.env.NEXT_PUBLIC_FRONTEND_URL);
-console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
 axiosInstance.interceptors.request.use(
   (request) => {
     const loginToken = JSON.parse(
