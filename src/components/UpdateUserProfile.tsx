@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { fetchUserById, updateProfile, useDispatch } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import {
@@ -24,6 +24,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import countries from "@/lib/data/countries.json";
 import { IUpdateProfileProps } from "./UpdateUserInfo";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const dayjsDate = yup
   .mixed()
@@ -68,6 +69,7 @@ const UpdateUserProfile = ({
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
+  const { setLoginData } = useContext(LoginContext);
 
   const {
     handleSubmit: handleSubmitProfile,
@@ -195,6 +197,21 @@ const UpdateUserProfile = ({
             preventDuplicate: true,
           });
           setCanEditProfile(false);
+          if (isAccountUser) {
+            dispatch(fetchUserById(userId))
+              .unwrap()
+              .then((nextRes) => {
+                if (nextRes.statusCode === 200) {
+                  setLoginData(nextRes.data);
+                }
+              })
+              .catch((_) => {
+                enqueueSnackbar("Failed to refetch", {
+                  variant: "error",
+                  preventDuplicate: true,
+                });
+              });
+          }
         } else {
           enqueueSnackbar(res.message, { variant: "error" });
         }

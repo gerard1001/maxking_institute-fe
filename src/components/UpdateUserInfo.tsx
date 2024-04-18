@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { fetchUserById, updateUser, useDispatch } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { TextField, Box, Button } from "@mui/material";
@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadinProgress from "@/components/LoadingProgess";
 import { User } from "@/lib/interfaces/user.interface";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const editInfoSchema = yup.object().shape({
   firstName: yup.string().required().min(4).max(40).label("First name"),
@@ -37,10 +38,8 @@ const UpdateUserInfo = ({
   const { enqueueSnackbar } = useSnackbar();
   //   const userState = useSelector(selectUsers)?.loggedInUser;
   const [canEdit, setCanEdit] = React.useState<boolean>(false);
-  const [canEditProfile, setCanEditProfile] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [picture, setPicture] = React.useState<Blob | any>("");
-  const [picUrl, setPicUrl] = React.useState<any>(null);
+  const { setLoginData } = useContext(LoginContext);
 
   const {
     handleSubmit,
@@ -116,6 +115,21 @@ const UpdateUserInfo = ({
           });
           // resetToDefaults();
           setCanEdit(false);
+          if (isAccountUser) {
+            dispatch(fetchUserById(userId))
+              .unwrap()
+              .then((nextRes) => {
+                if (nextRes.statusCode === 200) {
+                  setLoginData(nextRes.data);
+                }
+              })
+              .catch((_) => {
+                enqueueSnackbar("Failed to refetch", {
+                  variant: "error",
+                  preventDuplicate: true,
+                });
+              });
+          }
         } else {
           enqueueSnackbar(res.message, { variant: "error" });
         }

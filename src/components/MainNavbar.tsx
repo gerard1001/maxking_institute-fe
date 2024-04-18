@@ -100,7 +100,7 @@ const MainNavbar = () => {
   };
 
   const handleGoogleLogin = ({}) => {
-    window.open("http://localhost:5050/api/v1/auth/google", "_self");
+    window.open(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`, "_self");
   };
 
   const googleLoginError = searchParams.get("error");

@@ -22,9 +22,12 @@ const interceptorErrorResponse = (error: any) => {
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:5050/api/v1",
+  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
 });
-
+console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+console.log(process.env.NEXT_PUBLIC_FRONTEND_URL);
+console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 axiosInstance.interceptors.request.use(
   (request) => {
     const loginToken = JSON.parse(

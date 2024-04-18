@@ -35,7 +35,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const state = useSelector(selectUsers);
 
   const [loginData, setLoginData] = useState<User | any>(state.loggedInUser);
-  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(true);
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [loginUserFetchLoading, setLoginUserFetchLoading] =
     useState<boolean>(false);
 
@@ -44,10 +44,18 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
         "{}"
     );
-    if (loginToken?.login_token) {
-      setUserLoggedIn(true);
-    } else {
+
+    if (
+      typeof loginToken === "object" &&
+      Object.keys(loginToken).length === 0
+    ) {
       setUserLoggedIn(false);
+    }
+
+    if (!loginToken?.login_token || loginToken?.login_token === undefined) {
+      setUserLoggedIn(false);
+    } else {
+      setUserLoggedIn(true);
     }
 
     dispatch(fetchUserByToken(loginToken?.login_token))

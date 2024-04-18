@@ -10,9 +10,14 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   const { loginData, userLoggedIn } = useContext(LoginContext);
   React.useEffect(() => {
-    if (!userLoggedIn) {
-      // router.push("/");
-      window.location.href = "/";
+    const loginToken = JSON.parse(
+      (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
+        "{}"
+    );
+
+    if (!loginToken?.login_token) {
+      router.push("/");
+      // window.location.href = "/";
     }
   }, [userLoggedIn, loginData]);
 

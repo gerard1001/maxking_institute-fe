@@ -167,7 +167,7 @@ const DashboardSidebar: React.FC = ({}) => {
             </ul>
           </SidebarContext.Provider>
 
-          <div className="border-t flex p-3">
+          {/* <div className="border-t flex p-3">
             <img
               src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
               alt=""
@@ -185,7 +185,7 @@ const DashboardSidebar: React.FC = ({}) => {
               </div>
               <TfiArrowsVertical size={20} />
             </div>
-          </div>
+          </div> */}
         </nav>
       </aside>
     </ProtectedRoute>
