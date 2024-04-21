@@ -123,8 +123,6 @@ const Users = () => {
   const [userId, setUserId] = useState<string>("");
   const { loginUserFetchLoading } = useContext(LoginContext);
 
-  console.log(userId, "7777");
-
   const handleShowMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -369,8 +367,6 @@ const Users = () => {
 
   const users = state.allUsers;
   const focusUser = state.user;
-
-  console.log(focusUser, "focusUser");
 
   const table = useReactTable({
     data: users,

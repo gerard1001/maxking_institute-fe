@@ -9,7 +9,7 @@ import {
   useSelector,
 } from "@/lib/redux";
 import { format } from "date-fns/format";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { CiHeart } from "react-icons/ci";
 import { GoComment } from "react-icons/go";
 import { TbTextPlus } from "react-icons/tb";
@@ -27,6 +27,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const state = useSelector(selectArticles);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = React.useState(false);
 
@@ -107,7 +108,14 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
                 <p className="">{article.description}</p>
               </div>
               <div className="py-3">
-                <p>{article.body}</p>
+                {/* <p>{article.body}</p> */}
+                <div
+                  ref={divRef}
+                  dangerouslySetInnerHTML={{
+                    __html: article.body,
+                  }}
+                  // style={{ display: "none" }}
+                />
               </div>
             </div>
             <div
@@ -194,6 +202,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
             </IconButton>
           </div>
           <div className="mt-10 lg:px-4 px-2">
+            {/* <p>{article.body}</p>
             <p>{article.body}</p>
             <p>{article.body}</p>
             <p>{article.body}</p>
@@ -207,8 +216,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
             <p>{article.body}</p>
             <p>{article.body}</p>
             <p>{article.body}</p>
-            <p>{article.body}</p>
-            <p>{article.body}</p>
+            <p>{article.body}</p> */}
           </div>
         </div>
       </Drawer>

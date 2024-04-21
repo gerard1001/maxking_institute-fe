@@ -1,6 +1,18 @@
 import axios from "@/lib/config/axios.config";
 import { createAppAsyncThunk } from "../../createAppAsyncThunk";
 
+export const createArticle = createAppAsyncThunk(
+  "article/createArticle",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.post(`/article`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchArticles = createAppAsyncThunk(
   "article/fetchArticles",
   async (): Promise<any> => {

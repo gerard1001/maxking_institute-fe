@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  createArticle,
   fetchArticles,
   fetchFeaturedArticles,
   fetchRelatedArticles,
@@ -21,6 +22,19 @@ export const articleSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder
+      .addCase(createArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createArticle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleArticle = action.payload;
+      })
+      .addCase(createArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
     builder
       .addCase(fetchArticles.pending, (state) => {
         state.loading = true;

@@ -79,7 +79,7 @@ const UpdateUserInfo = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        enqueueSnackbar("Failed to fetch user", { variant: "error" });
       });
   }, [userId]);
 
@@ -107,7 +107,6 @@ const UpdateUserInfo = ({
     dispatch(updateUser({ id: userId, data }))
       .unwrap()
       .then((res) => {
-        console.log(res, "4444");
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, {
             variant: "success",
@@ -134,9 +133,7 @@ const UpdateUserInfo = ({
           enqueueSnackbar(res.message, { variant: "error" });
         }
       })
-      .catch((error: any) => {
-        console.log(error, "4444");
-      })
+      .catch((error: any) => {})
       .finally(() => {
         setLoading(false);
       });

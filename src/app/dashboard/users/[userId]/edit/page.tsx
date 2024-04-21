@@ -37,7 +37,7 @@ const EditUser = ({ params: { userId } }: SingleUserProps) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        enqueueSnackbar("Failed to fetch user", { variant: "error" });
       });
   }, [userId]);
 

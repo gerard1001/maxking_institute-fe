@@ -2,7 +2,6 @@
 
 import React, { useContext } from "react";
 import { LoginContext } from "@/lib/context/LoginContext";
-import DashboardNavbar from "./DashboardNavbar";
 import MainNavbar from "./MainNavbar";
 import { usePathname } from "next/navigation";
 

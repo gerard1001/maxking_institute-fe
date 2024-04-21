@@ -18,7 +18,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadinProgress from "@/components/LoadingProgess";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import dayjs, { Dayjs } from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -107,7 +106,7 @@ const UpdateUserProfile = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        enqueueSnackbar("Failed to fetch user", { variant: "error" });
       });
   }, [userId]);
 
@@ -174,7 +173,6 @@ const UpdateUserProfile = ({
 
   const handleUpdateProfile = (data: any) => {
     setLoading(true);
-    console.log(data);
     const formData = new FormData();
     formData.append("phoneNumber", data.phoneNumber);
     formData.append("birthDate", data.birthDate.format("YYYY-MM-DD"));
@@ -190,7 +188,6 @@ const UpdateUserProfile = ({
     dispatch(updateProfile({ id: userState?.profile?.id, data: formData }))
       .unwrap()
       .then((res) => {
-        console.log(res, "4444");
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, {
             variant: "success",
@@ -218,7 +215,6 @@ const UpdateUserProfile = ({
       })
       .catch((error: any) => {
         enqueueSnackbar(error.message, { variant: "error" });
-        console.log(error, "4444");
       })
       .finally(() => {
         setLoading(false);

@@ -168,7 +168,6 @@ export const updatePublicDisplay = createAppAsyncThunk(
     { rejectWithValue }
   ): Promise<any> => {
     try {
-      console.log(id, data);
       const res = await axios.patch(`/user/public/${id}`, data);
       return res.data;
     } catch (error: any) {
