@@ -28,12 +28,27 @@ export const editArticle = createAppAsyncThunk(
   }
 );
 
+export const featureArticle = createAppAsyncThunk(
+  "article/featureArticle",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/article/feature/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchArticles = createAppAsyncThunk(
   "article/fetchArticles",
   async (): Promise<any> => {
     try {
       const res = await axios.get("/article");
-      return res.data.data;
+      return res.data;
     } catch (error: any) {
       throw new Error(error);
     }
@@ -45,7 +60,7 @@ export const fetchFeaturedArticles = createAppAsyncThunk(
   async (): Promise<any> => {
     try {
       const res = await axios.get("/article/featured");
-      return res.data.data;
+      return res.data;
     } catch (error: any) {
       throw new Error(error);
     }
@@ -72,6 +87,18 @@ export const fetchRelatedArticles = createAppAsyncThunk(
       return res.data.data;
     } catch (error: any) {
       throw new Error(error);
+    }
+  }
+);
+
+export const deleteArticle = createAppAsyncThunk(
+  "article/deleteArticle",
+  async (articleId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.delete(`/article/${articleId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
     }
   }
 );

@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createArticle,
+  deleteArticle,
   editArticle,
+  featureArticle,
   fetchArticles,
   fetchFeaturedArticles,
   fetchRelatedArticles,
@@ -49,12 +51,24 @@ export const articleSlice = createSlice({
       });
 
     builder
+      .addCase(featureArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(featureArticle.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(featureArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
       .addCase(fetchArticles.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.loading = false;
-        state.articles = action.payload;
+        state.articles = action.payload.data;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.loading = false;
@@ -67,7 +81,7 @@ export const articleSlice = createSlice({
       })
       .addCase(fetchFeaturedArticles.fulfilled, (state, action) => {
         state.loading = false;
-        state.featuredArticles = action.payload;
+        state.featuredArticles = action.payload.data;
       })
       .addCase(fetchFeaturedArticles.rejected, (state, action) => {
         state.loading = false;
@@ -96,6 +110,18 @@ export const articleSlice = createSlice({
         state.relatedArticles = action.payload;
       })
       .addCase(fetchRelatedArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(deleteArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteArticle.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteArticle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

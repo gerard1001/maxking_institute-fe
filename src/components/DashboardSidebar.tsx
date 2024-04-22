@@ -20,7 +20,7 @@ export const SidebarContext = createContext({
   // setShowDropdown: (val: any) => {},
 });
 
-const sidebarItems = [
+const sidebarItems = (activePage: string[]) => [
   {
     listkey: "Overview",
     icon: <FaRegChartBar className="text-xl" />,
@@ -34,7 +34,11 @@ const sidebarItems = [
     text: "Courses",
     active: true,
     hasDropdown: true,
-    dropDownItems: ["All Courses", "Course categories", "Course subjects"],
+    dropDownItems: [
+      { to: "/dashboard/courses", text: "All Courses" },
+      { to: "/dashboard/courses", text: "Course categories" },
+      { to: "/dashboard/courses", text: "Course subjects" },
+    ],
     to: "/dashboard/courses",
   },
   {
@@ -57,7 +61,18 @@ const sidebarItems = [
     text: "Articles",
     active: true,
     hasDropdown: true,
-    dropDownItems: ["All Articles", "Article categories", "Saved Articles"],
+    dropDownItems: [
+      {
+        to: "/dashboard/articles",
+        text: "All Articles",
+        isFocused: activePage[2] === "articles" && activePage[3] === undefined,
+      },
+      {
+        to: "/dashboard/articles/saved",
+        text: "saved Articles",
+        isFocused: activePage[2] === "articles" && activePage[3] === "saved",
+      },
+    ],
     to: "/dashboard/articles",
   },
   {
@@ -91,14 +106,13 @@ const DashboardSidebar: React.FC = ({}) => {
   const [showDropdown, setShowDropdown] = useState<any>({
     0: false,
   });
+  const [activePage, setActivePage] = useState<string[]>(pathName.split("/"));
 
   const handleSetActiveIndex = (index: number) => {
     setActiveIndex(index);
   };
 
   useEffect(() => {
-    const activePage = pathName.split("/");
-
     if (activePage[2] === "courses") {
       setActiveIndex(1);
       setShowDropdown({ 1: true });
@@ -115,6 +129,10 @@ const DashboardSidebar: React.FC = ({}) => {
       setActiveIndex(0);
     }
   }, []);
+
+  useEffect(() => {
+    setActivePage(pathName.split("/"));
+  }, [pathName]);
 
   return (
     <ProtectedRoute>
@@ -142,19 +160,20 @@ const DashboardSidebar: React.FC = ({}) => {
 
           <SidebarContext.Provider value={{ expanded }}>
             <ul className="flex-1 px-3 overflow-y-auto overflow-x-hidden">
-              {sidebarItems.map((item, index) => (
+              {sidebarItems(activePage).map((item, index) => (
                 <div
                   className=""
                   key={index}
                   onClick={() => {
                     handleSetActiveIndex(index);
-                    router.push(`${item.to}`);
+                    // router.push(`${item.to}`);
                     // setShowDropdown({ [index]: !showDropdown[index] });
                   }}
                 >
                   <SidebarItem
                     icon={item.icon}
                     text={item.text}
+                    to={item.to}
                     active={index === activeIndex}
                     hasDropdown={item.hasDropdown}
                     dropDownItems={item.dropDownItems}

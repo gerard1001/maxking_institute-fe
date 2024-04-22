@@ -17,6 +17,7 @@ export interface Article {
   description: string;
   body: string | any;
   authorId: string;
+  isFeatured: boolean;
   createdAt: Date;
   updatedAt: Date;
   tags: ITag[];

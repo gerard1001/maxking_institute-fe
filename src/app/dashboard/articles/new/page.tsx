@@ -24,7 +24,6 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-  TextareaAutosize,
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
@@ -40,8 +39,8 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 
 const createArticleSchema = yup.object().shape({
-  title: yup.string().required().min(5).max(40),
-  description: yup.string().required().min(5).max(150),
+  title: yup.string().required().min(5).max(150),
+  description: yup.string().required().min(5).max(500),
   // body: yup.string().required(),
 });
 
@@ -64,7 +63,6 @@ const AddNewArticle = () => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [serviceIndex, setServiceIndex] = React.useState<number>(0);
 
   const openServiceDrawer = () => {
     setOpenDrawer(true);
@@ -85,7 +83,7 @@ const AddNewArticle = () => {
   const {
     handleSubmit,
     control,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm<CreateArticleInputs>({
     resolver: yupResolver(createArticleSchema),
@@ -160,6 +158,12 @@ const AddNewArticle = () => {
         })
         .finally(() => {
           setLoading(false);
+          setBody("");
+          reset();
+          setSelectedNames([]);
+          setSelectedTags([]);
+          setPicUrl(null);
+          setPicture("");
         });
     }
   };
@@ -186,7 +190,7 @@ const AddNewArticle = () => {
                 src={
                   picUrl
                     ? picUrl
-                    : "https://www.pngkit.com/png/detail/2-23698_splash-png-image-color-splash-png-blue.png"
+                    : "https://res.cloudinary.com/rutagerard/image/upload/v1713800805/Important/manga_z8z1xs.png"
                 }
                 alt=""
                 className="w-[640px] aspect-video object-cover rounded-lg shadow-sm"

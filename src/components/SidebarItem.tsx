@@ -3,10 +3,12 @@
 import { useContext, useState } from "react";
 import { SidebarContext } from "./DashboardSidebar";
 import { IoChevronDown } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const SidebarItem = ({
   icon,
   text,
+  to,
   active,
   hasDropdown,
   dropDownItems,
@@ -15,6 +17,7 @@ const SidebarItem = ({
   index,
 }: any) => {
   const { expanded } = useContext(SidebarContext);
+  const router = useRouter();
 
   return (
     <li
@@ -32,7 +35,10 @@ const SidebarItem = ({
             ? "bg-secondary text-white"
             : "hover:bg-secondary/80 text-accent hover:text-primary-foreground"
         }`}
-        onClick={() => setShowDropdown({ [index]: !showDropdown[index] })}
+        onClick={() => {
+          setShowDropdown({ [index]: !showDropdown[index] });
+          router.push(`${to}`);
+        }}
       >
         <div className="flex items-center">
           {" "}
@@ -70,16 +76,17 @@ const SidebarItem = ({
           hasDropdown &&
           showDropdown[index] &&
           expanded &&
-          dropDownItems.map((item: string, index: number) => (
+          dropDownItems.map((item: any, index: number) => (
             <div
               key={index}
               className={`left-full rounded-md px-2 py-1 ml-6 text-accent cursor-pointer flex items-center gap-2
-               `}
+               ${item.isFocused && "font-bold"}`}
+              onClick={() => {
+                router.push(`${item.to}`);
+                // alert(item.to);
+              }}
             >
-              {/* <div
-                className={`w-2 aspect-square rounded-full bg-accent-foreground`}
-              /> */}
-              <span>{item}</span>
+              <span>{item.text}</span>
             </div>
           ))}
       </div>

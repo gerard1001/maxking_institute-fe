@@ -43,8 +43,8 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 
 const createArticleSchema = yup.object().shape({
-  title: yup.string().required().min(5).max(40),
-  description: yup.string().required().min(5).max(150),
+  title: yup.string().required().min(5).max(150),
+  description: yup.string().required().min(5).max(500),
   // body: yup.string().required(),
 });
 
@@ -179,12 +179,19 @@ const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
       dispatch(editArticle({ id: articleId, data: formData }))
         .unwrap()
         .then((res: any) => {
-          console.log(res);
           if (res.statusCode === 200) {
             enqueueSnackbar(res.message, {
               variant: "success",
               preventDuplicate: true,
             });
+            dispatch(fetchSingleArticle(articleId))
+              .unwrap()
+              .catch((err: any) => {
+                enqueueSnackbar(err.message, {
+                  variant: "error",
+                  preventDuplicate: true,
+                });
+              });
           }
         })
         .catch((err: any) => {
