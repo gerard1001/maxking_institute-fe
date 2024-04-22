@@ -31,7 +31,7 @@ const Articles = () => {
         icon={FaBlog}
         rightSideActions={ViewAll("/articles")}
       />
-      <div className="flex items-center justify-evenly flex-wrap py-6 gap-4">
+      <div className="flex items-start justify-start flex-wrap py-6 gap-4">
         {state.articles.map((article) => {
           return (
             <div key={article.id} className="max-w-[350px] sm:pb-6 pb-2">

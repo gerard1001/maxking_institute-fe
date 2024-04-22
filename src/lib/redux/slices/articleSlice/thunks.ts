@@ -13,6 +13,21 @@ export const createArticle = createAppAsyncThunk(
   }
 );
 
+export const editArticle = createAppAsyncThunk(
+  "article/editArticle",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/article/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchArticles = createAppAsyncThunk(
   "article/fetchArticles",
   async (): Promise<any> => {
