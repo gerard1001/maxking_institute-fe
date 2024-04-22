@@ -452,7 +452,6 @@ const AddNewArticle = () => {
           >
             <MdOutlineClose className="" />
           </IconButton>
-          Hello
         </div>
       </Drawer>
     </div>

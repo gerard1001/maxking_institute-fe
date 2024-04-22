@@ -57,7 +57,7 @@ export const fetchSingleArticle = createAppAsyncThunk(
   async (articleId: string): Promise<any> => {
     try {
       const res = await axios.get(`/article/${articleId}`);
-      return res.data.data;
+      return res.data;
     } catch (error: any) {
       throw new Error(error);
     }

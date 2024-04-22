@@ -2,7 +2,10 @@
 
 import {
   createArticle,
+  editArticle,
   fetchAllTags,
+  fetchSingleArticle,
+  selectArticles,
   selectTags,
   useDispatch,
   useSelector,
@@ -51,10 +54,18 @@ interface CreateArticleInputs {
   // body: string;
 }
 
-const AddNewArticle = () => {
+interface SingleArticleProps {
+  params: {
+    articleId: string;
+  };
+}
+
+const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectTags);
+  const articleState = useSelector(selectArticles);
+  console.log(articleState.singleArticle, "articleState.singleArticle");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
@@ -64,7 +75,6 @@ const AddNewArticle = () => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const [serviceIndex, setServiceIndex] = React.useState<number>(0);
 
   const openServiceDrawer = () => {
     setOpenDrawer(true);
@@ -73,9 +83,10 @@ const AddNewArticle = () => {
     setOpenDrawer(false);
   };
   const tags = state.allTags;
+  const article = articleState.singleArticle;
 
+  console.log(selectedNames, "selectedNames");
   const handleChange = (event: SelectChangeEvent<typeof selectedNames>) => {
-    console.log(event);
     const {
       target: { value },
     } = event;
@@ -108,6 +119,31 @@ const AddNewArticle = () => {
   }, []);
 
   React.useEffect(() => {
+    dispatch(fetchSingleArticle(articleId))
+      .unwrap()
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+  }, [articleId]);
+
+  React.useEffect(() => {
+    const { title, description } = articleState.singleArticle;
+    if (
+      articleState.singleArticle.tags &&
+      articleState.singleArticle.tags.length > 0
+    ) {
+      setSelectedNames(articleState.singleArticle.tags.map((tag) => tag.name));
+    }
+    title && setValue("title", title);
+    description && setValue("description", description);
+    setPicUrl(articleState.singleArticle.coverImage);
+    setBody(articleState.singleArticle.body);
+  }, [articleState]);
+
+  React.useEffect(() => {
     if (picture) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -124,27 +160,27 @@ const AddNewArticle = () => {
     setSelectedTags(selectedTagObjects);
   }, [selectedNames]);
 
-  const handleCreateArticle = (data: any) => {
-    if (!picture) {
+  const handleEditArticle = (data: any) => {
+    if (!picture && !picUrl) {
       return setImageError("Please select a cover image");
     } else {
-      console.log(data);
-      console.log({ body });
       setLoading(true);
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("body", body);
-      formData.append("coverImage", picture);
+      if (picture) {
+        formData.append("coverImage", picture);
+      }
       for (let i = 0; i < selectedTags.length; i++) {
         formData.append(`tags[${i}]`, selectedTags[i].id);
       }
 
-      dispatch(createArticle(formData))
+      dispatch(editArticle({ id: articleId, data: formData }))
         .unwrap()
         .then((res: any) => {
           console.log(res);
-          if (res.statusCode === 201) {
+          if (res.statusCode === 200) {
             enqueueSnackbar(res.message, {
               variant: "success",
               preventDuplicate: true,
@@ -173,7 +209,7 @@ const AddNewArticle = () => {
       <Box
         component="form"
         noValidate
-        onSubmit={handleSubmit(handleCreateArticle)}
+        onSubmit={handleSubmit(handleEditArticle)}
         className="mb-12"
       >
         <div className="flex gap-6">
@@ -452,7 +488,6 @@ const AddNewArticle = () => {
           >
             <MdOutlineClose className="" />
           </IconButton>
-          Hello
         </div>
       </Drawer>
     </div>

@@ -1,3 +1,4 @@
+import { ITag } from "./tag.interface";
 import { User } from "./user.interface";
 
 export interface ArticleSliceState {
@@ -18,7 +19,7 @@ export interface Article {
   authorId: string;
   createdAt: Date;
   updatedAt: Date;
-  tags: ArticleTag;
+  tags: ITag[];
   author: User;
 }
 

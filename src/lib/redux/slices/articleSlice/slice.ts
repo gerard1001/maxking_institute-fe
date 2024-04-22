@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createArticle,
+  editArticle,
   fetchArticles,
   fetchFeaturedArticles,
   fetchRelatedArticles,
@@ -31,6 +32,18 @@ export const articleSlice = createSlice({
         state.singleArticle = action.payload;
       })
       .addCase(createArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(editArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editArticle.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(editArticle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
@@ -67,7 +80,7 @@ export const articleSlice = createSlice({
       })
       .addCase(fetchSingleArticle.fulfilled, (state, action) => {
         state.loading = false;
-        state.singleArticle = action.payload;
+        state.singleArticle = action.payload.data;
       })
       .addCase(fetchSingleArticle.rejected, (state, action) => {
         state.loading = false;
