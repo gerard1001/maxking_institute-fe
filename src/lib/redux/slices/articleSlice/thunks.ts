@@ -43,6 +43,30 @@ export const featureArticle = createAppAsyncThunk(
   }
 );
 
+export const saveUserArticle = createAppAsyncThunk(
+  "article/saveUserArticle",
+  async (id: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user-article/${id}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchUserSavedArticles = createAppAsyncThunk(
+  "article/fetchUserSavedArticles",
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/article/saved`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchArticles = createAppAsyncThunk(
   "article/fetchArticles",
   async (): Promise<any> => {

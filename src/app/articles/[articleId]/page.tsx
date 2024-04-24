@@ -12,9 +12,8 @@ import { format } from "date-fns/format";
 import React, { useEffect, useRef } from "react";
 import { CiHeart } from "react-icons/ci";
 import { GoComment } from "react-icons/go";
-import { TbTextPlus } from "react-icons/tb";
 import Drawer from "@mui/material/Drawer";
-import { MdOutlineClose } from "react-icons/md";
+import { MdOutlineClose, MdOutlinePlaylistAdd } from "react-icons/md";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 interface SingleArticleProps {
@@ -100,7 +99,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
                   </div>
                 </div>
                 <div className="text-black/75">
-                  <TbTextPlus className="text-xl" />
+                  <MdOutlinePlaylistAdd className="text-xl" />
                 </div>
               </div>
               <div className="border-y border-accent-foreground/50 py-3">
@@ -108,13 +107,11 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
                 <p className="">{article.description}</p>
               </div>
               <div className="py-3">
-                {/* <p>{article.body}</p> */}
                 <div
                   ref={divRef}
                   dangerouslySetInnerHTML={{
                     __html: article.body,
                   }}
-                  // style={{ display: "none" }}
                 />
               </div>
             </div>
@@ -122,7 +119,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
               className={`${
                 relatedArticles?.length === 0
                   ? "hidden"
-                  : "md:w-[320px] w-[250px] min-h-screen md:block hidden xs:mt-2 mt-0 lg:pl-4 md:pl-2"
+                  : "md:w-[320px] w-[250px] min-h-screen md:block hidden xs:mt-2 mt-0 lg:pl-4 md:pl-2 max-h-screen overflow-y-auto pr-[4px]"
               }`}
             >
               <h1 className="text-accent text-xl mt-4 font-bold uppercase mb-4">
@@ -178,7 +175,7 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
                           </div>
                         </div>
                         <div className="text-black/75">
-                          <TbTextPlus className="text-xl" />
+                          <MdOutlinePlaylistAdd className="text-xl" />
                         </div>
                       </div>
                     </div>

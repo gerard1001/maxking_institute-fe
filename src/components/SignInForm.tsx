@@ -99,6 +99,12 @@ const SignInForm = ({ closeModal }: SignInProps) => {
           enqueueSnackbar(res.message, { variant: "error" });
         }
       })
+      .catch((err) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
       .finally(() => {
         setLoginLoading(false);
         setLoginUserFetchLoading(false);

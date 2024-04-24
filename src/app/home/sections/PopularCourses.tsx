@@ -23,7 +23,7 @@ const PopularCourses = () => {
         image="/icons/popular-dark.svg"
         rightSideActions={ViewAll("/about")}
       />
-      <div className="lg:pt-10 pt-2 flex items-center gap-5 w-full justify-center min-h-80 bg-emerald-100"></div>
+      <div className="lg:pt-10 pt-2 flex items-center gap-5 w-full justify-center min-h-80 bg-yellow-200"></div>
     </div>
   );
 };

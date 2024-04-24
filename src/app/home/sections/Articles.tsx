@@ -10,11 +10,11 @@ import {
 import { format } from "date-fns";
 import { CiHeart } from "react-icons/ci";
 import { GoComment } from "react-icons/go";
-import { TbTextPlus } from "react-icons/tb";
 import { FaBlog } from "react-icons/fa";
 import SectionTitle from "../../../components/SectionTitle";
 import { ViewAll } from "./PopularCourses";
 import { Divider } from "@mui/material";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,8 @@ const Articles = () => {
     dispatch(fetchArticles());
   }, [dispatch]);
 
+  console.log(state);
+
   return (
     <div className="lg:p-10 p-2">
       <SectionTitle
@@ -31,15 +33,15 @@ const Articles = () => {
         icon={FaBlog}
         rightSideActions={ViewAll("/articles")}
       />
-      <div className="flex items-start justify-start flex-wrap py-6 gap-4">
-        {state.articles.map((article) => {
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 lg:p-10 p-4 gap-4">
+        {state?.articles?.map((article) => {
           return (
             <div key={article.id} className="max-w-[350px] sm:pb-6 pb-2">
               <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
                 <img
                   src={article.coverImage}
                   alt=""
-                  className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105"
+                  className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -57,7 +59,7 @@ const Articles = () => {
                   {format(article.createdAt, "PP")}
                 </p>
               </div>
-              <h1 className="text-slate-900 font-bold text-xl">
+              <h1 className="text-slate-900 font-bold text-xl line-clamp-2 min-h-14">
                 {article.title}
               </h1>
               <p className="line-clamp-3 my-2">{article.description}</p>
@@ -73,7 +75,7 @@ const Articles = () => {
                   </div>
                 </div>
                 <div className="text-black/75">
-                  <TbTextPlus className="text-xl" />
+                  <MdOutlinePlaylistAdd className="text-xl" />
                 </div>
               </div>
               <Divider className="sm:hidden block mt-4" />

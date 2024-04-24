@@ -11,13 +11,13 @@ import {
 import { format } from "date-fns";
 import { CiHeart } from "react-icons/ci";
 import { GoComment } from "react-icons/go";
-import { TbTextPlus } from "react-icons/tb";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import Slider from "react-slick";
 import { Button, IconButton } from "@mui/material";
 import { IoArrowForward } from "react-icons/io5";
 import { SuspenseLoading } from "@/components/SuspenseLoading";
 import { useRouter } from "next/navigation";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
 
 const ArticlesPage = () => {
   const dispatch = useDispatch();
@@ -88,50 +88,28 @@ const ArticlesPage = () => {
                   Featured articles
                 </h1>
               </div>
-              <Slider
-                prevArrow={<PreviousBtn />}
-                nextArrow={<NextBtn />}
-                {...settings}
-                className=""
-              >
-                {featuredArticles.map((article, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      className="wrapper flex items-start relative"
-                    >
-                      <div className="sm:hidden flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute xxs:top-[50%] top-[60%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10">
-                        <div className="flex flex-col items-center justify-center">
-                          <h1 className="xs:text-md text-xs font-bold uppercase text-center max-w-[500px] pb-3 border-b line-clamp-3">
-                            {article.title}
-                          </h1>{" "}
-                          <Button
-                            variant="contained"
-                            size="small"
-                            endIcon={<IoArrowForward />}
-                            className="xs:mt-5 mt-1 bg-primary"
-                            onClick={() => {
-                              // window.location.href = `/articles/${article.id}`;
-                              router.push(`/articles/${article.id}`);
-                            }}
-                          >
-                            Read more
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="fill relative mx-auto flex items-center justify-between">
-                        <div className="sm:flex hidden flex-col justify-center aspect-video text-accent p-2">
+              <div className="wrapper2">
+                <Slider
+                  prevArrow={<PreviousBtn />}
+                  nextArrow={<NextBtn />}
+                  {...settings}
+                >
+                  {featuredArticles.map((article, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="wrapper flex items-start relative"
+                      >
+                        <div className="sm:hidden flex flex-col justify-center w-[80%] max-w-[550px] aspect-[16/7] absolute xxs:top-[50%] top-[60%] left-[50%] -translate-x-2/4 -translate-y-2/4 text-white p-2 z-10">
                           <div className="flex flex-col items-center justify-center">
-                            <h1 className="2xl:text-2xl font-bold text-md uppercase text-center max-w-[550px] pb-3 border-b">
+                            <h1 className="xs:text-md text-xs font-bold uppercase text-center max-w-[500px] pb-3 border-b line-clamp-3">
                               {article.title}
-                            </h1>
-                            <p className="lg:block hidden text-center text-accent line-clamp-3 mt-2">
-                              {article.description}
-                            </p>
+                            </h1>{" "}
                             <Button
                               variant="contained"
+                              size="small"
                               endIcon={<IoArrowForward />}
-                              className="mt-5 bg-primary"
+                              className="xs:mt-5 mt-1 bg-primary"
                               onClick={() => {
                                 // window.location.href = `/articles/${article.id}`;
                                 router.push(`/articles/${article.id}`);
@@ -140,18 +118,41 @@ const ArticlesPage = () => {
                               Read more
                             </Button>
                           </div>
-                        </div>{" "}
-                        <img
-                          src={article.coverImage}
-                          alt=""
-                          className="object-cover object-center border border-[#afafaf33] w-full xl:max-w-[766px] sm:max-w-[440px] aspect-video"
-                        />
-                        <div className="absolute inset-0 bg-black/25 top-overlay-linear-gradient sm:hidden block"></div>
+                        </div>
+                        <div className="fill relative mx-auto flex items-center justify-between">
+                          <div className="sm:flex hidden flex-col justify-center aspect-video text-accent p-2">
+                            <div className="flex flex-col items-center justify-center">
+                              <h1 className="2xl:text-2xl font-bold text-md uppercase text-center max-w-[550px] pb-3 border-b">
+                                {article.title}
+                              </h1>
+                              <p className="lg:block hidden text-center text-accent line-clamp-3 mt-2">
+                                {article.description}
+                              </p>
+                              <Button
+                                variant="contained"
+                                endIcon={<IoArrowForward />}
+                                className="mt-5 bg-primary"
+                                onClick={() => {
+                                  // window.location.href = `/articles/${article.id}`;
+                                  router.push(`/articles/${article.id}`);
+                                }}
+                              >
+                                Read more
+                              </Button>
+                            </div>
+                          </div>{" "}
+                          <img
+                            src={article.coverImage}
+                            alt=""
+                            className="object-cover object-center border border-[#afafaf33] w-full xl:max-w-[766px] sm:max-w-[440px] aspect-video"
+                          />
+                          <div className="absolute inset-0 bg-black/25 top-overlay-linear-gradient sm:hidden block"></div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </Slider>
+                    );
+                  })}
+                </Slider>
+              </div>
             </div>
           )}
           <h1 className="text-primary-foreground text-xl text-center mt-14 mx-auto font-bold uppercase">
@@ -206,7 +207,7 @@ const ArticlesPage = () => {
                       </div>
                     </div>
                     <div className="text-black/75">
-                      <TbTextPlus className="text-xl" />
+                      <MdOutlinePlaylistAdd className="text-xl" />
                     </div>
                   </div>
                 </div>

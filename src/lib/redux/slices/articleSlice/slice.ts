@@ -8,6 +8,8 @@ import {
   fetchFeaturedArticles,
   fetchRelatedArticles,
   fetchSingleArticle,
+  fetchUserSavedArticles,
+  saveUserArticle,
 } from "./thunks";
 import { Article, ArticleSliceState } from "@/lib/interfaces/article.interface";
 
@@ -15,6 +17,7 @@ const initialState: ArticleSliceState = {
   articles: [],
   featuredArticles: [],
   relatedArticles: [],
+  savedArticles: [],
   singleArticle: {} as Article,
   loading: false,
   error: {},
@@ -46,6 +49,18 @@ export const articleSlice = createSlice({
         state.loading = false;
       })
       .addCase(editArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(saveUserArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveUserArticle.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(saveUserArticle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
@@ -84,6 +99,19 @@ export const articleSlice = createSlice({
         state.featuredArticles = action.payload.data;
       })
       .addCase(fetchFeaturedArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchUserSavedArticles.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUserSavedArticles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.savedArticles = action.payload.data;
+      })
+      .addCase(fetchUserSavedArticles.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
