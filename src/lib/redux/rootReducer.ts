@@ -5,6 +5,7 @@ import {
   userSlice,
   tagSlice,
   categorySlice,
+  subjectSlice,
 } from "./slices";
 
 export const reducer = {
@@ -14,4 +15,5 @@ export const reducer = {
   role: roleSlice.reducer,
   tag: tagSlice.reducer,
   category: categorySlice.reducer,
+  subject: subjectSlice.reducer,
 };
