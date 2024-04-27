@@ -10,7 +10,7 @@ const initialState: TagSliceState = {
 };
 
 export const tagSlice = createSlice({
-  name: "article",
+  name: "tag",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

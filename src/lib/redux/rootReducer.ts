@@ -1,5 +1,11 @@
-import { articleSlice, counterSlice, roleSlice, userSlice } from "./slices";
-import { tagSlice } from "./slices/tagSlice";
+import {
+  articleSlice,
+  counterSlice,
+  roleSlice,
+  userSlice,
+  tagSlice,
+  categorySlice,
+} from "./slices";
 
 export const reducer = {
   counter: counterSlice.reducer,
@@ -7,4 +13,5 @@ export const reducer = {
   user: userSlice.reducer,
   role: roleSlice.reducer,
   tag: tagSlice.reducer,
+  category: categorySlice.reducer,
 };

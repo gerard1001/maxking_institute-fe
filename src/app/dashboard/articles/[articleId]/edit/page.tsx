@@ -169,7 +169,7 @@ const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("body", body);
-      if (picture) {
+      if (picture && picture !== "") {
         formData.append("coverImage", picture);
       }
       for (let i = 0; i < selectedTags.length; i++) {

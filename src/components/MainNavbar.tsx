@@ -105,6 +105,8 @@ const MainNavbar = () => {
 
   const googleLoginError = searchParams.get("error");
   const googleLoginToken = searchParams.get("token");
+  const googleLoginRole = searchParams.get("role");
+  const googleLoginId = searchParams.get("id");
 
   useEffect(() => {
     if (googleLoginError === "manual_user_google_signin_conflict") {
@@ -116,7 +118,11 @@ const MainNavbar = () => {
     if (googleLoginToken) {
       localStorage.setItem(
         "loginData",
-        JSON.stringify({ login_token: googleLoginToken })
+        JSON.stringify({
+          login_token: googleLoginToken,
+          role: googleLoginRole,
+          id: googleLoginId,
+        })
       );
       const loginToken = JSON.parse(
         (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
@@ -134,7 +140,11 @@ const MainNavbar = () => {
             });
             localStorage.setItem(
               "loginData",
-              JSON.stringify({ login_token: loginToken?.login_token })
+              JSON.stringify({
+                login_token: loginToken?.login_token,
+                role: loginToken?.role,
+                id: loginToken?.id,
+              })
             );
             setLoginData(res.data);
             setTimeout(() => {

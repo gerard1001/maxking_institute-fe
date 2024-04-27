@@ -6,9 +6,9 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
 
-const Courses = () => {
+const Subjects = () => {
   const router = useRouter();
-  const [value, setValue] = React.useState("course");
+  const [value, setValue] = React.useState("subjects");
   console.log(value);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -50,4 +50,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Subjects;

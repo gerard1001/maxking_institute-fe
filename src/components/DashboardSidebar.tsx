@@ -35,8 +35,16 @@ const sidebarItems = (activePage: string[]) => [
     active: true,
     hasDropdown: true,
     dropDownItems: [
-      { to: "/dashboard/courses", text: "All Courses" },
-      { to: "/dashboard/courses", text: "Course categories" },
+      {
+        to: "/dashboard/courses",
+        text: "All Courses",
+        isFocused: activePage[2] === "courses" && activePage[3] === undefined,
+      },
+      {
+        to: "/dashboard/courses",
+        text: "Course categories",
+        isFocused: activePage[2] === "courses" && activePage[3] === "saved",
+      },
       { to: "/dashboard/courses", text: "Course subjects" },
     ],
     to: "/dashboard/courses",

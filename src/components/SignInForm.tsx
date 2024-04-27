@@ -77,6 +77,8 @@ const SignInForm = ({ closeModal }: SignInProps) => {
                   "loginData",
                   JSON.stringify({
                     login_token: res.data.token,
+                    role: res.data.role,
+                    id: res.data.id,
                   })
                 );
                 setUserLoggedIn(true);
