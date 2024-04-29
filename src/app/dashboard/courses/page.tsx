@@ -19,9 +19,9 @@ const Courses = () => {
         <Tabs
           value={value}
           onChange={handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          aria-label="secondary tabs example"
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="primary tabs example"
         >
           <Tab
             value="course"
@@ -37,13 +37,13 @@ const Courses = () => {
               router.push("/dashboard/courses/categories");
             }}
           />
-          <Tab
+          {/* <Tab
             value="subjects"
             label="Subjects"
             onClick={() => {
               router.push("/dashboard/courses/subjects");
             }}
-          />
+          /> */}
         </Tabs>
       </Box>
     </div>

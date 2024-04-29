@@ -6,6 +6,7 @@ import {
   tagSlice,
   categorySlice,
   subjectSlice,
+  courseSlice,
 } from "./slices";
 
 export const reducer = {
@@ -16,4 +17,5 @@ export const reducer = {
   tag: tagSlice.reducer,
   category: categorySlice.reducer,
   subject: subjectSlice.reducer,
+  course: courseSlice.reducer,
 };

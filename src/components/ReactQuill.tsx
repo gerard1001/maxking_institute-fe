@@ -63,7 +63,7 @@ const Quill: React.FC<IProps> = ({ setBody, body }) => {
       <ReactQuill
         theme="snow"
         modules={modules}
-        placeholder="Write somethings..."
+        placeholder="Write something..."
         onChange={(e) => setBody(e)}
         value={body}
         ref={quillRef}

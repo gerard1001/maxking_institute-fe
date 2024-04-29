@@ -5,3 +5,4 @@ export * from "./roleSlice";
 export * from "./tagSlice";
 export * from "./categorySlice";
 export * from "./subjectSlice";
+export * from "./courseSlice";

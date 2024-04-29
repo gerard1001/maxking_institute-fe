@@ -43,7 +43,7 @@ import { IoWarningOutline } from "react-icons/io5";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
 
 const schema = yup.object().shape({
-  name: yup.string().required().min(3).max(20),
+  name: yup.string().required().min(3).max(40),
 });
 
 interface CreateCategoryInputs {
@@ -213,11 +213,11 @@ const Categories = () => {
   const handleCloseSubjectModal = () => setOpenSubjectModal(false);
 
   const handleSaveOrUpdateCategory = (data: any) => {
-    setLoading(true);
     const formData = new FormData();
     if (onEdit) {
-      if (picture && picture !== "") {
+      if (picture || picture !== "") {
         formData.append("image", picture);
+        setLoading(true);
       }
       formData.append("name", data?.name);
       dispatch(updateCategory({ id: categoryId, data: formData }))
@@ -229,6 +229,9 @@ const Categories = () => {
               preventDuplicate: true,
             });
             reset();
+            setCategoryValue("name", "");
+            setPicUrl(null);
+            setPicture("");
             setTimeout(() => {
               handleCloseModal();
             }, 500);
@@ -263,6 +266,9 @@ const Categories = () => {
     } else {
       if (!picture && !picUrl) {
         return setImageError("Please select a cover image");
+      } else {
+        setImageError(null);
+        setLoading(true);
       }
       formData.append("name", data?.name);
       formData.append("image", picture);
@@ -458,9 +464,9 @@ const Categories = () => {
         <Tabs
           value={value}
           onChange={handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          aria-label="secondary tabs example"
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="primary tabs example"
         >
           <Tab
             value="course"
@@ -476,20 +482,27 @@ const Categories = () => {
               router.push("/dashboard/courses/categories");
             }}
           />
-          <Tab
+          {/* <Tab
             value="subjects"
             label="Subjects"
             onClick={() => {
               router.push("/dashboard/courses/subjects");
             }}
-          />
+          /> */}
         </Tabs>
       </Box>
       <Box className={`w-full flex flex-row-reverse py-4`}>
         <Button
           className="bg-secondary text-white"
           startIcon={<FaPlus />}
-          onClick={handleOpenModal}
+          onClick={() => {
+            setCategoryId("");
+            setOnEdit(false);
+            setCategoryValue("name", "");
+            setPicUrl(null);
+            setPicture("");
+            handleOpenModal();
+          }}
         >
           Create New category
         </Button>
@@ -510,7 +523,7 @@ const Categories = () => {
             </div>
           ) : (
             <div>
-              {state?.allCategories?.map((category, index) => {
+              {state?.allCategories?.map((category) => {
                 return (
                   <div key={category.id} className={`py-1`}>
                     <div
@@ -598,7 +611,14 @@ const Categories = () => {
                       >
                         <div className={`p-1 pl-3`}>
                           <div className="flex items-center justify-between">
-                            <div className="flex flex-col items-start gap-0 w-full cursor-pointer">
+                            <div
+                              className="flex flex-col items-start gap-0 w-full cursor-pointer hover:bg-slate-200 p-2 rounded-lg"
+                              onClick={() => {
+                                router.push(
+                                  `/dashboard/courses/subject/${subject.id}`
+                                );
+                              }}
+                            >
                               <p className="text-accent line-clamp-2">
                                 {subject.name}
                               </p>
