@@ -60,7 +60,6 @@ export const updateCourse = createAppAsyncThunk(
   ): Promise<any> => {
     try {
       const res = await axios.patch(`/course/${id}`, data);
-      console.log(res, "&&");
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

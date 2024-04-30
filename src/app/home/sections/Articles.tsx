@@ -24,8 +24,6 @@ const Articles = () => {
     dispatch(fetchArticles());
   }, [dispatch]);
 
-  console.log(state);
-
   return (
     <div className="lg:p-10 p-2">
       <SectionTitle

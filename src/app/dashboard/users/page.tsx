@@ -152,7 +152,7 @@ const Users = () => {
     setOpenMenuLoading(true);
     dispatch(fetchUserById(id))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res.statusCode === 200) {
           // enqueueSnackbar(res.message, {
           //   variant: "success",
@@ -162,7 +162,7 @@ const Users = () => {
           enqueueSnackbar(res.message, { variant: "error" });
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         enqueueSnackbar(error.message || "Error on Public display", {
           variant: "error",
         });
@@ -378,16 +378,16 @@ const Users = () => {
   useEffect(() => {
     dispatch(fetchAllUsers())
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res.statusCode !== 200) {
           enqueueSnackbar("Failed to fetch users", { variant: "error" });
         }
       })
-      .catch((error) => {});
+      .catch((error: any) => {});
 
     dispatch(fetchRoles())
       .unwrap()
-      .then((res) => {})
+      .then((res: any) => {})
       .catch((error: any) => {});
   }, []);
 
@@ -399,7 +399,7 @@ const Users = () => {
     setRegisterLoading(true);
     dispatch(createUser(data))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res.statusCode === 201) {
           enqueueSnackbar(res.message, {
             variant: "success",
@@ -415,7 +415,7 @@ const Users = () => {
           enqueueSnackbar(res.message, { variant: "error" });
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         enqueueSnackbar(error.message, {
           variant: "error",
           preventDuplicate: true,
@@ -425,12 +425,12 @@ const Users = () => {
         setRegisterLoading(false);
         dispatch(fetchAllUsers())
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             if (res.statusCode !== 200) {
               enqueueSnackbar("Failed to fetch users", { variant: "error" });
             }
           })
-          .catch((error) => {});
+          .catch((error: any) => {});
       });
   };
 
@@ -438,7 +438,7 @@ const Users = () => {
     setDeleteLoading(true);
     dispatch(deleteUser(userId))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, {
             variant: "success",
@@ -451,7 +451,7 @@ const Users = () => {
           enqueueSnackbar(res.message, { variant: "error" });
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         enqueueSnackbar(error.message, {
           variant: "error",
           preventDuplicate: true,
@@ -464,7 +464,7 @@ const Users = () => {
         setDeleteLoading(false);
         dispatch(fetchAllUsers())
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             if (res.statusCode !== 200) {
               enqueueSnackbar("Failed to fetch users", { variant: "error" });
             }
@@ -481,12 +481,12 @@ const Users = () => {
       updatePublicDisplay({ id: userId, data: { publicDisplay: status } })
     )
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, { variant: "success" });
           dispatch(fetchAllUsers())
             .unwrap()
-            .then((res) => {
+            .then((res: any) => {
               if (res.statusCode !== 200) {
                 enqueueSnackbar("Failed to fetch users", {
                   variant: "error",
@@ -494,7 +494,7 @@ const Users = () => {
                 setUserId("");
               }
             })
-            .catch((error) => {});
+            .catch((error: any) => {});
         }
       })
       .catch((error: any) => {

@@ -48,7 +48,6 @@ const CreateTagForm = ({ closeModal }: CreateTagProps) => {
     dispatch(createTag(data))
       .unwrap()
       .then((res) => {
-        console.log(res, "9999");
         if (res.statusCode === 201) {
           dispatch(fetchAllTags())
             .unwrap()

@@ -45,7 +45,6 @@ export const updateCategory = createAppAsyncThunk(
   ): Promise<any> => {
     try {
       const res = await axios.patch(`/category/${id}`, data);
-      console.log(res, "&&");
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

@@ -80,8 +80,6 @@ const Categories = () => {
   const [parentDeleted, setParentDeleted] = React.useState<boolean>(false);
   const category = state?.category;
 
-  console.log(category);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

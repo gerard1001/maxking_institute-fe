@@ -1,3 +1,6 @@
+import { ITag } from "./tag.interface";
+import { User } from "./user.interface";
+
 export interface ICourse {
   id: string;
   title: string;
@@ -7,7 +10,9 @@ export interface ICourse {
   previewText: string;
   subjectId: string;
   estimatedDuration: string;
-  tutor: string;
+  users: User[];
+  modules: any[];
+  tags: ITag[];
   createdAt: Date;
   updatedAt: Date;
 }

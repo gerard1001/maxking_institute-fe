@@ -3,8 +3,10 @@
 import {
   createArticle,
   createCourse,
+  fetchAllSubjects,
   fetchAllTags,
   fetchAllUsers,
+  selectSubjects,
   selectTags,
   selectUsers,
   useDispatch,
@@ -39,22 +41,19 @@ import LoadinProgress from "@/components/LoadingProgess";
 import { ITag } from "@/lib/interfaces/tag.interface";
 import { LuPlus } from "react-icons/lu";
 import CreateTagForm from "@/components/CreateTagForm";
-import { IoOptionsOutline } from "react-icons/io5";
+import { IoChevronBackOutline, IoOptionsOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import BackIconButton from "@/components/BackIconButton";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
-  description: yup.string().required().min(5).max(500),
+  description: yup.string().required().min(5),
   previewVideo: yup.string().nullable().max(16),
-  previewText: yup.string().nullable().max(500),
+  previewText: yup.string().nullable(),
   estimatedDuration: yup.string().required(),
+  subjectId: yup.string().uuid().required(),
   tutor: yup.string().uuid().required(),
 });
-
-interface SubjectProps {
-  params: {
-    subjectId: string;
-  };
-}
 
 export interface CreateCourseInputs {
   title: string;
@@ -62,14 +61,17 @@ export interface CreateCourseInputs {
   previewVideo?: string | null;
   previewText?: string | null;
   estimatedDuration: string;
+  subjectId: string;
   tutor: string;
 }
 
-const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
+const CreateCourse = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectTags);
   const userState = useSelector(selectUsers);
+  const subjectState = useSelector(selectSubjects);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
@@ -107,6 +109,7 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
       previewVideo: "",
       previewText: "",
       estimatedDuration: "",
+      subjectId: "",
       tutor: "",
     },
   });
@@ -122,6 +125,15 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
       });
 
     dispatch(fetchAllUsers())
+      .unwrap()
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+
+    dispatch(fetchAllSubjects())
       .unwrap()
       .catch((err: any) => {
         enqueueSnackbar(err.message, {
@@ -165,7 +177,7 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
         formData.append(`tags[${i}]`, selectedTags[i].id);
       }
 
-      dispatch(createCourse({ id: subjectId, data: formData }))
+      dispatch(createCourse({ id: data?.subjectId, data: formData }))
         .unwrap()
         .then((res: any) => {
           if (res.statusCode === 201) {
@@ -173,6 +185,10 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
               variant: "success",
               preventDuplicate: true,
             });
+
+            setTimeout(() => {
+              router.push("/dashboard/courses");
+            }, 500);
           }
         })
         .catch((err: any) => {
@@ -198,6 +214,7 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
   return (
     <div>
       {" "}
+      <BackIconButton />
       <Box
         component="form"
         noValidate
@@ -527,6 +544,68 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
         </div>
         <div className="w-full h-fit flex flex-col items-start mt-6">
           <h1 className="text-xl font-semibold ml-1 text-accent flex gap-2 items-center">
+            Select Course Subject{" "}
+          </h1>
+          <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Controller
+                name="subjectId"
+                control={control}
+                render={({ field }) => (
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      "& .MuiInputLabel-root": {
+                        top: "12px",
+                      },
+                      color: "#242E8F",
+                      "& label.Mui-focused": {
+                        color: "#242E8F",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "1.5px solid #242E8F",
+                        },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        py: "11.5px",
+                      },
+                    }}
+                  >
+                    <InputLabel id="demo-simple-select-label">
+                      Course Subject
+                    </InputLabel>
+                    <Select
+                      {...field}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Subject"
+                      sx={{
+                        input: {
+                          color: "#021527",
+                        },
+                        mt: 2,
+                      }}
+                      inputProps={{ style: { height: 16 } }}
+                      error={!!errors.tutor}
+                    >
+                      {subjectState?.allCSubjects?.map((subject, index) => (
+                        <MenuItem value={subject?.id} key={index}>
+                          {subject?.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText error>
+                      {errors.tutor && errors.tutor?.message}
+                    </FormHelperText>
+                  </FormControl>
+                )}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="w-full h-fit flex flex-col items-start mt-6">
+          <h1 className="text-xl font-semibold ml-1 text-accent flex gap-2 items-center">
             Select Course Tutor{" "}
           </h1>
           <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg">
@@ -560,7 +639,7 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
                       {...field}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      label="Age"
+                      label="Tutor"
                       sx={{
                         input: {
                           color: "#021527",

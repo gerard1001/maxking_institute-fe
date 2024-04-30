@@ -73,7 +73,6 @@ const AddNewArticle = () => {
   const tags = state.allTags;
 
   const handleChange = (event: SelectChangeEvent<typeof selectedNames>) => {
-    console.log(event);
     const {
       target: { value },
     } = event;
@@ -126,8 +125,6 @@ const AddNewArticle = () => {
     if (!picture) {
       return setImageError("Please select a cover image");
     } else {
-      console.log(data);
-      console.log({ body });
       setLoading(true);
       const formData = new FormData();
       formData.append("title", data.title);
@@ -141,7 +138,6 @@ const AddNewArticle = () => {
       dispatch(createArticle(formData))
         .unwrap()
         .then((res: any) => {
-          console.log(res);
           if (res.statusCode === 201) {
             enqueueSnackbar(res.message, {
               variant: "success",
@@ -150,7 +146,6 @@ const AddNewArticle = () => {
           }
         })
         .catch((err: any) => {
-          console.log(err);
           enqueueSnackbar(err.message, {
             variant: "error",
             preventDuplicate: true,

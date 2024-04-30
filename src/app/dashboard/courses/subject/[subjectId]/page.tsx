@@ -1,5 +1,6 @@
 "use client";
 
+import BackIconButton from "@/components/BackIconButton";
 import {
   fetchCoursesBySubjectId,
   fetchOneSubject,
@@ -27,15 +28,10 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
   const state = useSelector(selectSubjects);
   const courseState = useSelector(selectCourses);
 
-  console.log(state.subject);
-  console.log(courseState.allCourses, "&&");
-
   React.useEffect(() => {
     dispatch(fetchOneSubject(subjectId))
       .unwrap()
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -43,9 +39,7 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
   React.useEffect(() => {
     dispatch(fetchCoursesBySubjectId(state.subject.id))
       .unwrap()
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((err) => {
         // enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -73,7 +67,8 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
           </li>
         </ul>
       </div>
-      <div className={`w-full flex flex-row-reverse py-4`}>
+      <div className={`w-full flex items-center justify-between py-4`}>
+        <BackIconButton />
         <Button
           className="bg-secondary text-white"
           startIcon={<FaPlus />}
@@ -98,7 +93,7 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
                 <img
                   src={course.coverImage}
                   alt=""
-                  className="w-[320px] aspect-video rounded-lg"
+                  className="w-[320px] aspect-video rounded-lg object-cover"
                 />
                 <div className="w-full">
                   <h1 className="text-2xl font-bold">{course.title}</h1>
@@ -106,9 +101,7 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
                   <Button
                     className="bg-secondary text-white"
                     onClick={() => {
-                      router.push(
-                        `/dashboard/courses/subject/${subjectId}/course/${course.id}`
-                      );
+                      router.push(`/dashboard/courses/${course.id}`);
                     }}
                   >
                     View Course

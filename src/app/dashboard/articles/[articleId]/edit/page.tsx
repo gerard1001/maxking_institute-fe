@@ -65,7 +65,6 @@ const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectTags);
   const articleState = useSelector(selectArticles);
-  console.log(articleState.singleArticle, "articleState.singleArticle");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
@@ -85,7 +84,6 @@ const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const tags = state.allTags;
   const article = articleState.singleArticle;
 
-  console.log(selectedNames, "selectedNames");
   const handleChange = (event: SelectChangeEvent<typeof selectedNames>) => {
     const {
       target: { value },
@@ -195,7 +193,6 @@ const AddNewArticle = ({ params: { articleId } }: SingleArticleProps) => {
           }
         })
         .catch((err: any) => {
-          console.log(err);
           enqueueSnackbar(err.message, {
             variant: "error",
             preventDuplicate: true,
