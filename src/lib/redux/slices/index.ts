@@ -6,3 +6,4 @@ export * from "./tagSlice";
 export * from "./categorySlice";
 export * from "./subjectSlice";
 export * from "./courseSlice";
+export * from "./moduleSlice";

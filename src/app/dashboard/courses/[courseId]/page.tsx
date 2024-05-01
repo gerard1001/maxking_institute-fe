@@ -75,9 +75,6 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
   const [imageError, setImageError] = React.useState<string | null>(null);
   const [selectedNames, setSelectedNames] = React.useState<string[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
-  const [selectedTutorName, setSelectedTutorName] = React.useState<string[]>(
-    []
-  );
   const [selectedTutor, setSelectedTutor] = React.useState<any>("");
   const [openDialog, setOpenDialog] = React.useState(false);
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
@@ -99,6 +96,8 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
       tutor: "",
     },
   });
+
+  console.log(state.course.modules);
 
   const tags = tagState.allTags;
 
@@ -285,9 +284,11 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
           <Button
             className="bg-secondary text-white"
             startIcon={<FaPlus />}
-            onClick={() => {}}
+            onClick={() => {
+              router.push(`/dashboard/courses/${courseId}/create-module`);
+            }}
           >
-            Create New category
+            Add module
           </Button>
           <div className="flex gap-2">
             <IconButton
@@ -326,24 +327,18 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
                   <img
                     src={state.course.coverImage}
                     alt=""
-                    className="w-[440px] aspect-video"
+                    className="w-[440px] aspect-video  object-cover "
                   />
                 </div>
               </div>
               {state.course && (
                 <div className="py-4 border-b border-b-slate-400 flex  items-center justify-between">
-                  <h1> {state?.course?.modules?.length} modules</h1>
-                  <Button
-                    className="bg-secondary text-white"
-                    startIcon={<FaPlus />}
-                    onClick={() => {
-                      router.push(
-                        `/dashboard/courses/${courseId}/create-module`
-                      );
-                    }}
-                  >
-                    Add module
-                  </Button>
+                  <h1 className="text-accent text-xl leading-6 font-semibold">
+                    Modules:{" "}
+                    <span className="text-base font-medium leading-3">
+                      {state?.course?.modules?.length}
+                    </span>
+                  </h1>
                 </div>
               )}
               <div className="">

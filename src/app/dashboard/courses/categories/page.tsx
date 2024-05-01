@@ -621,7 +621,7 @@ const Categories = () => {
                                 {subject.name}
                               </p>
                               <p className="text-secondary line-clamp-1 text-xs">
-                                (0 Courses)
+                                ({subject?.courses?.length} Courses)
                               </p>
                             </div>
                             <IconButton

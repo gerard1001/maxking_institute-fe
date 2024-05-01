@@ -1,7 +1,10 @@
+import { ICourse } from "./course.interface";
+
 export interface ISubject {
   id: string;
   name: string;
   categoryId: string;
+  courses: ICourse[];
   createdAt: Date;
   updatedAt: Date;
 }

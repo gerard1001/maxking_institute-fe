@@ -7,6 +7,7 @@ import {
   categorySlice,
   subjectSlice,
   courseSlice,
+  moduleSlice,
 } from "./slices";
 
 export const reducer = {
@@ -18,4 +19,5 @@ export const reducer = {
   category: categorySlice.reducer,
   subject: subjectSlice.reducer,
   course: courseSlice.reducer,
+  module: moduleSlice.reducer,
 };
