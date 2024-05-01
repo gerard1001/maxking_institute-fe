@@ -18,11 +18,11 @@ import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 interface SingleArticleProps {
   params: {
-    articleId: string;
+    article_id: string;
   };
 }
 
-const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
+const SingleArticle = ({ params: { article_id } }: SingleArticleProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const state = useSelector(selectArticles);
@@ -41,9 +41,9 @@ const SingleArticle = ({ params: { articleId } }: SingleArticleProps) => {
   const relatedArticles = state.relatedArticles;
 
   useEffect(() => {
-    dispatch(fetchSingleArticle(articleId));
-    dispatch(fetchRelatedArticles(articleId));
-  }, [dispatch, articleId]);
+    dispatch(fetchSingleArticle(article_id));
+    dispatch(fetchRelatedArticles(article_id));
+  }, [dispatch, article_id]);
   return (
     <div className="pt-2 lg:px-10 xs:px-2 px-0 pb-12">
       {state.loading ? (

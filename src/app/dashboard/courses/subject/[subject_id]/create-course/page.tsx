@@ -52,7 +52,7 @@ const createCourseSchema = yup.object().shape({
 
 interface SubjectProps {
   params: {
-    subjectId: string;
+    subject_id: string;
   };
 }
 
@@ -65,7 +65,7 @@ export interface CreateCourseInputs {
   tutor: string;
 }
 
-const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
+const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectTags);
@@ -165,7 +165,7 @@ const CreateCourse = ({ params: { subjectId } }: SubjectProps) => {
         formData.append(`tags[${i}]`, selectedTags[i].id);
       }
 
-      dispatch(createCourse({ id: subjectId, data: formData }))
+      dispatch(createCourse({ id: subject_id, data: formData }))
         .unwrap()
         .then((res: any) => {
           if (res.statusCode === 201) {

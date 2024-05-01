@@ -2,7 +2,7 @@
 
 import {
   createArticle,
-  createModule,
+  createChapter,
   fetchAllTags,
   selectTags,
   useDispatch,
@@ -44,22 +44,21 @@ import BackIconButton from "@/components/BackIconButton";
 const schema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
-  // content: yup.string().required(),
 });
 
 type CreateModuleInputs = {
   title: string;
   description: string;
-  // content: string;
 };
 
-interface CourseProps {
+interface ModuleProps {
   params: {
-    courseId: string;
+    module_id: string;
+    course_id: string;
   };
 }
 
-const CreateModule = ({ params: { courseId } }: CourseProps) => {
+const CreateModule = ({ params: { module_id, course_id } }: ModuleProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -75,16 +74,15 @@ const CreateModule = ({ params: { courseId } }: CourseProps) => {
     defaultValues: {
       title: "",
       description: "",
-      // body: "",
     },
   });
 
-  const handleCreateModule = (data: CreateModuleInputs) => {
+  const handleCreateChapter = (data: CreateModuleInputs) => {
     console.log(data);
     setLoading(true);
     dispatch(
-      createModule({
-        id: courseId,
+      createChapter({
+        id: module_id,
         data: {
           title: data.title,
           description: data.description,
@@ -97,6 +95,10 @@ const CreateModule = ({ params: { courseId } }: CourseProps) => {
         console.log(res, "*****************8");
         if (res.statusCode === 201) {
           enqueueSnackbar(res.message, { variant: "success" });
+          setBody("");
+          reset();
+          // router.push(`/dashboard/courses/${course_id}/module/${module_id}`);
+          router.push(`/dashboard/courses/${course_id}`);
         }
       })
       .catch((err) => {
@@ -105,9 +107,6 @@ const CreateModule = ({ params: { courseId } }: CourseProps) => {
       })
       .finally(() => {
         setLoading(false);
-        setBody("");
-        reset();
-        router.push(`/dashboard/courses/${courseId}`);
       });
   };
   return (
@@ -118,7 +117,7 @@ const CreateModule = ({ params: { courseId } }: CourseProps) => {
       <Box
         component="form"
         noValidate
-        onSubmit={handleSubmit(handleCreateModule)}
+        onSubmit={handleSubmit(handleCreateChapter)}
         className="mb-12"
       >
         <div className="flex gap-6">
@@ -212,7 +211,7 @@ const CreateModule = ({ params: { courseId } }: CourseProps) => {
         </div>
         <div className="w-full h-fit flex flex-col items-start mt-6">
           <h1 className="text-xl font-semibold ml-1 text-accent">
-            Course Content
+            Chapter Content
           </h1>
           <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-7 px-8 rounded-lg">
             <ReactQuill setBody={setBody} body={body} />

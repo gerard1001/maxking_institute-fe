@@ -17,11 +17,11 @@ import { FaPlus } from "react-icons/fa6";
 
 interface SubjectProps {
   params: {
-    subjectId: string;
+    subject_id: string;
   };
 }
 
-const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
+const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -29,7 +29,7 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
   const courseState = useSelector(selectCourses);
 
   React.useEffect(() => {
-    dispatch(fetchOneSubject(subjectId))
+    dispatch(fetchOneSubject(subject_id))
       .unwrap()
       .then((res) => {})
       .catch((err) => {
@@ -74,7 +74,7 @@ const SubjectCourses = ({ params: { subjectId } }: SubjectProps) => {
           startIcon={<FaPlus />}
           onClick={() => {
             router.push(
-              `/dashboard/courses/subject/${subjectId}/create-course`
+              `/dashboard/courses/subject/${subject_id}/create-course`
             );
           }}
         >

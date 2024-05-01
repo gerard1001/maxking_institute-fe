@@ -5,7 +5,6 @@ import {
   fetchAllTags,
   fetchAllUsers,
   fetchOneCourse,
-  fetchOneSubject,
   selectCourses,
   selectTags,
   selectUsers,
@@ -14,6 +13,10 @@ import {
   useSelector,
 } from "@/lib/redux";
 import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Checkbox,
@@ -38,13 +41,13 @@ import { Controller, useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa6";
 import { MdCloudUpload, MdEdit, MdOutlineClose } from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
-import { CreateCourseInputs } from "../subject/[subjectId]/create-course/page";
+import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ITag } from "@/lib/interfaces/tag.interface";
 import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
-import { LuPlus } from "react-icons/lu";
 import LoadinProgress from "@/components/LoadingProgess";
+import { BsChevronDown } from "react-icons/bs";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -57,11 +60,11 @@ const createCourseSchema = yup.object().shape({
 
 interface SubjectProps {
   params: {
-    courseId: string;
+    course_id: string;
   };
 }
 
-const CoursePage = ({ params: { courseId } }: SubjectProps) => {
+const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -149,13 +152,13 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
   }, []);
 
   React.useEffect(() => {
-    dispatch(fetchOneCourse(courseId))
+    dispatch(fetchOneCourse(course_id))
       .unwrap()
       .then((res: any) => {})
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
-  }, [courseId]);
+  }, [course_id]);
 
   React.useEffect(() => {
     const selectedTagObjects = selectedNames.map(
@@ -218,7 +221,7 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
         formData.append(`tags[${i}]`, selectedTags[i].id);
       }
 
-      dispatch(updateCourse({ id: courseId, data: formData }))
+      dispatch(updateCourse({ id: course_id, data: formData }))
         .unwrap()
         .then((res: any) => {
           if (res.statusCode === 200) {
@@ -229,7 +232,7 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
             setTimeout(() => {
               handleCloseModal();
             }, 1000);
-            dispatch(fetchOneCourse(courseId))
+            dispatch(fetchOneCourse(course_id))
               .unwrap()
               .catch((err: any) => {
                 enqueueSnackbar(err.message, {
@@ -253,7 +256,7 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
 
   const handleDeleteCourse = () => {
     setDeleteLoading(true);
-    dispatch(deleteCourse(courseId))
+    dispatch(deleteCourse(course_id))
       .unwrap()
       .then((res: any) => {
         if (res.statusCode === 200) {
@@ -285,7 +288,7 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
             className="bg-secondary text-white"
             startIcon={<FaPlus />}
             onClick={() => {
-              router.push(`/dashboard/courses/${courseId}/create-module`);
+              router.push(`/dashboard/courses/${course_id}/create-module`);
             }}
           >
             Add module
@@ -306,7 +309,7 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
           </div>
         </div>
         {state.course && (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white">
+          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
             <div className="w-full">
               <div className="flex gap-3 pt-6">
                 <div className="w-full">
@@ -339,6 +342,14 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
                       {state?.course?.modules?.length}
                     </span>
                   </h1>
+                  <Button
+                    className="bg-secondary text-white"
+                    onClick={() => {
+                      router.push(`/dashboard/courses/${course_id}/module`);
+                    }}
+                  >
+                    See modules
+                  </Button>
                 </div>
               )}
               <div className="">
@@ -358,6 +369,135 @@ const CoursePage = ({ params: { courseId } }: SubjectProps) => {
             </div>
           </div>
         )}
+        <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
+          {state.course?.modules?.length === 0 ? (
+            <div className="w-full">
+              <h1 className="text-center text-xl text-accent font-bold">
+                No modules here yet
+              </h1>
+              <p
+                className="text-center text-accent/50 hover:underline  hover:text-accent/80 cursor-pointer"
+                onClick={() => {
+                  router.push(`/dashboard/courses/${course_id}/create-module`);
+                }}
+              >
+                Add New
+              </p>
+            </div>
+          ) : (
+            <div className="">
+              {state.course?.modules
+                ?.slice()
+                ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
+                ?.map((module) => (
+                  <Accordion key={module.id}>
+                    <AccordionSummary
+                      expandIcon={<BsChevronDown />}
+                      aria-controls="panel3-content"
+                      id="panel3-header"
+                    >
+                      {module.moduleNumber}: {module.title}
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <div className="">
+                        <p>{module.description}</p>
+                        <div className="flex gap-2 text-center">
+                          <h1 className="text-lg text-accent font-semibold">
+                            Chapters:{" "}
+                            <span className="text-base font-medium">
+                              {module.chapters.length}
+                            </span>
+                          </h1>
+                        </div>
+                        <div className="">
+                          {" "}
+                          <Button
+                            className="bg-secondary text-white"
+                            startIcon={<FaPlus />}
+                            onClick={() => {
+                              router.push(
+                                `/dashboard/courses/${course_id}/module/${module.id}/create-chapter`
+                              );
+                            }}
+                          >
+                            Add Chapter
+                          </Button>
+                        </div>
+                        <div className="mt-6">
+                          {module?.chapters
+                            ?.slice()
+                            ?.sort((a, b) => a.chapterNumber - b.chapterNumber)
+                            ?.map((chapter) => (
+                              <Accordion
+                                key={chapter.id}
+                                sx={{ background: "#f4f4f5" }}
+                              >
+                                <AccordionSummary
+                                  expandIcon={<BsChevronDown />}
+                                  aria-controls="panel3-content"
+                                  id="panel3-header"
+                                >
+                                  {chapter.chapterNumber}: {chapter.title}
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  <div className="">
+                                    <p>{chapter.description}</p>
+                                  </div>
+                                </AccordionDetails>
+                                <AccordionActions>
+                                  <Button
+                                    className="bg-secondary text-white"
+                                    onClick={() => {
+                                      router.push(
+                                        `/dashboard/courses/${course_id}/module/${module.id}`
+                                      );
+                                    }}
+                                  >
+                                    View
+                                  </Button>
+                                  <Button
+                                    className="bg-primary text-white"
+                                    onClick={() => {
+                                      router.push(
+                                        `/dashboard/courses/${course_id}/module/${module.id}/edit`
+                                      );
+                                    }}
+                                  >
+                                    Edit
+                                  </Button>
+                                </AccordionActions>
+                              </Accordion>
+                            ))}
+                        </div>
+                      </div>
+                    </AccordionDetails>
+                    <AccordionActions>
+                      <Button
+                        className="bg-secondary text-white"
+                        onClick={() => {
+                          router.push(
+                            `/dashboard/courses/${course_id}/module/${module.id}`
+                          );
+                        }}
+                      >
+                        View
+                      </Button>
+                      <Button
+                        className="bg-primary text-white"
+                        onClick={() => {
+                          router.push(
+                            `/dashboard/courses/${course_id}/module/${module.id}/edit`
+                          );
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </AccordionActions>
+                  </Accordion>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
       <Modal
         open={openModal}
