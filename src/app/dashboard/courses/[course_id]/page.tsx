@@ -53,6 +53,7 @@ import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
 import { BsChevronDown } from "react-icons/bs";
 import { CreateModuleInputs, createModuleSchema } from "./create-module/page";
+import Link from "next/link";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -629,12 +630,21 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                     Edit
                                   </Button> */}
                                   <div className="flex gap-2">
-                                    <IconButton
-                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                                      onClick={handleOpenModal}
+                                    <Link
+                                      href={`/dashboard/courses/${course_id}/module/${module.id}/chapter/learning/${chapter.chapterNumber}`}
+                                      target="_blank"
                                     >
-                                      <FaRegEye className="text-primary" />
-                                    </IconButton>
+                                      <IconButton
+                                        className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                        // onClick={() => {
+                                        //   router.push(
+                                        //     `/dashboard/courses/${course_id}/module/${module.id}/chapter/learning/${chapter.chapterNumber}`
+                                        //   );
+                                        // }}
+                                      >
+                                        <FaRegEye className="text-primary" />
+                                      </IconButton>
+                                    </Link>
                                     <IconButton
                                       className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
                                       onClick={() => {

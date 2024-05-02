@@ -1,13 +1,16 @@
 "use client";
 
+import DashboardLearningSidebar from "@/components/DashboardLearningSidebar";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import DashboardTopbar from "@/components/DashboardTopbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { SuspenseLoading } from "@/components/SuspenseLoading";
 import { LoginContext } from "@/lib/context/LoginContext";
+import { usePathname } from "next/navigation";
 import React, { useContext, useState } from "react";
 
 const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const pathName = usePathname();
   const {
     loginData,
     loginUserFetchLoading,
@@ -15,6 +18,9 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setLoginData,
   } = useContext(LoginContext);
   const [navBar, setNavBar] = useState<boolean>(false);
+  const [onLearning, setOnLearning] = useState<boolean>(false);
+
+  console.log(onLearning);
 
   const scrollDiv = (e: any) => {
     if (e.target.scrollTop >= 40) {
@@ -24,11 +30,21 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   };
 
+  const splits = pathName.split("/");
+  console.log(splits);
+  React.useEffect(() => {
+    if (splits[6] === "chapter" && splits[7] === "learning") {
+      setOnLearning(true);
+    } else {
+      setOnLearning(false);
+    }
+  }, [pathName]);
   return (
     <ProtectedRoute>
       <div className="flex h-screen overflow-hidden">
         <div className="">
-          <DashboardSidebar />
+          {onLearning ? <DashboardLearningSidebar /> : <DashboardSidebar />}
+          {/* <DashboardSidebar /> */}
         </div>
         <div className="w-full h-full overflow-y-auto" onScroll={scrollDiv}>
           <DashboardTopbar navBar={navBar} />
