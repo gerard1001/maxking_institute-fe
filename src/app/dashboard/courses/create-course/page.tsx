@@ -463,8 +463,12 @@ const CreateCourse = () => {
                     fullWidth
                     size="small"
                     className="text-xs"
-                    error={!!errors.title}
-                    helperText={errors.title ? errors.title.message : ""}
+                    error={!!errors.estimatedDuration}
+                    helperText={
+                      errors.estimatedDuration
+                        ? errors.estimatedDuration.message
+                        : ""
+                    }
                   />
                 )}
               />

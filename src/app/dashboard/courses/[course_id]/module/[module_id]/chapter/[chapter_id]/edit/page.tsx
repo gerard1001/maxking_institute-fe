@@ -4,7 +4,9 @@ import {
   createArticle,
   createChapter,
   fetchAllTags,
+  fetchOneChapter,
   selectTags,
+  updateChapter,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
@@ -40,26 +42,28 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
-import { CreateModuleInputs } from "../../../create-module/page";
 
 const schema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
 });
 
-// type CreateModuleInputs = {
-//   title: string;
-//   description: string;
-// };
+type CreateModuleInputs = {
+  title: string;
+  description: string;
+};
 
 interface ModuleProps {
   params: {
     module_id: string;
     course_id: string;
+    chapter_id: string;
   };
 }
 
-const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
+const EditChapter = ({
+  params: { module_id, course_id, chapter_id },
+}: ModuleProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -69,6 +73,7 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<CreateModuleInputs>({
     resolver: yupResolver(schema),
@@ -78,12 +83,26 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
     },
   });
 
-  const handleCreateChapter = (data: CreateModuleInputs) => {
-    console.log(data);
+  React.useEffect(() => {
+    dispatch(fetchOneChapter(chapter_id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          setValue("title", res.data.title);
+          setValue("description", res.data.description);
+          setBody(res.data.content);
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  }, []);
+
+  const handleUpdateChapter = (data: CreateModuleInputs) => {
     setLoading(true);
     dispatch(
-      createChapter({
-        id: module_id,
+      updateChapter({
+        id: chapter_id,
         data: {
           title: data.title,
           description: data.description,
@@ -93,13 +112,12 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
     )
       .unwrap()
       .then((res) => {
-        console.log(res, "*****************8");
-        if (res.statusCode === 201) {
+        if (res.statusCode === 200) {
           enqueueSnackbar(res.message, { variant: "success" });
           setBody("");
           reset();
-          // router.push(`/dashboard/courses/${course_id}/module/${module_id}`);
-          router.push(`/dashboard/courses/${course_id}`);
+          //   router.push(`/dashboard/courses/${course_id}`);
+          router.back();
         }
       })
       .catch((err) => {
@@ -118,7 +136,7 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
       <Box
         component="form"
         noValidate
-        onSubmit={handleSubmit(handleCreateChapter)}
+        onSubmit={handleSubmit(handleUpdateChapter)}
         className="mb-12"
       >
         <div className="flex gap-6">
@@ -226,11 +244,11 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
           size="large"
           disabled={loading}
         >
-          {loading ? <LoadinProgress /> : "Submit"}
+          {loading ? <LoadinProgress /> : "Save"}
         </Button>
       </Box>
     </div>
   );
 };
 
-export default CreateChapter;
+export default EditChapter;

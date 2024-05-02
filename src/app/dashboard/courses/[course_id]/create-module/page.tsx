@@ -41,7 +41,7 @@ import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
 
-const schema = yup.object().shape({
+export const createModuleSchema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
 });
@@ -69,7 +69,7 @@ const CreateModule = ({ params: { course_id } }: CourseProps) => {
     reset,
     formState: { errors },
   } = useForm<CreateModuleInputs>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(createModuleSchema),
     defaultValues: {
       title: "",
       description: "",

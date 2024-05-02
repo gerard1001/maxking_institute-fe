@@ -1,14 +1,18 @@
 "use client";
 
 import {
+  deleteChapter,
   deleteCourse,
+  deleteModule,
   fetchAllTags,
   fetchAllUsers,
   fetchOneCourse,
+  fetchOneModule,
   selectCourses,
   selectTags,
   selectUsers,
   updateCourse,
+  updateModule,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
@@ -38,7 +42,7 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaRegEye } from "react-icons/fa6";
 import { MdCloudUpload, MdEdit, MdOutlineClose } from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
 import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
@@ -48,6 +52,7 @@ import { ITag } from "@/lib/interfaces/tag.interface";
 import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
 import { BsChevronDown } from "react-icons/bs";
+import { CreateModuleInputs, createModuleSchema } from "./create-module/page";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -72,6 +77,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const tagState = useSelector(selectTags);
   const userState = useSelector(selectUsers);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const [openModuleModal, setOpenModuleModal] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
@@ -80,7 +86,11 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [selectedTutor, setSelectedTutor] = React.useState<any>("");
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openModuleDialog, setOpenModuleDialog] = React.useState(false);
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
+  const [moduleId, setModuleId] = React.useState<string>("");
+  const [chapterId, setChapterId] = React.useState<string>("");
+  const [deletingWhat, setDeletingWhat] = React.useState<string>("course");
 
   const {
     handleSubmit,
@@ -100,6 +110,20 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     },
   });
 
+  const {
+    handleSubmit: handleSubmitModule,
+    control: controlModule,
+    reset: resetModule,
+    setValue: setValueModule,
+    formState: { errors: errorsModule },
+  } = useForm<CreateModuleInputs>({
+    resolver: yupResolver(createModuleSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  });
+
   console.log(state.course.modules);
 
   const tags = tagState.allTags;
@@ -107,12 +131,21 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
+  const handleOpenModuleModal = () => setOpenModuleModal(true);
+  const handleCloseModuleModal = () => setOpenModuleModal(false);
+
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOpenModuleDialog = () => {
+    setOpenModuleDialog(true);
+  };
+  const handleCloseModuleDialog = () => {
+    setOpenModuleDialog(false);
   };
 
   const handleChange = (event: SelectChangeEvent<typeof selectedNames>) => {
@@ -202,6 +235,25 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     }
   }, [state.course]);
 
+  React.useEffect(() => {
+    if (moduleId && moduleId !== "") {
+      dispatch(fetchOneModule(moduleId))
+        .unwrap()
+        .then((res: any) => {
+          if (res.statusCode === 200) {
+            setValueModule("title", res.data.title);
+            setValueModule("description", res.data.description);
+          }
+        })
+        .catch((err: any) => {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+            preventDuplicate: true,
+          });
+        });
+    }
+  }, [moduleId]);
+
   const handleSaveArticle = (data: CreateCourseInputs) => {
     if (!picture && !picUrl) {
       return setImageError("Please select a cover image");
@@ -280,6 +332,122 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         setDeleteLoading(false);
       });
   };
+
+  const handleDeleteChapter = () => {
+    dispatch(deleteChapter(chapterId))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          dispatch(fetchOneCourse(course_id))
+            .unwrap()
+            .then((res: any) => {
+              if (res.statusCode === 200) {
+                dispatch(fetchOneModule(moduleId))
+                  .unwrap()
+                  .catch((err: any) => {
+                    enqueueSnackbar(err.message, {
+                      variant: "error",
+                      preventDuplicate: true,
+                    });
+                  });
+              }
+            })
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+          setTimeout(() => {
+            handleCloseDialog();
+          }, 500);
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
+      .finally(() => {
+        setDeleteLoading(false);
+      });
+  };
+
+  const handleUpdateModule = (data: CreateModuleInputs) => {
+    setLoading(true);
+    dispatch(updateModule({ id: moduleId, data }))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          dispatch(fetchOneCourse(course_id))
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+          setTimeout(() => {
+            handleCloseModuleModal();
+          }, 1000);
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleDeleteModule = () => {
+    if (moduleId && moduleId !== "") {
+      setDeleteLoading(true);
+      dispatch(deleteModule(moduleId))
+        .unwrap()
+        .then((res: any) => {
+          if (res.statusCode === 200) {
+            enqueueSnackbar(res.message, {
+              variant: "success",
+              preventDuplicate: true,
+            });
+            dispatch(fetchOneCourse(course_id))
+              .unwrap()
+              .catch((err: any) => {
+                enqueueSnackbar(err.message, {
+                  variant: "error",
+                  preventDuplicate: true,
+                });
+              });
+            setTimeout(() => {
+              handleCloseModuleDialog();
+            }, 500);
+          }
+        })
+        .catch((err: any) => {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+            preventDuplicate: true,
+          });
+        })
+        .finally(() => {
+          setDeleteLoading(false);
+        });
+    }
+  };
+
   return (
     <>
       <div className="pb-10">
@@ -385,12 +553,17 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
               </p>
             </div>
           ) : (
-            <div className="">
+            <div className="w-full">
               {state.course?.modules
                 ?.slice()
                 ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
                 ?.map((module) => (
-                  <Accordion key={module.id}>
+                  <Accordion
+                    key={module.id}
+                    onChange={() => {
+                      setModuleId(module.id);
+                    }}
+                  >
                     <AccordionSummary
                       expandIcon={<BsChevronDown />}
                       aria-controls="panel3-content"
@@ -401,7 +574,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                     <AccordionDetails>
                       <div className="">
                         <p>{module.description}</p>
-                        <div className="flex gap-2 text-center">
+                        <div className="flex gap-2 text-center mt-4">
                           <h1 className="text-lg text-accent font-semibold">
                             Chapters:{" "}
                             <span className="text-base font-medium">
@@ -409,21 +582,8 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                             </span>
                           </h1>
                         </div>
-                        <div className="">
-                          {" "}
-                          <Button
-                            className="bg-secondary text-white"
-                            startIcon={<FaPlus />}
-                            onClick={() => {
-                              router.push(
-                                `/dashboard/courses/${course_id}/module/${module.id}/create-chapter`
-                              );
-                            }}
-                          >
-                            Add Chapter
-                          </Button>
-                        </div>
-                        <div className="mt-6">
+
+                        <div className="mt-2">
                           {module?.chapters
                             ?.slice()
                             ?.sort((a, b) => a.chapterNumber - b.chapterNumber)
@@ -431,6 +591,9 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                               <Accordion
                                 key={chapter.id}
                                 sx={{ background: "#f4f4f5" }}
+                                onChange={() => {
+                                  setChapterId(chapter.id);
+                                }}
                               >
                                 <AccordionSummary
                                   expandIcon={<BsChevronDown />}
@@ -445,7 +608,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                   </div>
                                 </AccordionDetails>
                                 <AccordionActions>
-                                  <Button
+                                  {/* <Button
                                     className="bg-secondary text-white"
                                     onClick={() => {
                                       router.push(
@@ -464,15 +627,56 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                     }}
                                   >
                                     Edit
-                                  </Button>
+                                  </Button> */}
+                                  <div className="flex gap-2">
+                                    <IconButton
+                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                      onClick={handleOpenModal}
+                                    >
+                                      <FaRegEye className="text-primary" />
+                                    </IconButton>
+                                    <IconButton
+                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                      onClick={() => {
+                                        router.push(
+                                          `/dashboard/courses/${course_id}/module/${module.id}/chapter/${chapter.id}/edit`
+                                        );
+                                      }}
+                                    >
+                                      <MdEdit className="text-blue-700" />
+                                    </IconButton>
+                                    <IconButton
+                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                      onClick={() => {
+                                        setDeletingWhat("chapter");
+                                        handleOpenDialog();
+                                      }}
+                                    >
+                                      <TbTrash className="text-red-600" />
+                                    </IconButton>
+                                  </div>
                                 </AccordionActions>
                               </Accordion>
                             ))}
                         </div>
+                        <div className="mt-4">
+                          {" "}
+                          <Button
+                            className="bg-secondary text-white"
+                            startIcon={<FaPlus />}
+                            onClick={() => {
+                              router.push(
+                                `/dashboard/courses/${course_id}/module/${module.id}/create-chapter`
+                              );
+                            }}
+                          >
+                            Add Chapter
+                          </Button>
+                        </div>
                       </div>
                     </AccordionDetails>
                     <AccordionActions>
-                      <Button
+                      {/* <Button
                         className="bg-secondary text-white"
                         onClick={() => {
                           router.push(
@@ -491,10 +695,33 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                         }}
                       >
                         Edit
-                      </Button>
+                      </Button> */}
+                      <div className="flex gap-2">
+                        <IconButton
+                          className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                          onClick={handleOpenModuleModal}
+                        >
+                          <MdEdit className="text-blue-700" />
+                        </IconButton>
+                        <IconButton
+                          className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                          onClick={handleOpenModuleDialog}
+                        >
+                          <TbTrash className="text-red-600" />
+                        </IconButton>
+                      </div>
                     </AccordionActions>
                   </Accordion>
                 ))}
+              <Button
+                className="bg-secondary text-white mt-4"
+                startIcon={<FaPlus />}
+                onClick={() => {
+                  router.push(`/dashboard/courses/${course_id}/create-module`);
+                }}
+              >
+                Add module
+              </Button>
             </div>
           )}
         </div>
@@ -950,6 +1177,147 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </Box>
         </Box>
       </Modal>
+      <Modal
+        open={openModuleModal}
+        onClose={handleCloseModuleModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          borderRadius: "30px",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxHeight: "98vh",
+            width: {
+              sm: 1400,
+              xs: "95%",
+            },
+            maxWidth: 900,
+            overflowY: "auto",
+            bgcolor: "background.paper",
+            border: "none",
+            borderRadius: "10px",
+            boxShadow: 24,
+            p: {
+              md: 4,
+              sm: 2,
+              xs: 1,
+            },
+          }}
+        >
+          <Box className="flex items-center justify-between border-b mb-4">
+            <Typography className="text-2xl font-semibold text-accent">
+              Edit Module
+            </Typography>
+            <IconButton onClick={handleCloseModuleModal} size="medium">
+              <MdOutlineClose />
+            </IconButton>
+          </Box>
+          <Box>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmitModule(handleUpdateModule)}
+              className="mb-12"
+            >
+              <Controller
+                name="title"
+                control={controlModule}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    sx={{
+                      input: {
+                        color: "#021527",
+                      },
+                      mt: 2,
+                      color: "#242E8F",
+                      "& label.Mui-focused": {
+                        color: "#242E8F",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "1.5px solid #242E8F",
+                        },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        py: "14px",
+                      },
+                      "& .MuiFormLabel-root": {
+                        mt: "3px",
+                      },
+                    }}
+                    inputProps={{ style: { height: 18 } }}
+                    label="Title"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                    className="text-xs"
+                    error={!!errors.title}
+                    helperText={errors.title ? errors.title.message : ""}
+                  />
+                )}
+              />
+              <Controller
+                name="description"
+                control={controlModule}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    sx={{
+                      input: {
+                        color: "#021527",
+                      },
+                      mt: 2,
+                      color: "#242E8F",
+                      "& label.Mui-focused": {
+                        color: "#242E8F",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "1.5px solid #242E8F",
+                        },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        py: "14px",
+                      },
+                      "& .MuiFormLabel-root": {
+                        mt: "3px",
+                      },
+                    }}
+                    inputProps={{ style: { height: 18 } }}
+                    label="Description"
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    size="small"
+                    className="text-xs"
+                    error={!!errors.description}
+                    helperText={
+                      errors.description ? errors.description.message : ""
+                    }
+                  />
+                )}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                className="bg-primary hover:bg-primary/90 w-full max-w-32 mt-4 !h-[46px]"
+                size="large"
+                disabled={loading}
+              >
+                {loading ? <LoadinProgress /> : "Save"}
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -962,12 +1330,19 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </div>
           <h1 className="text-xl font-semibold">Are you sure?</h1>
           <p className="text-center">
-            This action will completely remove this course and its modules.
+            This action will completely remove this{" "}
+            {deletingWhat === "chapter" ? "chapter" : "course and its modules"}.
             Still wish to proceed?
           </p>
           <Button
             fullWidth
-            onClick={handleDeleteCourse}
+            onClick={() => {
+              if (deletingWhat === "chapter") {
+                handleDeleteChapter();
+              } else {
+                handleDeleteCourse();
+              }
+            }}
             className="bg-red-500 text-white hover:bg-red-400 !h-9"
             disabled={deleteLoading}
           >
@@ -980,6 +1355,44 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           <Button
             fullWidth
             onClick={handleCloseDialog}
+            autoFocus
+            variant="contained"
+            className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Dialog>
+      <Dialog
+        open={openModuleDialog}
+        onClose={handleCloseModuleDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+          <div className="w-fit p-4 rounded-full bg-red-200">
+            <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
+          </div>
+          <h1 className="text-xl font-semibold">Are you sure?</h1>
+          <p className="text-center">
+            This action will completely remove this Module and its chapters.
+            Still wish to proceed?
+          </p>
+          <Button
+            fullWidth
+            onClick={handleDeleteModule}
+            className="bg-red-500 text-white hover:bg-red-400 !h-9"
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? (
+              <LoadinProgress className="!h-8 !w-8" />
+            ) : (
+              "Delete"
+            )}
+          </Button>
+          <Button
+            fullWidth
+            onClick={handleCloseModuleDialog}
             autoFocus
             variant="contained"
             className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
