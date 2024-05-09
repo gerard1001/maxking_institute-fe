@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { LuCalendarClock, LuChevronFirst, LuChevronLast } from "react-icons/lu";
 import { TfiArrowsVertical } from "react-icons/tfi";
 import SidebarItem from "./SidebarItem";
@@ -13,6 +13,7 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineLogout } from "react-icons/ai";
 import ProtectedRoute from "./ProtectedRoute";
 import { usePathname, useRouter } from "next/navigation";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -115,6 +116,7 @@ const DashboardSidebar: React.FC = ({}) => {
     0: false,
   });
   const [activePage, setActivePage] = useState<string[]>(pathName.split("/"));
+  const { isClient } = useContext(LoginContext);
 
   const handleSetActiveIndex = (index: number) => {
     setActiveIndex(index);
@@ -170,7 +172,9 @@ const DashboardSidebar: React.FC = ({}) => {
             <ul className="flex-1 px-3 overflow-y-auto overflow-x-hidden">
               {sidebarItems(activePage).map((item, index) => (
                 <div
-                  className=""
+                  className={`${
+                    isClient && item.text === "Users" ? "hidden" : "block"
+                  }`}
                   key={index}
                   onClick={() => {
                     handleSetActiveIndex(index);
@@ -193,26 +197,6 @@ const DashboardSidebar: React.FC = ({}) => {
               ))}
             </ul>
           </SidebarContext.Provider>
-
-          {/* <div className="border-t flex p-3">
-            <img
-              src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-              alt=""
-              className="w-10 h-10 rounded-md"
-            />
-            <div
-              className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-            >
-              <div className="leading-4">
-                <h4 className="font-semibold">John Doe</h4>
-                <span className="text-xs text-gray-600">johndoe@gmail.com</span>
-              </div>
-              <TfiArrowsVertical size={20} />
-            </div>
-          </div> */}
         </nav>
       </aside>
     </ProtectedRoute>

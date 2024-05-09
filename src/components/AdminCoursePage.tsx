@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  createUserCourse,
-  createUserModule,
   deleteChapter,
   deleteCourse,
   deleteModule,
@@ -10,7 +8,6 @@ import {
   fetchAllUsers,
   fetchOneCourse,
   fetchOneModule,
-  fetchUserById,
   selectCourses,
   selectTags,
   selectUsers,
@@ -48,7 +45,7 @@ import { Controller, useForm } from "react-hook-form";
 import { FaPlus, FaRegEye } from "react-icons/fa6";
 import { MdCloudUpload, MdEdit, MdOutlineClose } from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
-import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
+// import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ITag } from "@/lib/interfaces/tag.interface";
@@ -56,10 +53,7 @@ import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
 import { BsChevronDown } from "react-icons/bs";
 import Link from "next/link";
-import { LoginContext } from "@/lib/context/LoginContext";
-import { RiFilePaper2Line } from "react-icons/ri";
-import { objectIsEmpty } from "@/lib/functions/object_check.function";
-import { IModule } from "@/lib/interfaces/module.interface";
+import { CreateCourseInputs } from "@/app/dashboard/courses/subject/[subject_id]/create-course/page";
 
 const createModuleSchema = yup.object().shape({
   title: yup.string().required(),
@@ -80,17 +74,11 @@ const createCourseSchema = yup.object().shape({
   tutor: yup.string().required(),
 });
 
-interface SubjectProps {
-  params: {
-    course_id: string;
-  };
-}
-
-const CoursePage = ({ params: { course_id } }: SubjectProps) => {
+const AdminCoursePage = ({ course_id }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const courseState = useSelector(selectCourses);
+  const state = useSelector(selectCourses);
   const tagState = useSelector(selectTags);
   const userState = useSelector(selectUsers);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
@@ -108,17 +96,6 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const [moduleId, setModuleId] = React.useState<string>("");
   const [chapterId, setChapterId] = React.useState<string>("");
   const [deletingWhat, setDeletingWhat] = React.useState<string>("course");
-  const { isClient, userId, loginData } = React.useContext(LoginContext);
-
-  const loggedInUser = objectIsEmpty(userState.user)
-    ? userState.loggedInUser
-    : userState.user;
-
-  const firstModule =
-    courseState?.course?.modules?.length > 0 &&
-    courseState?.course?.modules?.find((module) => module.moduleNumber === 1)!;
-
-  console.log(firstModule, "firstModule");
 
   const {
     handleSubmit,
@@ -151,6 +128,8 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       description: "",
     },
   });
+
+  console.log(state.course.modules);
 
   const tags = tagState.allTags;
 
@@ -208,28 +187,6 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           preventDuplicate: true,
         });
       });
-
-    if (loginData && !objectIsEmpty(loginData)) {
-      dispatch(fetchUserById(loginData.id))
-        .unwrap()
-        .catch((err: any) => {
-          enqueueSnackbar(err.message, {
-            variant: "error",
-            preventDuplicate: true,
-          });
-        });
-    }
-
-    if (userId) {
-      dispatch(fetchUserById(userId))
-        .unwrap()
-        .catch((err: any) => {
-          enqueueSnackbar(err.message, {
-            variant: "error",
-            preventDuplicate: true,
-          });
-        });
-    }
   }, []);
 
   React.useEffect(() => {
@@ -266,7 +223,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       previewText,
       estimatedDuration,
       users = [],
-    } = courseState.course;
+    } = state.course;
 
     title && setValue("title", title);
     description && setValue("description", description);
@@ -274,14 +231,14 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     previewText && setValue("previewText", previewText);
     estimatedDuration && setValue("estimatedDuration", estimatedDuration);
     users[0]?.id && setValue("tutor", users[0].id);
-    setPicUrl(courseState.course.coverImage);
-    if (courseState.course.tags && courseState.course.tags.length > 0) {
-      setSelectedNames(courseState.course.tags.map((tag) => tag.name));
+    setPicUrl(state.course.coverImage);
+    if (state.course.tags && state.course.tags.length > 0) {
+      setSelectedNames(state.course.tags.map((tag) => tag.name));
     }
-    if (courseState.course.users && courseState.course.users.length > 0) {
-      setSelectedTutor(courseState.course.users[0].id);
+    if (state.course.users && state.course.users.length > 0) {
+      setSelectedTutor(state.course.users[0].id);
     }
-  }, [courseState.course]);
+  }, [state.course]);
 
   React.useEffect(() => {
     if (moduleId && moduleId !== "") {
@@ -496,225 +453,66 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     }
   };
 
-  const enrollInCourse = () => {
-    setLoading(true);
-    dispatch(
-      createUserCourse({
-        userId: userId,
-        courseId: course_id,
-      })
-    )
-      .unwrap()
-      .then((res: any) => {
-        if (res.statusCode === 201) {
-          enqueueSnackbar(res.message, {
-            variant: "success",
-            preventDuplicate: true,
-          });
-          dispatch(fetchUserById(loginData.id))
-            .unwrap()
-            .catch((err: any) => {
-              enqueueSnackbar(err.message, {
-                variant: "error",
-                preventDuplicate: true,
-              });
-            });
-        }
-      })
-      .catch((err: any) => {
-        enqueueSnackbar(err.message, {
-          variant: "error",
-          preventDuplicate: true,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const startCourse = () => {
-    setLoading(true);
-    if (firstModule && !objectIsEmpty(firstModule)) {
-      dispatch(
-        createUserModule({
-          userId: userId,
-          moduleId: firstModule?.id,
-        })
-      )
-        .unwrap()
-        .then((res: any) => {
-          if (res.statusCode === 201) {
-            enqueueSnackbar(res.message, {
-              variant: "success",
-              preventDuplicate: true,
-            });
-            dispatch(fetchUserById(loginData.id))
-              .unwrap()
-              .then((res: any) => {
-                if (res.statusCode === 200) {
-                  router.push(
-                    `/dashboard/courses/${course_id}/learning/${
-                      loggedInUser?.courses?.find(
-                        (course) => course.id === course_id
-                      )?.user_course?.currentModule
-                    }/${
-                      loggedInUser?.modules?.find(
-                        (module) => module.courseId === course_id
-                      )?.user_module?.currentChapter
-                    }`
-                  );
-                }
-              })
-              .catch((err: any) => {
-                enqueueSnackbar(err.message, {
-                  variant: "error",
-                  preventDuplicate: true,
-                });
-              });
-          }
-        })
-        .catch((err: any) => {
-          enqueueSnackbar(err.message, {
-            variant: "error",
-            preventDuplicate: true,
-          });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  };
-
   return (
-    <>
+    <div>
       <div className="pb-10">
         <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between">
-          {isClient ? (
-            <>
-              {loggedInUser?.courses?.find(
-                (course) => course.id === course_id
-              ) ? (
-                <>
-                  {firstModule &&
-                  !objectIsEmpty(firstModule) &&
-                  loggedInUser?.modules?.find(
-                    (module) => module.courseId === course_id
-                  ) ? (
-                    <Button
-                      className="bg-secondary text-white"
-                      onClick={() => {
-                        if (
-                          loggedInUser?.courses?.find(
-                            (course) => course.id === course_id
-                          )
-                        ) {
-                          router.push(
-                            `/dashboard/courses/${course_id}/learning/${
-                              loggedInUser?.courses?.find(
-                                (course) => course.id === course_id
-                              )?.user_course?.currentModule
-                            }/${
-                              loggedInUser?.modules?.find(
-                                (module) => module.courseId === course_id
-                              )?.user_module?.currentChapter
-                            }`
-                          );
-                        }
-                      }}
-                    >
-                      Continue Learning
-                    </Button>
-                  ) : (
-                    <Button
-                      className="bg-secondary text-white"
-                      onClick={() => {
-                        if (
-                          loggedInUser?.courses?.find(
-                            (course) => course.id === course_id
-                          )
-                        ) {
-                          startCourse();
-                        }
-                      }}
-                    >
-                      Start course
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <Button
-                  className="bg-secondary text-white"
-                  startIcon={!loading && <FaPlus />}
-                  disabled={loading}
-                  onClick={() => {
-                    enrollInCourse();
-                  }}
-                >
-                  {loading ? "Enrollment in progess..." : " Enroll in course"}
-                </Button>
-              )}
-            </>
-          ) : (
-            <Button
-              className="bg-secondary text-white"
-              startIcon={<FaPlus />}
-              onClick={() => {
-                router.push(`/dashboard/courses/${course_id}/create-module`);
-              }}
+          <Button
+            className="bg-secondary text-white"
+            startIcon={<FaPlus />}
+            onClick={() => {
+              router.push(`/dashboard/courses/${course_id}/create-module`);
+            }}
+          >
+            Add module
+          </Button>
+          <div className="flex gap-2">
+            <IconButton
+              className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+              onClick={handleOpenModal}
             >
-              Add module
-            </Button>
-          )}
-          {!isClient && (
-            <div className="flex gap-2">
-              <IconButton
-                className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                onClick={handleOpenModal}
-              >
-                <MdEdit className="text-blue-700" />
-              </IconButton>
-              <IconButton
-                className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                onClick={handleOpenDialog}
-              >
-                <TbTrash className="text-red-600" />
-              </IconButton>
-            </div>
-          )}
+              <MdEdit className="text-blue-700" />
+            </IconButton>
+            <IconButton
+              className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+              onClick={handleOpenDialog}
+            >
+              <TbTrash className="text-red-600" />
+            </IconButton>
+          </div>
         </div>
-
-        <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
-          {courseState.course && (
+        {state.course && (
+          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
             <div className="w-full">
               <div className="flex gap-3 pt-6">
                 <div className="w-full">
                   <h1 className="text-accent text-xl leading-6 font-semibold mb-2">
-                    {courseState.course.title}
+                    {state.course.title}
                   </h1>
                   <p className="text-accent leading-6">
-                    {courseState.course.description}
+                    {state.course.description}
                   </p>
                   <h1 className="text-accent text-xl leading-6 font-semibold mb-4 mt-8 border-b border-b-slate-400">
                     Estimated duration:{" "}
                     <span className="text-base font-medium leading-3">
-                      {courseState.course.estimatedDuration}
+                      {state.course.estimatedDuration}
                     </span>
                   </h1>
                 </div>
                 <div className="">
                   <img
-                    src={courseState.course.coverImage}
+                    src={state.course.coverImage}
                     alt=""
                     className="w-[440px] aspect-video  object-cover "
                   />
                 </div>
               </div>
-              {courseState.course && (
+              {state.course && (
                 <div className="py-4 border-b border-b-slate-400 flex  items-center justify-between">
                   <h1 className="text-accent text-xl leading-6 font-semibold">
                     Modules:{" "}
                     <span className="text-base font-medium leading-3">
-                      {courseState?.course?.modules?.length}
+                      {state?.course?.modules?.length}
                     </span>
                   </h1>
                   <Button
@@ -731,153 +529,94 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                 <h1 className="text-accent text-2xl font-semibold mb-4 border-b border-b-slate-400">
                   Preview
                 </h1>
-                {courseState?.course?.previewVideo ? (
-                  <div className="overflow-x-auto">
-                    <iframe
-                      width="853"
-                      height="480"
-                      src={`https://www.youtube.com/embed/${courseState?.course?.previewVideo}`}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      title="Embedded youtube"
-                    />
-                  </div>
-                ) : (
-                  <p className="text-accent leading-6">
-                    {courseState?.course?.previewText}
-                  </p>
-                )}
+                <iframe
+                  width="853"
+                  height="480"
+                  src={`https://www.youtube.com/embed/${state?.course?.previewVideo}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Embedded youtube"
+                />
               </div>
             </div>
-          )}
-        </div>
-
-        {isClient ? (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
-            {courseState.course?.modules?.length === 0 ? (
-              <div className="w-full">
-                <h1 className="text-center text-xl text-accent font-bold">
-                  No modules here yet
-                </h1>
-              </div>
-            ) : (
-              <div className="">
-                {courseState.course?.modules
-                  ?.slice()
-                  ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
-                  ?.map((module) => (
-                    <div key={module.id} className="mb-6">
-                      <h1 className="text-xl text-accent font-semibold">
-                        {module.moduleNumber}. {module.title}
-                      </h1>
-                      {/* <p>{module.description}</p> */}
-                      <div className="flex gap-2 text-center mt-2">
-                        <h1 className="text-lg text-accent font-semibold flex items-center gap-2">
-                          <RiFilePaper2Line />
-                          <span className="text-base font-medium">
-                            {module.chapters.length} chapters
-                          </span>
-                        </h1>
-                      </div>
-                      <div className="mt-2">
-                        {module?.chapters
-                          ?.slice()
-                          ?.sort((a, b) => a.chapterNumber - b.chapterNumber)
-                          ?.map((chapter) => (
-                            <div key={chapter.id} className="bg-white p-2">
-                              <h1 className="text-muted">
-                                [{chapter.chapterNumber}] {chapter.title}
-                              </h1>
-                              {/* <p>{chapter.description}</p> */}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )}
           </div>
-        ) : (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
-            {courseState.course?.modules?.length === 0 ? (
-              <div className="w-full">
-                <h1 className="text-center text-xl text-accent font-bold">
-                  No modules here yet
-                </h1>
-                <p
-                  className="text-center text-accent/50 hover:underline  hover:text-accent/80 cursor-pointer"
-                  onClick={() => {
-                    router.push(
-                      `/dashboard/courses/${course_id}/create-module`
-                    );
-                  }}
-                >
-                  Add New
-                </p>
-              </div>
-            ) : (
-              <div className="w-full">
-                {courseState.course?.modules
-                  ?.slice()
-                  ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
-                  ?.map((module) => (
-                    <Accordion
-                      key={module.id}
-                      onChange={() => {
-                        setModuleId(module.id);
-                      }}
+        )}
+        <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
+          {state.course?.modules?.length === 0 ? (
+            <div className="w-full">
+              <h1 className="text-center text-xl text-accent font-bold">
+                No modules here yet
+              </h1>
+              <p
+                className="text-center text-accent/50 hover:underline  hover:text-accent/80 cursor-pointer"
+                onClick={() => {
+                  router.push(`/dashboard/courses/${course_id}/create-module`);
+                }}
+              >
+                Add New
+              </p>
+            </div>
+          ) : (
+            <div className="w-full">
+              {state.course?.modules
+                ?.slice()
+                ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
+                ?.map((module) => (
+                  <Accordion
+                    key={module.id}
+                    onChange={() => {
+                      setModuleId(module.id);
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<BsChevronDown />}
+                      aria-controls="panel3-content"
+                      id="panel3-header"
                     >
-                      <AccordionSummary
-                        expandIcon={<BsChevronDown />}
-                        aria-controls="panel3-content"
-                        id="panel3-header"
-                      >
-                        {module.moduleNumber}: {module.title}
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <div className="">
-                          <p>{module.description}</p>
-                          <div className="flex gap-2 text-center mt-4">
-                            <h1 className="text-lg text-accent font-semibold">
-                              Chapters:{" "}
-                              <span className="text-base font-medium">
-                                {module.chapters.length}
-                              </span>
-                            </h1>
-                          </div>
+                      {module.moduleNumber}: {module.title}
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <div className="">
+                        <p>{module.description}</p>
+                        <div className="flex gap-2 text-center mt-4">
+                          <h1 className="text-lg text-accent font-semibold">
+                            Chapters:{" "}
+                            <span className="text-base font-medium">
+                              {module.chapters.length}
+                            </span>
+                          </h1>
+                        </div>
 
-                          <div className="mt-2">
-                            {module?.chapters
-                              ?.slice()
-                              ?.sort(
-                                (a, b) => a.chapterNumber - b.chapterNumber
-                              )
-                              ?.map((chapter) => (
-                                <Accordion
-                                  key={chapter.id}
-                                  sx={{
-                                    background: "#f4f4f5",
-                                    // overflow: "hidden",
-                                  }}
-                                  onChange={() => {
-                                    setChapterId(chapter.id);
-                                  }}
+                        <div className="mt-2">
+                          {module?.chapters
+                            ?.slice()
+                            ?.sort((a, b) => a.chapterNumber - b.chapterNumber)
+                            ?.map((chapter) => (
+                              <Accordion
+                                key={chapter.id}
+                                sx={{
+                                  background: "#f4f4f5",
+                                  // overflow: "hidden",
+                                }}
+                                onChange={() => {
+                                  setChapterId(chapter.id);
+                                }}
+                              >
+                                <AccordionSummary
+                                  expandIcon={<BsChevronDown />}
+                                  aria-controls="panel3-content"
+                                  id="panel3-header"
                                 >
-                                  <AccordionSummary
-                                    expandIcon={<BsChevronDown />}
-                                    aria-controls="panel3-content"
-                                    id="panel3-header"
-                                  >
-                                    {chapter.chapterNumber}: {chapter.title}
-                                  </AccordionSummary>
-                                  <AccordionDetails>
-                                    <div className="bg-white overflow-x-auto p-1">
-                                      <p>{chapter.description}</p>
-                                    </div>
-                                  </AccordionDetails>
-                                  <AccordionActions>
-                                    {/* <Button
+                                  {chapter.chapterNumber}: {chapter.title}
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  <div className="bg-white overflow-x-auto p-1">
+                                    <p>{chapter.description}</p>
+                                  </div>
+                                </AccordionDetails>
+                                <AccordionActions>
+                                  {/* <Button
                                     className="bg-secondary text-white"
                                     onClick={() => {
                                       router.push(
@@ -897,64 +636,57 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                   >
                                     Edit
                                   </Button> */}
-                                    <div className="flex gap-2">
-                                      <Link
-                                        href={`/dashboard/courses/${course_id}/module/${module.id}/chapter/learning/${chapter.chapterNumber}`}
-                                        target="_blank"
-                                      >
-                                        <IconButton className="bg-muted-foreground/20 hover:bg-muted-foreground/50">
-                                          <FaRegEye className="text-primary" />
-                                        </IconButton>
-                                      </Link>
-                                      {!isClient && (
-                                        <>
-                                          <IconButton
-                                            className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                                            onClick={() => {
-                                              router.push(
-                                                `/dashboard/courses/${course_id}/module/${module.id}/chapter/${chapter.id}/edit`
-                                              );
-                                            }}
-                                          >
-                                            <MdEdit className="text-blue-700" />
-                                          </IconButton>
-                                          <IconButton
-                                            className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                                            onClick={() => {
-                                              setDeletingWhat("chapter");
-                                              handleOpenDialog();
-                                            }}
-                                          >
-                                            <TbTrash className="text-red-600" />
-                                          </IconButton>
-                                        </>
-                                      )}
-                                    </div>
-                                  </AccordionActions>
-                                </Accordion>
-                              ))}
-                          </div>
-                          {!isClient && (
-                            <div className="mt-4">
-                              {" "}
-                              <Button
-                                className="bg-secondary text-white"
-                                startIcon={<FaPlus />}
-                                onClick={() => {
-                                  router.push(
-                                    `/dashboard/courses/${course_id}/module/${module.id}/create-chapter`
-                                  );
-                                }}
-                              >
-                                Add Chapter
-                              </Button>
-                            </div>
-                          )}
+                                  <div className="flex gap-2">
+                                    <Link
+                                      href={`/dashboard/courses/${course_id}/module/${module.id}/chapter/learning/${chapter.chapterNumber}`}
+                                      target="_blank"
+                                    >
+                                      <IconButton className="bg-muted-foreground/20 hover:bg-muted-foreground/50">
+                                        <FaRegEye className="text-primary" />
+                                      </IconButton>
+                                    </Link>
+                                    <IconButton
+                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                      onClick={() => {
+                                        router.push(
+                                          `/dashboard/courses/${course_id}/module/${module.id}/chapter/${chapter.id}/edit`
+                                        );
+                                      }}
+                                    >
+                                      <MdEdit className="text-blue-700" />
+                                    </IconButton>
+                                    <IconButton
+                                      className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                                      onClick={() => {
+                                        setDeletingWhat("chapter");
+                                        handleOpenDialog();
+                                      }}
+                                    >
+                                      <TbTrash className="text-red-600" />
+                                    </IconButton>
+                                  </div>
+                                </AccordionActions>
+                              </Accordion>
+                            ))}
                         </div>
-                      </AccordionDetails>
-                      {!isClient && (
-                        <AccordionActions>
-                          {/* <Button
+                        <div className="mt-4">
+                          {" "}
+                          <Button
+                            className="bg-secondary text-white"
+                            startIcon={<FaPlus />}
+                            onClick={() => {
+                              router.push(
+                                `/dashboard/courses/${course_id}/module/${module.id}/create-chapter`
+                              );
+                            }}
+                          >
+                            Add Chapter
+                          </Button>
+                        </div>
+                      </div>
+                    </AccordionDetails>
+                    <AccordionActions>
+                      {/* <Button
                         className="bg-secondary text-white"
                         onClick={() => {
                           router.push(
@@ -974,41 +706,35 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                       >
                         Edit
                       </Button> */}
-                          <div className="flex gap-2">
-                            <IconButton
-                              className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                              onClick={handleOpenModuleModal}
-                            >
-                              <MdEdit className="text-blue-700" />
-                            </IconButton>
-                            <IconButton
-                              className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
-                              onClick={handleOpenModuleDialog}
-                            >
-                              <TbTrash className="text-red-600" />
-                            </IconButton>
-                          </div>
-                        </AccordionActions>
-                      )}
-                    </Accordion>
-                  ))}
-                {!isClient && (
-                  <Button
-                    className="bg-secondary text-white mt-4"
-                    startIcon={<FaPlus />}
-                    onClick={() => {
-                      router.push(
-                        `/dashboard/courses/${course_id}/create-module`
-                      );
-                    }}
-                  >
-                    Add module
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+                      <div className="flex gap-2">
+                        <IconButton
+                          className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                          onClick={handleOpenModuleModal}
+                        >
+                          <MdEdit className="text-blue-700" />
+                        </IconButton>
+                        <IconButton
+                          className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                          onClick={handleOpenModuleDialog}
+                        >
+                          <TbTrash className="text-red-600" />
+                        </IconButton>
+                      </div>
+                    </AccordionActions>
+                  </Accordion>
+                ))}
+              <Button
+                className="bg-secondary text-white mt-4"
+                startIcon={<FaPlus />}
+                onClick={() => {
+                  router.push(`/dashboard/courses/${course_id}/create-module`);
+                }}
+              >
+                Add module
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
       <Modal
         open={openModal}
@@ -1685,8 +1411,8 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </Button>
         </Box>
       </Dialog>
-    </>
+    </div>
   );
 };
 
-export default CoursePage;
+export default AdminCoursePage;

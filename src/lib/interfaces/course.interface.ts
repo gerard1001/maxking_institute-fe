@@ -1,6 +1,7 @@
 import { IModule } from "./module.interface";
 import { ITag } from "./tag.interface";
 import { User } from "./user.interface";
+import { IUserCourse } from "./user_course.interface";
 
 export interface ICourse {
   id: string;
@@ -14,6 +15,7 @@ export interface ICourse {
   users: User[];
   modules: IModule[];
   tags: ITag[];
+  user_course: IUserCourse;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -15,6 +15,7 @@ import { useSnackbar } from "notistack";
 import { Button, IconButton } from "@mui/material";
 import { FaPlus } from "react-icons/fa6";
 import { BsBookmarkPlus } from "react-icons/bs";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const Courses = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Courses = () => {
     setValue(newValue);
   };
 
-  const isAdmin = true;
+  const { isClient } = React.useContext(LoginContext);
 
   React.useEffect(() => {
     dispatch(fetchAllCourses())
@@ -63,15 +64,17 @@ const Courses = () => {
             />
           </Tabs>
         </Box>
-        <Button
-          className="bg-secondary text-white"
-          startIcon={<FaPlus />}
-          onClick={() => {
-            router.push("/dashboard/courses/create-course");
-          }}
-        >
-          Add New Course
-        </Button>
+        {!isClient && (
+          <Button
+            className="bg-secondary text-white"
+            startIcon={<FaPlus />}
+            onClick={() => {
+              router.push("/dashboard/courses/create-course");
+            }}
+          >
+            Add New Course
+          </Button>
+        )}
       </Box>
       <div className="py-8">
         <div className="">

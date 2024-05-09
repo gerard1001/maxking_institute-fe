@@ -16,6 +16,10 @@ type LoginContextType = {
   setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   loginUserFetchLoading: boolean;
   setLoginUserFetchLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isClient: any;
+  setIsClient: React.Dispatch<React.SetStateAction<boolean>>;
+  userId: string;
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
 };
 const LoginContextState = {
   loginData: {},
@@ -24,6 +28,10 @@ const LoginContextState = {
   setUserLoggedIn: () => {},
   loginUserFetchLoading: false,
   setLoginUserFetchLoading: () => {},
+  isClient: true,
+  setIsClient: () => {},
+  userId: "",
+  setUserId: () => {},
 };
 
 export const LoginContext = createContext<LoginContextType>(LoginContextState);
@@ -34,10 +42,22 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const dispatch = useDispatch();
   const state = useSelector(selectUsers);
 
-  const [loginData, setLoginData] = useState<User | any>(state.loggedInUser);
+  const [loginData, setLoginData] = useState<User | any>({});
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [loginUserFetchLoading, setLoginUserFetchLoading] =
     useState<boolean>(false);
+  // const [isClient, setIsClient] = useState(
+  //   typeof window !== "undefined" &&
+  //     localStorage.getItem("loginData") &&
+  //     JSON.parse(
+  //       (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
+  //         "{}"
+  //     )?.role === "CLIENT"
+  // );
+  const [isClient, setIsClient] = useState<boolean>(true);
+  const [userId, setUserId] = React.useState<string>("");
+
+  console.log(isClient, "isClient");
 
   useEffect(() => {
     const loginToken = JSON.parse(
@@ -56,6 +76,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserLoggedIn(false);
     } else {
       setUserLoggedIn(true);
+      setUserId(loginToken?.id);
     }
 
     dispatch(fetchUserByToken(loginToken?.login_token))
@@ -74,6 +95,12 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       .finally(() => {
         setLoginUserFetchLoading(false);
       });
+
+    if (loginToken && loginToken?.role === "CLIENT") {
+      setIsClient(true);
+    } else {
+      setIsClient(false);
+    }
   }, []);
 
   const value = useMemo(
@@ -84,6 +111,10 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserLoggedIn,
       loginUserFetchLoading,
       setLoginUserFetchLoading,
+      isClient,
+      setIsClient,
+      userId,
+      setUserId,
     }),
     [loginData]
   );

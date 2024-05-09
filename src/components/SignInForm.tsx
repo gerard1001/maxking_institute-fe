@@ -53,8 +53,12 @@ const SignInForm = ({ closeModal }: SignInProps) => {
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [loginLoading, setLoginLoading] = React.useState<boolean>(false);
-  const { setLoginData, setLoginUserFetchLoading, setUserLoggedIn } =
-    useContext(LoginContext);
+  const {
+    setLoginData,
+    setLoginUserFetchLoading,
+    setUserLoggedIn,
+    setIsClient,
+  } = useContext(LoginContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -83,6 +87,11 @@ const SignInForm = ({ closeModal }: SignInProps) => {
                 );
                 setUserLoggedIn(true);
                 setLoginData(nextRes.data);
+                if (res.data.role === "CLIENT") {
+                  setIsClient(true);
+                } else {
+                  setIsClient(false);
+                }
                 setTimeout(() => {
                   router.push("/dashboard");
                 }, 500);

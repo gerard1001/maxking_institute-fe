@@ -78,3 +78,109 @@ export const deleteCourse = createAppAsyncThunk(
     }
   }
 );
+
+/* USER COURSE SECTION */
+export const createUserCourse = createAppAsyncThunk(
+  "userCourse/createUserCourse",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.post(`/user-course`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const findByUserAndCourseId = createAppAsyncThunk(
+  "userCourse/findByUserAndCourseId",
+  async (
+    { userId, courseId }: { userId: string; courseId: string },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.get(
+        `/user-course/user/${userId}/course/${courseId}`
+      );
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createUserModule = createAppAsyncThunk(
+  "userModule/createUserModule",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.post(`/user-module`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const findByUserAndModuleId = createAppAsyncThunk(
+  "userModule/findByUserAndModuleId",
+  async (
+    { userId, moduleId }: { userId: string; moduleId: string },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.get(
+        `/user-module/user/${userId}/module/${moduleId}`
+      );
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateCurrentModule = createAppAsyncThunk(
+  "userModule/updateCurrentModule",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/user-course/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateCurrentChapter = createAppAsyncThunk(
+  "userChapter/updateCurrentChapter",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/user-module/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteByUserAndModuleId = createAppAsyncThunk(
+  "userModule/deleteByUserAndModuleId",
+  async (
+    { userId, moduleId }: { userId: string; moduleId: string },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.delete(
+        `/user-module/user/${userId}/module/${moduleId}`
+      );
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

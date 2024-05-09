@@ -6,6 +6,13 @@ import {
   fetchAllCourses,
   updateCourse,
   fetchCoursesBySubjectId,
+  createUserCourse,
+  createUserModule,
+  updateCurrentChapter,
+  updateCurrentModule,
+  findByUserAndModuleId,
+  findByUserAndCourseId,
+  deleteByUserAndModuleId,
 } from "./thunks";
 import { ICourse, CourseSliceState } from "@/lib/interfaces/course.interface";
 
@@ -92,6 +99,90 @@ export const courseSlice = createSlice({
         state.loading = false;
       })
       .addCase(updateCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(createUserCourse.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createUserCourse.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(createUserCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(createUserModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createUserModule.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(createUserModule.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updateCurrentChapter.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateCurrentChapter.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateCurrentChapter.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updateCurrentModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateCurrentModule.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateCurrentModule.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(findByUserAndModuleId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(findByUserAndModuleId.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(findByUserAndModuleId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(findByUserAndCourseId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(findByUserAndCourseId.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(findByUserAndCourseId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(deleteByUserAndModuleId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteByUserAndModuleId.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteByUserAndModuleId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

@@ -75,6 +75,7 @@ const MainNavbar = () => {
     userLoggedIn,
     loginUserFetchLoading,
     setLoginUserFetchLoading,
+    setIsClient,
   } = useContext(LoginContext);
 
   const secondaryNavLinks = userLoggedIn
@@ -124,6 +125,11 @@ const MainNavbar = () => {
           id: googleLoginId,
         })
       );
+      if (googleLoginRole === "CLIENT") {
+        setIsClient(true);
+      } else {
+        setIsClient(false);
+      }
       const loginToken = JSON.parse(
         (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
           "{}"

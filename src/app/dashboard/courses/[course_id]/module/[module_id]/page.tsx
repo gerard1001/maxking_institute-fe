@@ -28,12 +28,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
-import { CreateModuleInputs } from "../../create-module/page";
 
 const createModuleSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
   description: yup.string().required().min(5).max(500),
 });
+
+type CreateModuleInputs = {
+  title: string;
+  description: string;
+};
 
 interface SubjectProps {
   params: {

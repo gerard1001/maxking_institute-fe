@@ -40,17 +40,16 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
-import { CreateModuleInputs } from "../../../create-module/page";
 
 const schema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
 });
 
-// type CreateModuleInputs = {
-//   title: string;
-//   description: string;
-// };
+type CreateModuleInputs = {
+  title: string;
+  description: string;
+};
 
 interface ModuleProps {
   params: {

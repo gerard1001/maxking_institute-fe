@@ -1,3 +1,6 @@
+import { ICourse } from "./course.interface";
+import { IModule } from "./module.interface";
+
 export interface IUserSignUp {
   firstName: string;
   lastName: string;
@@ -32,6 +35,8 @@ export interface User {
   email: string;
   profile: Profile;
   roles: Role[];
+  courses?: ICourse[];
+  modules?: IModule[];
   isVerified: boolean;
   publicDisplay: boolean;
   createdAt: Date;

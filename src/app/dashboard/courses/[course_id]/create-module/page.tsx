@@ -41,12 +41,12 @@ import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
 
-export const createModuleSchema = yup.object().shape({
+const createModuleSchema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
 });
 
-export type CreateModuleInputs = {
+type CreateModuleInputs = {
   title: string;
   description: string;
 };

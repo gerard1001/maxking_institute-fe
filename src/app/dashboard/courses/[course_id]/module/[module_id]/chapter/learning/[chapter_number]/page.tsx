@@ -32,9 +32,11 @@ const ModuleLearning = ({
   // const currentChapter = moduleState?.allModules?.map((module) =>
   //   module.chapters.find((chapter) => chapter.chapterNumber === chapter_number)
   // );
-  const currentChapter = moduleState?.module?.chapters.find(
-    (chapter) => chapter.chapterNumber === Number(chapter_number)
-  );
+  const currentChapter =
+    moduleState?.module?.chapters &&
+    moduleState?.module?.chapters?.find(
+      (chapter) => chapter.chapterNumber === Number(chapter_number)
+    );
   console.log(currentChapter, "currentChapter");
   console.log(moduleState, "moduleState");
   console.log(chapter_number, "chapnb");

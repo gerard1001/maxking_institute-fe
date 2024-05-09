@@ -33,7 +33,7 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const splits = pathName.split("/");
   console.log(splits);
   React.useEffect(() => {
-    if (splits[6] === "chapter" && splits[7] === "learning") {
+    if (splits[2] === "courses" && splits[4] === "learning") {
       setOnLearning(true);
     } else {
       setOnLearning(false);
