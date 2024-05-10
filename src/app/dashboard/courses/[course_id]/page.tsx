@@ -1009,6 +1009,33 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             )}
           </div>
         )}
+
+        {isClient ? (
+          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+            <h1 className="text-lg font-semibold text-accent">
+              End of course evaluation
+            </h1>
+            <p className="">
+              {courseState?.course?.questions?.length} questions
+            </p>
+          </div>
+        ) : (
+          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+            {courseState.course && (
+              <Button
+                type="submit"
+                variant="contained"
+                className="bg-primary hover:bg-primary/90 w-full max-w-32 mt-4 !h-[46px]"
+                size="large"
+                onClick={() => {
+                  router.push(`/dashboard/courses/${course_id}/assessment/new`);
+                }}
+              >
+                Add Assessment
+              </Button>
+            )}
+          </div>
+        )}
       </div>
       <Modal
         open={openModal}

@@ -17,16 +17,39 @@ import {
   selectModules,
   selectUsers,
   updateCurrentChapter,
-  updateCurrentModule,
+  updateUserCourse,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
-import { IconButton } from "@mui/material";
-import { create } from "domain";
+import {
+  Box,
+  Button,
+  IconButton,
+  LinearProgress,
+  LinearProgressProps,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
+
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ width: "100%", mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 export interface ModuleLearningProps {
   params: {
@@ -51,11 +74,78 @@ const ModuleLearning = ({
   const [nextChapter, setNextChapter] = React.useState<IChapter>();
   const [userActualModule, setUserActualModule] = React.useState<number>(1);
   const [userActualChapter, setUserActualChapter] = React.useState<number>(1);
+  const [progress, setProgress] = React.useState(10);
+
+  React.useEffect(() => {}, []);
+
   const actualUserPosition = Number(
     userActualModule.toString() + userActualChapter.toString()
   );
-
   const { isClient, userId, loginData } = React.useContext(LoginContext);
+
+  // const modules = [
+  //   {
+  //     id: "bfa6b441-6237-4d60-a9eb-8c55ed22a305",
+  //     chapters: [
+  //       {
+  //         id: "9ab946d1-4996-4dbe-9d75-6246d216e521",
+  //       },
+  //       {
+  //         id: "1d6b7654-e798-44d7-a2b8-a342048af387",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: "05660b48-3104-4244-bc06-b2f0dd8d5408",
+  //     chapters: [
+  //       {
+  //         id: "349cee08-ba0b-4e84-8fd9-c107bd3c733d",
+  //       },
+  //       {
+  //         id: "cf3113fa-7252-4b44-be56-b501c276a503",
+  //       },
+  //       {
+  //         id: "f5ae7074-c7c8-44d6-94bf-8d5e46d0e19e",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: "7c22f8cd-9326-494a-903d-8911f80d089e",
+  //     chapters: [
+  //       {
+  //         id: "6f94bab2-a0a4-490a-8011-0ee8b5a7318a",
+  //       },
+  //       {
+  //         id: "18d070fc-5651-4812-9583-c4044aafc2c9",
+  //       },
+  //     ],
+  //   },
+  // ];
+
+  const modules =
+    userState?.user?.courses?.find((course) => course.id === course_id)
+      ?.modules ?? [];
+
+  function calculateValues(moduleIndex: number, chapterIndex: number) {
+    const totalCount = modules.reduce(
+      (acc, curr) => acc + curr.chapters.length,
+      0
+    );
+
+    let itemsBeforeIndex = 0;
+    for (let i = 0; i < moduleIndex; i++) {
+      itemsBeforeIndex += modules[i].chapters.length;
+    }
+    itemsBeforeIndex += chapterIndex;
+
+    return {
+      totalCount,
+      itemsBeforeIndex,
+    };
+  }
+
+  const result = calculateValues(userActualModule - 1, userActualChapter - 1);
+  console.log(result, "rsess");
 
   // const userActualModule = userState?.user?.courses?.find(
   //   (course) => course.id === course_id
@@ -65,12 +155,15 @@ const ModuleLearning = ({
   //   (module) => module.courseId === course_id
   // )?.user_module?.currentChapter;
 
-  console.log(actualUserPosition, "actualUserPosition");
+  console.log(courseState?.course, "actualUserPosition");
 
   React.useEffect(() => {
     dispatch(fetchOneCourse(course_id))
       .unwrap()
       .catch((err) => {
+        if (err.statusCode === 404) {
+          router.push(`/dashboard/courses`);
+        }
         enqueueSnackbar(err.message, { variant: "error" });
       });
 
@@ -95,6 +188,12 @@ const ModuleLearning = ({
       );
     }
   }, [courseState]);
+
+  React.useEffect(() => {
+    setProgress(() => {
+      return (result.itemsBeforeIndex / result.totalCount) * 100;
+    });
+  }, [result]);
 
   React.useEffect(() => {
     if (userState?.user?.courses) {
@@ -207,7 +306,7 @@ const ModuleLearning = ({
               .then((res: any) => {
                 if (res.statusCode === 200) {
                   dispatch(
-                    updateCurrentModule({
+                    updateUserCourse({
                       id: res?.data?.id,
                       data: { currentModule: nextModule?.moduleNumber },
                     })
@@ -234,7 +333,7 @@ const ModuleLearning = ({
                             });
                             dispatch(
                               createUserModule({
-                                userId: userState?.user?.id,
+                                userId: userId,
                                 moduleId: nextModule?.id,
                               })
                             )
@@ -427,18 +526,28 @@ const ModuleLearning = ({
         >
           <FaArrowRightLong className="rotate-180" />
         </IconButton>
-        <IconButton
-          disabled={
-            courseState?.course?.modules?.length === Number(module_number) &&
-            currentModule?.chapters?.length === Number(chapter_number)
-          }
-          className="bg-slate-100"
-          onClick={() => {
-            toNext();
-          }}
-        >
-          <FaArrowRightLong />
-        </IconButton>
+        <Box sx={{ width: "100%", px: "10px" }}>
+          <LinearProgressWithLabel value={progress} />
+        </Box>
+        {courseState?.course?.modules?.length === Number(module_number) &&
+        currentModule?.chapters?.length === Number(chapter_number) ? (
+          <Button className="bg-secondary text-white w-fit" onClick={() => {}}>
+            Take Test
+          </Button>
+        ) : (
+          <IconButton
+            disabled={
+              courseState?.course?.modules?.length === Number(module_number) &&
+              currentModule?.chapters?.length === Number(chapter_number)
+            }
+            className="bg-slate-100"
+            onClick={() => {
+              toNext();
+            }}
+          >
+            <FaArrowRightLong />
+          </IconButton>
+        )}
       </div>
     </div>
   );

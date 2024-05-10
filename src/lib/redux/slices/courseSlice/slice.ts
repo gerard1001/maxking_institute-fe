@@ -9,7 +9,7 @@ import {
   createUserCourse,
   createUserModule,
   updateCurrentChapter,
-  updateCurrentModule,
+  updateUserCourse,
   findByUserAndModuleId,
   findByUserAndCourseId,
   deleteByUserAndModuleId,
@@ -140,13 +140,13 @@ export const courseSlice = createSlice({
       });
 
     builder
-      .addCase(updateCurrentModule.pending, (state) => {
+      .addCase(updateUserCourse.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateCurrentModule.fulfilled, (state, action) => {
+      .addCase(updateUserCourse.fulfilled, (state, action) => {
         state.loading = false;
       })
-      .addCase(updateCurrentModule.rejected, (state, action) => {
+      .addCase(updateUserCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

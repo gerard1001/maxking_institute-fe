@@ -138,8 +138,8 @@ export const findByUserAndModuleId = createAppAsyncThunk(
   }
 );
 
-export const updateCurrentModule = createAppAsyncThunk(
-  "userModule/updateCurrentModule",
+export const updateUserCourse = createAppAsyncThunk(
+  "userModule/updateUserCourse",
   async (
     { id, data }: { id: string; data: any },
     { rejectWithValue }

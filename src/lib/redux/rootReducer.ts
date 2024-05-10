@@ -8,8 +8,9 @@ import {
   subjectSlice,
   courseSlice,
   moduleSlice,
+  chapterSlice,
+  questionSlice,
 } from "./slices";
-import { chapterSlice } from "./slices/chapterSlice";
 
 export const reducer = {
   counter: counterSlice.reducer,
@@ -22,4 +23,5 @@ export const reducer = {
   course: courseSlice.reducer,
   module: moduleSlice.reducer,
   chapter: chapterSlice.reducer,
+  question: questionSlice.reducer,
 };

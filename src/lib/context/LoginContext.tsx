@@ -92,6 +92,14 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
           setLoginData({});
         }
       })
+      .catch((err) => {
+        if (err.statusCode === 404) {
+          if (typeof window !== "undefined") {
+            window.location.href = "/";
+            localStorage.removeItem("loginData");
+          }
+        }
+      })
       .finally(() => {
         setLoginUserFetchLoading(false);
       });
