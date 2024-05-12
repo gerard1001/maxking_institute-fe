@@ -32,6 +32,8 @@ import {
   FormHelperText,
   IconButton,
   InputLabel,
+  LinearProgress,
+  LinearProgressProps,
   ListItemText,
   MenuItem,
   Modal,
@@ -84,6 +86,23 @@ interface SubjectProps {
   params: {
     course_id: string;
   };
+}
+
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ width: "100%", mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
 }
 
 const CoursePage = ({ params: { course_id } }: SubjectProps) => {
@@ -557,11 +576,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                       loggedInUser?.courses?.find(
                         (course) => course.id === course_id
                       )?.user_course?.currentModule
-                    }/${
-                      loggedInUser?.modules?.find(
-                        (module) => module.courseId === course_id
-                      )?.user_module?.currentChapter
-                    }`
+                    }/1`
                   );
                 }
               })
@@ -595,57 +610,88 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                 (course) => course.id === course_id
               ) ? (
                 <>
-                  {firstModule &&
-                  !objectIsEmpty(firstModule) &&
-                  loggedInUser?.modules?.find(
-                    (module) => module.courseId === course_id
-                  ) ? (
-                    <Button
-                      className="bg-secondary text-white"
-                      onClick={() => {
-                        if (
-                          loggedInUser?.courses?.find(
-                            (course) => course.id === course_id
-                          )
-                        ) {
-                          router.push(
-                            `/dashboard/courses/${course_id}/learning/${
+                  {loggedInUser?.courses?.find(
+                    (course) => course.id === course_id
+                  )?.user_course?.completed ? (
+                    <>
+                      <Box
+                        sx={{ width: "100%", px: "10px" }}
+                        className="flex items-center gap-2"
+                      >
+                        <LinearProgressWithLabel value={100} /> Complete
+                      </Box>
+                      <Button
+                        className="bg-secondary text-white w-[180px]"
+                        onClick={() => {
+                          if (
+                            loggedInUser?.courses?.find(
+                              (course) => course.id === course_id
+                            )
+                          ) {
+                            router.push(
+                              `/dashboard/courses/${course_id}/learning/1/1`
+                            );
+                          }
+                        }}
+                      >
+                        Review course
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {firstModule &&
+                      !objectIsEmpty(firstModule) &&
+                      loggedInUser?.modules?.find(
+                        (module) => module.courseId === course_id
+                      ) ? (
+                        <Button
+                          className="bg-secondary text-white"
+                          onClick={() => {
+                            if (
                               loggedInUser?.courses?.find(
                                 (course) => course.id === course_id
-                              )?.user_course?.currentModule
-                            }/${
-                              loggedInUser?.modules?.find(
-                                (module) => module.courseId === course_id
-                              )?.user_module?.currentChapter
-                            }`
-                          );
-                        }
-                      }}
-                    >
-                      Continue Learning
-                    </Button>
-                  ) : (
-                    <Button
-                      className="bg-secondary text-white"
-                      onClick={() => {
-                        if (
-                          loggedInUser?.courses?.find(
-                            (course) => course.id === course_id
-                          )
-                        ) {
-                          startCourse();
-                        }
-                      }}
-                    >
-                      Start course
-                    </Button>
+                              )
+                            ) {
+                              router.push(
+                                `/dashboard/courses/${course_id}/learning/${
+                                  loggedInUser?.courses?.find(
+                                    (course) => course.id === course_id
+                                  )?.user_course?.currentModule
+                                }/${
+                                  loggedInUser?.modules?.find(
+                                    (module) => module.courseId === course_id
+                                  )?.user_module?.currentChapter
+                                }`
+                              );
+                            }
+                          }}
+                        >
+                          Continue Learning
+                        </Button>
+                      ) : (
+                        <Button
+                          className="bg-secondary text-white"
+                          onClick={() => {
+                            if (
+                              loggedInUser?.courses?.find(
+                                (course) => course.id === course_id
+                              )
+                            ) {
+                              startCourse();
+                            }
+                          }}
+                        >
+                          Start course
+                        </Button>
+                      )}
+                    </>
                   )}
                 </>
               ) : (
                 <Button
                   className="bg-secondary text-white"
                   startIcon={!loading && <FaPlus />}
-                  disabled={loading}
+                  disabled={loading || !userId}
                   onClick={() => {
                     enrollInCourse();
                   }}
@@ -1021,17 +1067,24 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </div>
         ) : (
           <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+            <h1 className="text-lg font-semibold text-accent">
+              End of course evaluation{" "}
+              <span className="text-muted text-base">
+                ({courseState.course?.questions?.length} questions)
+              </span>
+            </h1>
             {courseState.course && (
               <Button
                 type="submit"
                 variant="contained"
-                className="bg-primary hover:bg-primary/90 w-full max-w-32 mt-4 !h-[46px]"
+                className="bg-primary hover:bg-primary/90 w-fit mt-4 !h-[46px]"
                 size="large"
                 onClick={() => {
                   router.push(`/dashboard/courses/${course_id}/assessment/new`);
                 }}
               >
-                Add Assessment
+                Add{courseState.course?.questions?.length > 0 && "/View"}{" "}
+                Assessments
               </Button>
             )}
           </div>

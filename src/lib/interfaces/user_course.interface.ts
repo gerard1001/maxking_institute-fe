@@ -4,6 +4,7 @@ export interface IUserCourse {
   courseId: string;
   userType: string;
   currentModule: number;
+  completed: boolean;
   rank?: string | null;
   createdAt: Date;
   updatedAt: Date;

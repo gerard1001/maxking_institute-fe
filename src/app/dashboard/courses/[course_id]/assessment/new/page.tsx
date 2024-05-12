@@ -67,6 +67,7 @@ import { IModule } from "@/lib/interfaces/module.interface";
 import ReactQuill from "@/components/ReactQuill";
 import { set } from "date-fns";
 import { Choice } from "@/lib/interfaces/question.interface";
+import BackIconButton from "@/components/BackIconButton";
 
 interface PageProps {
   params: {
@@ -218,6 +219,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
 
   return (
     <div>
+      <BackIconButton />
       <div className="w-full h-fit flex flex-col items-start mt-6">
         <h1 className="text-xl font-semibold ml-1 text-accent">
           Compose Assessment question
@@ -394,10 +396,6 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
               onChange={() => {
                 // setModuleId(module.id);
               }}
-              sx={{
-                background: "#f4f4f5",
-                // overflow: "hidden",
-              }}
             >
               <AccordionSummary
                 expandIcon={<BsChevronDown />}
@@ -474,8 +472,8 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
           </div>
           <h1 className="text-xl font-semibold">Are you sure?</h1>
           <p className="text-center">
-            This action will completely remove this Module and its chapters.
-            Still wish to proceed?
+            This action will completely remove this Assessment question. Still
+            wish to proceed?
           </p>
           <Button
             fullWidth
