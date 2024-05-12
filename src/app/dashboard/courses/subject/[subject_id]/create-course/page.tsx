@@ -40,6 +40,7 @@ import { ITag } from "@/lib/interfaces/tag.interface";
 import { LuPlus } from "react-icons/lu";
 import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
+import BackIconButton from "@/components/BackIconButton";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -197,7 +198,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
 
   return (
     <div>
-      {" "}
+      <BackIconButton />
       <Box
         component="form"
         noValidate

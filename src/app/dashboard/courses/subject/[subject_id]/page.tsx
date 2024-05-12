@@ -81,13 +81,13 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
           Create New Course
         </Button>
       </div>
-      <div className="w-full flex gap-4">
+      <div className="w-full flex gap-4 mb-8">
         <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px]"></div>
         <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
           {courseState.allCourses.map((course) => (
             <div
               key={course.id}
-              className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 rounded-lg"
+              className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 rounded-lg mt-4"
             >
               <div className="w-full flex gap-2 border-b pb-2">
                 <img

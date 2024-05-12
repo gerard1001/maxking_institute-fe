@@ -41,6 +41,7 @@ import LoadinProgress from "@/components/LoadingProgess";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { IoWarningOutline } from "react-icons/io5";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const schema = yup.object().shape({
   name: yup.string().required().min(3).max(40),
@@ -79,6 +80,7 @@ const Categories = () => {
   const [onEditSub, setOnEditSub] = React.useState<boolean>(false);
   const [parentDeleted, setParentDeleted] = React.useState<boolean>(false);
   const category = state?.category;
+  const { isClient } = React.useContext(LoginContext);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -489,23 +491,26 @@ const Categories = () => {
           /> */}
         </Tabs>
       </Box>
-      <Box className={`w-full flex flex-row-reverse py-4`}>
-        <Button
-          className="bg-secondary text-white"
-          startIcon={<FaPlus />}
-          onClick={() => {
-            setCategoryId("");
-            setOnEdit(false);
-            setCategoryValue("name", "");
-            setPicUrl(null);
-            setPicture("");
-            handleOpenModal();
-          }}
-        >
-          Create New category
-        </Button>
-      </Box>
-      <Box className="w-full flex gap-4">
+      {!isClient && (
+        <Box className={`w-full flex flex-row-reverse py-4`}>
+          <Button
+            className="bg-secondary text-white"
+            startIcon={<FaPlus />}
+            onClick={() => {
+              setCategoryId("");
+              setOnEdit(false);
+              setCategoryValue("name", "");
+              setPicUrl(null);
+              setPicture("");
+              handleOpenModal();
+            }}
+          >
+            Create New category
+          </Button>
+        </Box>
+      )}
+
+      <Box className={`w-full flex gap-4 ${isClient && "mt-10"}`}>
         <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px]">
           {state?.allCategories?.length === 0 ? (
             <div className="p-4">
@@ -550,16 +555,18 @@ const Categories = () => {
                             {category.name}
                           </p>
                         </div>
-                        <IconButton
-                          onClick={(
-                            event: React.MouseEvent<HTMLButtonElement>
-                          ) => {
-                            handleClick(event);
-                            setCategoryId(category.id);
-                          }}
-                        >
-                          <HiDotsHorizontal />
-                        </IconButton>
+                        {!isClient && (
+                          <IconButton
+                            onClick={(
+                              event: React.MouseEvent<HTMLButtonElement>
+                            ) => {
+                              handleClick(event);
+                              setCategoryId(category.id);
+                            }}
+                          >
+                            <HiDotsHorizontal />
+                          </IconButton>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -624,31 +631,35 @@ const Categories = () => {
                                 ({subject?.courses?.length} Courses)
                               </p>
                             </div>
-                            <IconButton
-                              onClick={(
-                                event: React.MouseEvent<HTMLButtonElement>
-                              ) => {
-                                handleClickSub(event);
-                                setSubjectId(subject.id);
-                              }}
-                            >
-                              <HiDotsHorizontal />
-                            </IconButton>
+                            {!isClient ?? (
+                              <IconButton
+                                onClick={(
+                                  event: React.MouseEvent<HTMLButtonElement>
+                                ) => {
+                                  handleClickSub(event);
+                                  setSubjectId(subject.id);
+                                }}
+                              >
+                                <HiDotsHorizontal />
+                              </IconButton>
+                            )}
                           </div>
                         </div>
                       </div>
                     );
                   })}
-                  <div className="flex flex-col justify-center w-fit h-full pl-4 py-1">
-                    {subjectState?.allCSubjects?.length > 0 && (
-                      <IconButton
-                        onClick={handleOpenSubjectModal}
-                        className="bg-slate-100 hover:bg-slate-200"
-                      >
-                        <FaPlus className="text-sm" />
-                      </IconButton>
-                    )}
-                  </div>
+                  {!isClient && (
+                    <div className="flex flex-col justify-center w-fit h-full pl-4 py-1">
+                      {subjectState?.allCSubjects?.length > 0 && (
+                        <IconButton
+                          onClick={handleOpenSubjectModal}
+                          className="bg-slate-100 hover:bg-slate-200"
+                        >
+                          <FaPlus className="text-sm" />
+                        </IconButton>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </>

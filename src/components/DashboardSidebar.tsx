@@ -122,6 +122,9 @@ const DashboardSidebar: React.FC = ({}) => {
     setActiveIndex(index);
   };
 
+  console.log(activeIndex, "activeIndex");
+  console.log(activePage, "activeIndex");
+
   useEffect(() => {
     if (activePage[2] === "courses") {
       setActiveIndex(1);
@@ -138,7 +141,7 @@ const DashboardSidebar: React.FC = ({}) => {
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }
-  }, []);
+  }, [activePage]);
 
   useEffect(() => {
     setActivePage(pathName.split("/"));
