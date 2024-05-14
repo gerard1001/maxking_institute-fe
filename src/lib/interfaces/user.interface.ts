@@ -1,5 +1,6 @@
 import { ICourse } from "./course.interface";
 import { IModule } from "./module.interface";
+import { IUserCourse } from "./user_course.interface";
 
 export interface IUserSignUp {
   firstName: string;
@@ -39,6 +40,7 @@ export interface User {
   modules?: IModule[];
   isVerified: boolean;
   publicDisplay: boolean;
+  user_course: IUserCourse;
   createdAt: Date;
   updatedAt: Date;
 }

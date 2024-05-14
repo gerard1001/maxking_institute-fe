@@ -34,7 +34,7 @@ const sidebarItems = (activePage: string[]) => [
     icon: <FiBookOpen className="text-xl" />,
     text: "Courses",
     active: true,
-    hasDropdown: true,
+    hasDropdown: false,
     dropDownItems: [
       {
         to: "/dashboard/courses",

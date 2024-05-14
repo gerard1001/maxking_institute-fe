@@ -30,6 +30,7 @@ import LoadinProgress from "@/components/LoadingProgess";
 import { useSnackbar } from "notistack";
 import Slider from "react-slick";
 import { MdOutlinePlaylistAdd, MdOutlinePlaylistRemove } from "react-icons/md";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Articles = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [articleId, setArticleId] = useState<string>("");
+  const { isClient } = React.useContext(LoginContext);
 
   useEffect(() => {
     dispatch(fetchArticles());
@@ -204,17 +206,20 @@ const Articles = () => {
   return (
     <ProtectedRoute>
       <section className="w-full flex flex-col gap-6 pb-10">
-        <div className="">
-          {" "}
-          <Button
-            className={`bg-secondary text-white`}
-            onClick={() => {
-              router.push("/dashboard/articles/new");
-            }}
-          >
-            Add New
-          </Button>
-        </div>
+        {!isClient && (
+          <div className="">
+            {" "}
+            <Button
+              className={`bg-secondary text-white`}
+              onClick={() => {
+                router.push("/dashboard/articles/new");
+              }}
+            >
+              Add New
+            </Button>
+          </div>
+        )}
+
         <div className="w-full h-fit flex flex-col items-start">
           <h1 className="text-xl font-semibold ml-1 text-accent">
             Featured Articles

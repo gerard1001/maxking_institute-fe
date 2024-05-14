@@ -57,7 +57,9 @@ const SavedArticles = () => {
     <div>
       {" "}
       <div className="w-full h-fit flex flex-col items-start">
-        <h1 className="text-xl font-semibold ml-1 text-accent">All Articles</h1>
+        <h1 className="text-xl font-semibold ml-1 text-accent">
+          Your Saved Articles
+        </h1>
         {articles?.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center py-8 rounded-lg bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
             <h1 className="text-lg font-semibold text-black/75">
