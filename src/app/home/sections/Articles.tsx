@@ -15,9 +15,11 @@ import SectionTitle from "../../../components/SectionTitle";
 import { ViewAll } from "./PopularCourses";
 import { Divider } from "@mui/material";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 const Articles = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const state = useSelector(selectArticles);
 
   useEffect(() => {
@@ -32,54 +34,70 @@ const Articles = () => {
         rightSideActions={ViewAll("/articles")}
       />
       <div className="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 lg:p-10 p-4 gap-4">
-        {state?.articles?.map((article) => {
-          return (
-            <div key={article.id} className="max-w-[350px] sm:pb-6 pb-2">
-              <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
-                <img
-                  src={article.coverImage}
-                  alt=""
-                  className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
-                  <img
-                    src={article.author.profile.picture}
-                    alt="author image"
-                    className="w-7 aspect-square rounded-full object-cover cursor-pointer"
-                  />
-                  <h1>
-                    {article.author.firstName} {article.author.lastName}
+        {state?.articles &&
+          state?.articles
+            ?.slice(0, 8)
+            ?.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            .map((article) => {
+              return (
+                <div key={article.id} className="max-w-[300px] sm:pb-6 pb-2">
+                  <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
+                    <img
+                      src={article.coverImage}
+                      alt=""
+                      className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                      onClick={() => {
+                        router.push(`/articles/${article.id}`);
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
+                      <img
+                        src={article.author.profile.picture}
+                        alt="author image"
+                        className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                      />
+                      <h1>
+                        {article.author.firstName} {article.author.lastName}
+                      </h1>
+                    </div>
+                    <p className="my-2 text-xs font-semibold text-primary">
+                      {format(article.createdAt, "PP")}
+                    </p>
+                  </div>
+                  <h1 className="text-accent font-bold text-md line-clamp-2 min-h-12">
+                    {article.title}
                   </h1>
-                </div>
-                <p className="my-2 text-xs font-semibold text-black/75">
-                  {format(article.createdAt, "PP")}
-                </p>
-              </div>
-              <h1 className="text-slate-900 font-bold text-xl line-clamp-2 min-h-14">
-                {article.title}
-              </h1>
-              <p className="line-clamp-3 my-2">{article.description}</p>
-              <div className="flex items-center gap-3 justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-[2px] text-black/75">
-                    <CiHeart className="text-2xl" />
-                    <span className="">12 likes</span>
+                  <p className="line-clamp-3 my-2 text-sm">
+                    {article.description}
+                  </p>
+                  <div className="flex items-center gap-3 justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-[2px] text-black/75">
+                        <CiHeart className="text-2xl" />
+                        <span className="text-sm font-semibold">12 likes</span>
+                      </div>
+                      <div className="flex items-center gap-[4px] text-black/75">
+                        <GoComment className="text-xl" />
+                        <span className="text-sm font-semibold">
+                          {" "}
+                          5 comments
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-black/75">
+                      <MdOutlinePlaylistAdd className="text-xl" />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-[4px] text-black/75">
-                    <GoComment className="text-xl" />
-                    <span className=""> 5 comments</span>
-                  </div>
+                  <Divider className="sm:hidden block mt-4" />
                 </div>
-                <div className="text-black/75">
-                  <MdOutlinePlaylistAdd className="text-xl" />
-                </div>
-              </div>
-              <Divider className="sm:hidden block mt-4" />
-            </div>
-          );
-        })}
+              );
+            })}
       </div>
     </div>
   );

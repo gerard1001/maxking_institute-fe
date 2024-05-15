@@ -6,6 +6,7 @@ import { BsDot } from "react-icons/bs";
 import { IconButton, Menu } from "@mui/material";
 import { Tweet } from "react-tweet";
 import { MdOutlineClose } from "react-icons/md";
+import Footer from "@/components/Footer";
 
 const members = [
   {
@@ -416,7 +417,7 @@ const AboutUs = () => {
             <h1 className="text-xl text-accent font-bold py-2 capitalize">
               meet Our team
             </h1>
-            <div className="min-h-[800px] w-full">
+            <div className="min-h-[80px] w-full">
               <div className="flex items-start gap-5 justify-center flex-wrap">
                 {members.map((member, index) => (
                   <div
@@ -522,6 +523,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

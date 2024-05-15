@@ -28,9 +28,9 @@ const ImageSlider = () => {
   ];
   const settings = {
     dots: true,
-    fade: true,
+    // fade: true,
     infinite: true,
-    speed: 500,
+    speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,

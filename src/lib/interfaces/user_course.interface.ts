@@ -2,7 +2,7 @@ export interface IUserCourse {
   id: string;
   userId: string;
   courseId: string;
-  userType: string;
+  userType: "TUTOR" | "STUDENT";
   currentModule: number;
   completed: boolean;
   rank?: string | null;

@@ -31,6 +31,7 @@ import { useSnackbar } from "notistack";
 import { LoginContext } from "@/lib/context/LoginContext";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import SignInModal from "./SignInModal";
 
 const navBarLinks = [
   {
@@ -76,6 +77,7 @@ const MainNavbar = () => {
     loginUserFetchLoading,
     setLoginUserFetchLoading,
     setIsClient,
+    goToPage,
   } = useContext(LoginContext);
 
   const secondaryNavLinks = userLoggedIn
@@ -399,7 +401,12 @@ const MainNavbar = () => {
           </List>
         </nav>
       </Drawer>
-      <Modal
+      <SignInModal
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+        setOpenModal={setOpenModal}
+      />
+      {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -489,7 +496,7 @@ const MainNavbar = () => {
             </Button>
           </Box>
         </Box>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

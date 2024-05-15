@@ -58,6 +58,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
     setLoginUserFetchLoading,
     setUserLoggedIn,
     setIsClient,
+    goToPage,
   } = useContext(LoginContext);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -93,7 +94,7 @@ const SignInForm = ({ closeModal }: SignInProps) => {
                   setIsClient(false);
                 }
                 setTimeout(() => {
-                  router.push("/dashboard");
+                  router.push(goToPage);
                 }, 500);
               } else {
                 enqueueSnackbar(nextRes.message, { variant: "error" });

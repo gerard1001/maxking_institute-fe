@@ -36,8 +36,6 @@ const Dashboard = () => {
     | undefined
   >({});
 
-  console.log(result, "***************");
-
   const calculateValues = (
     moduleObject: any,
     chapterObject: any,

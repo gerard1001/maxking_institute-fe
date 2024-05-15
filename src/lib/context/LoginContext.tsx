@@ -14,6 +14,8 @@ type LoginContextType = {
   setLoginData: React.Dispatch<React.SetStateAction<any>>;
   userLoggedIn: boolean;
   setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  goToPage: string;
+  setGoToPage: React.Dispatch<React.SetStateAction<string>>;
   loginUserFetchLoading: boolean;
   setLoginUserFetchLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isClient: any;
@@ -26,6 +28,8 @@ const LoginContextState = {
   setLoginData: () => {},
   userLoggedIn: false,
   setUserLoggedIn: () => {},
+  goToPage: "",
+  setGoToPage: () => {},
   loginUserFetchLoading: false,
   setLoginUserFetchLoading: () => {},
   isClient: true,
@@ -44,6 +48,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [loginData, setLoginData] = useState<User | any>({});
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+  const [goToPage, setGoToPage] = useState<string>("/dashboard");
   const [loginUserFetchLoading, setLoginUserFetchLoading] =
     useState<boolean>(false);
   // const [isClient, setIsClient] = useState(
@@ -118,6 +123,8 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoginData,
       userLoggedIn,
       setUserLoggedIn,
+      goToPage,
+      setGoToPage,
       loginUserFetchLoading,
       setLoginUserFetchLoading,
       isClient,
@@ -125,7 +132,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       userId,
       setUserId,
     }),
-    [loginData]
+    [loginData, userLoggedIn, goToPage, loginUserFetchLoading, isClient, userId]
   );
 
   return (

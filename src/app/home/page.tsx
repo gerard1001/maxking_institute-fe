@@ -1,7 +1,6 @@
 import ImageSlider from "./sections/ImageSlider";
 import WhyUs from "./sections/WhyUs";
 import CourseCategories from "./sections/CourseCategories";
-import CourseUpdates from "./sections/CourseUpdates";
 import PopularCourses from "./sections/PopularCourses";
 import Articles from "./sections/Articles";
 import Collaborators from "./sections/Collaborators";
@@ -15,15 +14,15 @@ const HomePage = () => {
       <WhyUs />
       <CourseCategories />
       <div className="flex items-start">
-        <div className="bg-yellow-100 min-h-40 xl:w-[78%] w-full">
-          <CourseUpdates />
+        <div className="min-h-40 w-full">
+          {/* <CourseUpdates /> */}
           <PopularCourses />
         </div>
-        <div className="bg-yellow-200 min-h-40 w-[22%] xl:block hidden"></div>
+        {/* <div className="bg-yellow-100 min-h-40 w-[22%] xl:block hidden"></div> */}
       </div>
       <Articles />
       <Collaborators />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Footer />
     </div>
   );

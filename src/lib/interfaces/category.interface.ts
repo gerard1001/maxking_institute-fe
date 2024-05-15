@@ -1,7 +1,10 @@
+import { ISubject } from "./subject.interface";
+
 export interface ICategory {
   id: string;
   name: string;
   image: string;
+  subjects: ISubject[];
   createdAt: Date;
   updatedAt: Date;
 }

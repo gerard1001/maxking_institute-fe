@@ -415,7 +415,7 @@ const Articles = () => {
                           {article.author.firstName} {article.author.lastName}
                         </h1>
                       </div>
-                      <p className="my-2 text-xs font-semibold text-black/75">
+                      <p className="my-2 text-xs font-semibold text-primary">
                         {format(article.createdAt, "PP")}
                       </p>
                     </div>
@@ -449,41 +449,43 @@ const Articles = () => {
                         </IconButton>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 justify-between mt-1 bg-secondary px-2 py-1">
-                      <div className="flex items-center gap-2 shadow-sm">
+                    {!isClient && (
+                      <div className="flex items-center gap-3 justify-between mt-1 bg-secondary px-2 py-1">
+                        <div className="flex items-center gap-2 shadow-sm">
+                          <IconButton
+                            onClick={() => {
+                              router.push(
+                                `/dashboard/articles/${article.id}/edit`
+                              );
+                            }}
+                            className="hover:bg-white/20"
+                          >
+                            <FaRegEdit className="text-lg text-white" />
+                          </IconButton>
+                          <IconButton
+                            className="hover:bg-white/20"
+                            onClick={() => {
+                              setArticleId(article.id);
+                              handleOpenDialog();
+                            }}
+                          >
+                            <FaTrashAlt className="text-lg text-white" />
+                          </IconButton>
+                        </div>
                         <IconButton
-                          onClick={() => {
-                            router.push(
-                              `/dashboard/articles/${article.id}/edit`
-                            );
-                          }}
-                          className="hover:bg-white/20"
-                        >
-                          <FaRegEdit className="text-lg text-white" />
-                        </IconButton>
-                        <IconButton
                           className="hover:bg-white/20"
                           onClick={() => {
-                            setArticleId(article.id);
-                            handleOpenDialog();
+                            handleFeatureArticle(article.id);
                           }}
                         >
-                          <FaTrashAlt className="text-lg text-white" />
+                          {article?.isFeatured ? (
+                            <FaStar className="text-lg text-primary-foreground" />
+                          ) : (
+                            <FaRegStar className="text-lg text-white" />
+                          )}
                         </IconButton>
                       </div>
-                      <IconButton
-                        className="hover:bg-white/20"
-                        onClick={() => {
-                          handleFeatureArticle(article.id);
-                        }}
-                      >
-                        {article?.isFeatured ? (
-                          <FaStar className="text-lg text-primary-foreground" />
-                        ) : (
-                          <FaRegStar className="text-lg text-white" />
-                        )}
-                      </IconButton>
-                    </div>
+                    )}
                   </div>
                 );
               })}

@@ -14,6 +14,8 @@ import { AiOutlineLogout } from "react-icons/ai";
 import ProtectedRoute from "./ProtectedRoute";
 import { usePathname, useRouter } from "next/navigation";
 import { LoginContext } from "@/lib/context/LoginContext";
+import { GrUpdate } from "react-icons/gr";
+import { RxUpdate } from "react-icons/rx";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -85,9 +87,9 @@ const sidebarItems = (activePage: string[]) => [
     to: "/dashboard/articles",
   },
   {
-    listkey: "Schedule",
-    icon: <LuCalendarClock className="text-xl" />,
-    text: "Schedule",
+    listkey: "Updates",
+    icon: <RxUpdate className="text-xl" />,
+    text: "Updates",
     active: false,
     to: "/dashboard",
   },
@@ -98,13 +100,13 @@ const sidebarItems = (activePage: string[]) => [
     active: false,
     to: "/dashboard/profile",
   },
-  {
-    listkey: "Sign out",
-    icon: <AiOutlineLogout className="text-xl" />,
-    text: "Sign out",
-    active: false,
-    to: "/dashboard",
-  },
+  // {
+  //   listkey: "Sign out",
+  //   icon: <AiOutlineLogout className="text-xl" />,
+  //   text: "Sign out",
+  //   active: false,
+  //   to: "/",
+  // },
 ];
 
 const DashboardSidebar: React.FC = ({}) => {
@@ -116,7 +118,8 @@ const DashboardSidebar: React.FC = ({}) => {
     0: false,
   });
   const [activePage, setActivePage] = useState<string[]>(pathName.split("/"));
-  const { isClient } = useContext(LoginContext);
+  const { isClient, setLoginData, setUserLoggedIn, loginUserFetchLoading } =
+    useContext(LoginContext);
 
   const handleSetActiveIndex = (index: number) => {
     setActiveIndex(index);
@@ -176,7 +179,10 @@ const DashboardSidebar: React.FC = ({}) => {
               {sidebarItems(activePage).map((item, index) => (
                 <div
                   className={`${
-                    isClient && item.text === "Users" ? "hidden" : "block"
+                    isClient &&
+                    (item.text === "Users" || item.text === "Updates")
+                      ? "hidden"
+                      : "block"
                   }`}
                   key={index}
                   onClick={() => {
@@ -198,6 +204,54 @@ const DashboardSidebar: React.FC = ({}) => {
                   />
                 </div>
               ))}
+              <li className={`bg-white text-white" rounded-md w-full`}>
+                <div
+                  className={`max-h-10 flex items-center py-2 px-3 my-1
+        font-medium rounded-md cursor-pointer justify-between
+        group hover:bg-red-400 text-accent hover:text-white`}
+                  onClick={() => {
+                    localStorage.removeItem("loginData");
+                    setLoginData({});
+                    setUserLoggedIn(false);
+                    router.push("/");
+                  }}
+                >
+                  <div className="flex items-center">
+                    {" "}
+                    <AiOutlineLogout className="text-xl" />
+                    <span
+                      className={`overflow-hidden transition-all ${
+                        expanded ? "w-28 ml-3" : "w-0"
+                      }`}
+                    >
+                      Sign out
+                    </span>
+                  </div>
+                </div>
+
+                {/* <div
+                  className={`flex flex-col gap-1 transition-all bg-white ease-in-out duration-150 h-0 pl-3`}
+                >
+                  {active &&
+                    hasDropdown &&
+                    showDropdown[index] &&
+                    expanded &&
+                    dropDownItems.map((item: any, index: number) => (
+                      <div
+                        key={index}
+                        className={`left-full rounded-md px-2 py-1 ml-6 text-accent cursor-pointer flex items-center gap-2
+               ${item.isFocused && "font-bold"}`}
+                        onClick={() => {
+                          router.push(`${item.to}`);
+                          // alert(item.to);
+                        }}
+                      >
+                        <span>{item.text}</span>
+                      </div>
+                    ))}
+                </div> */}
+                {/* )} */}
+              </li>
             </ul>
           </SidebarContext.Provider>
         </nav>

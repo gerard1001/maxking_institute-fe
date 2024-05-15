@@ -169,7 +169,7 @@ const ArticlesPage = () => {
                     <img
                       src={article.coverImage}
                       alt=""
-                      className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105"
+                      className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
                       onClick={() => {
                         // window.location.href = `/articles/${article.id}`;
                         router.push(`/articles/${article.id}`);
@@ -187,7 +187,7 @@ const ArticlesPage = () => {
                         {article.author.firstName} {article.author.lastName}
                       </h1>
                     </div>
-                    <p className="my-2 text-xs font-semibold text-black/75">
+                    <p className="my-2 text-xs font-semibold text-primary">
                       {format(article.createdAt, "PP")}
                     </p>
                   </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import DashboardFooter from "@/components/DashboardFooter";
 import DashboardLearningSidebar from "@/components/DashboardLearningSidebar";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import DashboardTopbar from "@/components/DashboardTopbar";
@@ -51,7 +52,13 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {loginUserFetchLoading ? (
             <SuspenseLoading />
           ) : (
-            <div className="px-4 bg-zinc-100 min-h-screen pt-6">{children}</div>
+            <>
+              {" "}
+              <div className="px-4 bg-zinc-100 min-h-screen pt-6">
+                {children}
+              </div>
+              <DashboardFooter />
+            </>
           )}
         </div>
       </div>
