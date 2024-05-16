@@ -427,11 +427,11 @@ const Articles = () => {
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-[2px] text-black/75">
                           <CiHeart className="text-2xl" />
-                          <span className="">12</span>
+                          <span className="">{article?.likes?.length}</span>
                         </div>
                         <div className="flex items-center gap-[4px] text-black/75">
                           <GoComment className="text-xl" />
-                          <span className=""> 5</span>
+                          <span className="">{article?.comments?.length}</span>
                         </div>
                       </div>
                       <div className="text-black/75">

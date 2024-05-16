@@ -24,12 +24,25 @@ export interface Article {
   updatedAt: Date;
   tags: ITag[];
   comments: IComment[];
+  likes: ILike[];
   author: User;
 }
 
 export interface ArticleTag {
   id: string;
   name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ILike {
+  id: string;
+  userId: string;
+  articleId: string;
+  commentId: string;
+  liker: User;
+  article: Article;
+  comment: Comment;
   createdAt: Date;
   updatedAt: Date;
 }

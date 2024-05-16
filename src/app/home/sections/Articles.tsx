@@ -8,6 +8,9 @@ import {
   fetchArticles,
   fetchCommentsByArticleId,
   fetchSingleComment,
+  fetchUserSavedArticles,
+  likePost,
+  saveUserArticle,
   selectArticles,
   selectComments,
   useDispatch,
@@ -30,7 +33,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { MdOutlineClose, MdOutlinePlaylistAdd } from "react-icons/md";
+import {
+  MdOutlineClose,
+  MdOutlinePlaylistAdd,
+  MdOutlinePlaylistRemove,
+} from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Drawer from "@mui/material/Drawer";
 import { useSnackbar } from "notistack";
@@ -42,6 +49,8 @@ import { LoginContext } from "@/lib/context/LoginContext";
 import SignInModal from "@/components/SignInModal";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { BsFillTrashFill } from "react-icons/bs";
+import { IoMdHeart } from "react-icons/io";
+import ArticleDrawer from "@/components/ArticleDrawer";
 
 const schema = yup.object().shape({
   text: yup.string().required().min(5).max(150),
@@ -56,6 +65,7 @@ const Articles = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectArticles);
+  const savedArticles = state.savedArticles;
   const commentState = useSelector(selectComments);
   const [open, setOpen] = React.useState(false);
   const [articleId, setArticleId] = React.useState<string>("");
@@ -102,6 +112,8 @@ const Articles = () => {
     },
   });
 
+  const savedArticlesIds = savedArticles.map((article) => article.id);
+
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
@@ -125,6 +137,8 @@ const Articles = () => {
           preventDuplicate: true,
         });
       });
+
+    dispatch(fetchUserSavedArticles());
   }, [dispatch]);
 
   useEffect(() => {
@@ -245,6 +259,47 @@ const Articles = () => {
     }
   };
 
+  const likeOrUnlikePost = (postId: string) => {
+    dispatch(likePost(postId))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          console.log(res.data?.split(" ")[1], "555555");
+          if (res.data?.split(" ")[1] === "article") {
+            dispatch(fetchArticles());
+          } else {
+            dispatch(fetchCommentsByArticleId(articleId));
+          }
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+  };
+
+  const saveArticle = (id: string) => {
+    dispatch(saveUserArticle(id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          dispatch(fetchUserSavedArticles());
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+  };
+
   return (
     <>
       <div className="lg:p-10 p-2" id="articles">
@@ -298,10 +353,28 @@ const Articles = () => {
                     </p>
                     <div className="flex items-center gap-3 justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-[2px] text-black/75">
-                          <CiHeart className="text-2xl" />
+                        <div
+                          className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer"
+                          onClick={() => {
+                            if (!userLoggedIn) {
+                              setGoToPage(`/#articles`);
+                              handleOpenModal();
+                            } else {
+                              likeOrUnlikePost(article.id);
+                            }
+                          }}
+                        >
+                          {article.likes.find(
+                            (like) => like.liker.id === userId
+                          ) ? (
+                            <IoMdHeart className="text-primary text-2xl" />
+                          ) : (
+                            <CiHeart className="text-2xl" />
+                          )}
+
                           <span className="text-sm font-semibold">
-                            12 likes
+                            {article?.likes?.length}{" "}
+                            {article?.likes?.length === 1 ? "like" : "likes"}
                           </span>
                         </div>
                         <div
@@ -321,9 +394,22 @@ const Articles = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="text-black/75">
-                        <MdOutlinePlaylistAdd className="text-xl" />
-                      </div>
+                      {userLoggedIn && (
+                        <div className="text-black/75">
+                          <IconButton
+                            onClick={() => {
+                              saveArticle(article.id);
+                            }}
+                            className=""
+                          >
+                            {!savedArticlesIds.includes(article.id) ? (
+                              <MdOutlinePlaylistAdd className={`text-xl`} />
+                            ) : (
+                              <MdOutlinePlaylistRemove className="text-xl text-red-500" />
+                            )}
+                          </IconButton>
+                        </div>
+                      )}
                     </div>
                     <Divider className="sm:hidden block mt-4" />
                   </div>
@@ -331,7 +417,7 @@ const Articles = () => {
               })}
         </div>
       </div>
-      <Drawer open={open} onClose={closeDrawer} className="" anchor="right">
+      {/* <Drawer open={open} onClose={closeDrawer} className="" anchor="right">
         <div className="max-w-[600px] w-[400px] relative">
           <IconButton onClick={closeDrawer} className="absolute top-4 right-4">
             <MdOutlineClose className="" />
@@ -480,6 +566,30 @@ const Articles = () => {
                               )
                             </p>
                           )}
+                          <div
+                            className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer w-fit"
+                            onClick={() => {
+                              if (!userLoggedIn) {
+                                setGoToPage(`/#articles`);
+                                handleOpenModal();
+                              } else {
+                                likeOrUnlikePost(comment.id);
+                              }
+                            }}
+                          >
+                            {comment.likes.find(
+                              (like) => like.liker.id === userId
+                            ) ? (
+                              <IoMdHeart className="text-primary" />
+                            ) : (
+                              <CiHeart />
+                            )}
+
+                            <span className="text-sm font-semibold">
+                              {comment?.likes?.length}{" "}
+                              {comment?.likes?.length === 1 ? "like" : "likes"}
+                            </span>
+                          </div>
                         </div>
                       ))}
                   </div>
@@ -488,7 +598,23 @@ const Articles = () => {
             </div>
           </div>
         </div>
-      </Drawer>
+      </Drawer> */}
+      <ArticleDrawer
+        articleId={articleId}
+        open={open}
+        closeDrawer={closeDrawer}
+        commentState={commentState}
+        handleClick={handleClick}
+        handleOpenModal={handleOpenModal}
+        loading={loading}
+        setCommentId={setCommentId}
+        setGoToPage={setGoToPage}
+        setOpenModal={setOpenModal}
+        userId={userId}
+        userLoggedIn={userLoggedIn}
+        userRole={userRole}
+        key={articleId}
+      />
       <SignInModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}

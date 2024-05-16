@@ -180,27 +180,31 @@ const Dashboard = () => {
               <h1 className="text-2xl text-accent font-semibold ml-10">
                 Take a look at some courses here
               </h1>
-              <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
-                {courseState?.allCourses?.map((course) => {
-                  return (
-                    <div className="bg-white w-[250px]">
-                      <img
-                        src={course?.coverImage}
-                        alt=""
-                        className="w-full aspect-video"
-                      />
-                      <div className="p-2">
-                        <h1 className="text-base font-semibold text-accent line-clamp-2">
-                          {course?.title}
-                        </h1>
-                        <p className="line-clamp-3 mt-2 text-[15px]">
-                          {course?.description}
-                        </p>
+              {courseState?.allCourses?.length === 0 ? (
+                <h1 className="text-accent ml-10 mb-6">No added courses yet</h1>
+              ) : (
+                <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
+                  {courseState?.allCourses?.map((course) => {
+                    return (
+                      <div className="bg-white w-[250px]">
+                        <img
+                          src={course?.coverImage}
+                          alt=""
+                          className="w-full aspect-video"
+                        />
+                        <div className="p-2">
+                          <h1 className="text-base font-semibold text-accent line-clamp-2">
+                            {course?.title}
+                          </h1>
+                          <p className="line-clamp-3 mt-2 text-[15px]">
+                            {course?.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex flex-wrap lg:p-10 p-4 gap-4">

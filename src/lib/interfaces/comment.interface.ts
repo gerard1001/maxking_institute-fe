@@ -1,5 +1,4 @@
-import { Article } from "./article.interface";
-import { ITag } from "./tag.interface";
+import { Article, ILike } from "./article.interface";
 import { User } from "./user.interface";
 
 export interface CommentSliceState {
@@ -17,6 +16,7 @@ export interface IComment {
   articleId: string;
   writer: User;
   article: Article;
+  likes: ILike[];
   createdAt: Date;
   updatedAt: Date;
 }

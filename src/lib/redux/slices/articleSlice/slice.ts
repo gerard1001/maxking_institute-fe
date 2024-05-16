@@ -9,6 +9,7 @@ import {
   fetchRelatedArticles,
   fetchSingleArticle,
   fetchUserSavedArticles,
+  likePost,
   saveUserArticle,
 } from "./thunks";
 import { Article, ArticleSliceState } from "@/lib/interfaces/article.interface";
@@ -150,6 +151,18 @@ export const articleSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(likePost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(likePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

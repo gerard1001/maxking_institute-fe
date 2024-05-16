@@ -126,3 +126,15 @@ export const deleteArticle = createAppAsyncThunk(
     }
   }
 );
+
+export const likePost = createAppAsyncThunk(
+  "like/likePost",
+  async (postId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/like/${postId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
