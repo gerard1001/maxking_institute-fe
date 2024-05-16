@@ -3,9 +3,12 @@ import { createAppAsyncThunk } from "../../createAppAsyncThunk";
 
 export const createComment = createAppAsyncThunk(
   "comment/createComment",
-  async (data: any, { rejectWithValue }): Promise<any> => {
+  async (
+    { articleId, data }: { articleId: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
     try {
-      const res = await axios.post(`/comment`, data);
+      const res = await axios.post(`/comment/${articleId}`, data);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

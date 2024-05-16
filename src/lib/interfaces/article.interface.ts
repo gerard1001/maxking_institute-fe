@@ -1,3 +1,4 @@
+import { IComment } from "./comment.interface";
 import { ITag } from "./tag.interface";
 import { User } from "./user.interface";
 
@@ -22,6 +23,7 @@ export interface Article {
   createdAt: Date;
   updatedAt: Date;
   tags: ITag[];
+  comments: IComment[];
   author: User;
 }
 

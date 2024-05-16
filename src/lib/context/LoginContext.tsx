@@ -22,6 +22,8 @@ type LoginContextType = {
   setIsClient: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
+  userRole: string;
+  setUserRole: React.Dispatch<React.SetStateAction<string>>;
 };
 const LoginContextState = {
   loginData: {},
@@ -36,6 +38,8 @@ const LoginContextState = {
   setIsClient: () => {},
   userId: "",
   setUserId: () => {},
+  userRole: "",
+  setUserRole: () => {},
 };
 
 export const LoginContext = createContext<LoginContextType>(LoginContextState);
@@ -61,6 +65,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
   // );
   const [isClient, setIsClient] = useState<boolean>(true);
   const [userId, setUserId] = React.useState<string>("");
+  const [userRole, setUserRole] = React.useState<string>("");
 
   console.log(isClient, "isClient");
 
@@ -82,6 +87,7 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       setUserLoggedIn(true);
       setUserId(loginToken?.id);
+      setUserRole(loginToken?.role);
     }
 
     dispatch(fetchUserByToken(loginToken?.login_token))
@@ -131,8 +137,18 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsClient,
       userId,
       setUserId,
+      userRole,
+      setUserRole,
     }),
-    [loginData, userLoggedIn, goToPage, loginUserFetchLoading, isClient, userId]
+    [
+      loginData,
+      userLoggedIn,
+      goToPage,
+      loginUserFetchLoading,
+      isClient,
+      userId,
+      userRole,
+    ]
   );
 
   return (
