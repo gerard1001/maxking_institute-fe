@@ -44,7 +44,7 @@ const benefits = [
 
 const WhyUs = () => {
   return (
-    <div className="lg:p-10 p-2">
+    <div className="lg:p-10 p-2" id="why-us">
       <SectionTitle title="Why choose us?" icon={TiInfoOutline} />
       <div
         className="flex flex-wrap content-center pt-16 max-w-[900px] w-fit mx-auto gap-2"

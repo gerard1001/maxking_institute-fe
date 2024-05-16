@@ -27,7 +27,7 @@ const Articles = () => {
   }, [dispatch]);
 
   return (
-    <div className="lg:p-10 p-2">
+    <div className="lg:p-10 p-2" id="articles">
       <SectionTitle
         title="recent ARTICLES"
         icon={FaBlog}

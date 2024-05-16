@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "CHD",
+    "title": "COMMUNITY HEALTH & DEVELOPMENT (CHD)",
+    "image": "/programs/program-1.jpeg",
+    "descriptions": [
+      "Through this program, MKI aims to raise awareness and provide knowledge and essentials on different health conditions such: IPC, SRH, Health-related Emergencies, and more."
+    ]
+  },
+  {
+    "slug": "EMFE",
+    "title": "EMERGENCY MEDICINE FOR EVERYONE (EMFE)",
+    "image": "/programs/program-2.webp",
+    "descriptions": [
+      "Unexpected but predictable and preventable life trouble shootings (e.g.: injuries and illnesses) are among the barriers to the community’s progress and sustainable development. With this program, MKI provide effective knowledge and facilities to people to create a bridge to manage and early prevent possible life troubles at different level of communities.",
+
+      "Through this initiative, we empower communities and make them able to manage and or early intervene at the possible maximum to anticipate or remove the danger, According to the level of our operations during this program, we offer training on different emergency subjects like Basic Life Support, Health, and Safety over different areas including road safety and more.",
+
+      "We empower people from home to large communities, professionals, and nonprofessionals to their different workplaces, from new prospects to career and professional continuous development."
+    ]
+  },
+  {
+    "slug": "RCK",
+    "title": "READING FOR CHANGE KIT (RCK)",
+    "image": "/programs/program-3.jpg",
+    "descriptions": [
+      "As a beneficial tool and practice, Reading can change your life for the better., Reading is one of the most powerful things to offer new opportunities to learn, grow, and be inspired. So as a strategic and great program, MKI uses it to help people open up their potentials and get out of the box for the greater good. ",
+
+      "With this program, MKI enables people’s powers and responsibilities to create a burning desire for a better change and sustainable development as well, Along program, MKI helps people expand their minds and allow for creative thinking and give them a greater perspective whilst providing a sense of real inspiration for a better future."
+    ]
+  },
+  {
+    "slug": "RMF",
+    "title": "RWANDA MEDICAL FORUM (RMF)",
+    "image": "/programs/program-4.jpg",
+    "descriptions": [
+      "With RMF program, MKI aims at helping professionals enhancing their career prospects and scaling up their professionalism with continuous professional development.",
+
+      "With the program, we carry out career mentorship with different means/platform including cases onsite/online discussions, field visits as a bridge to professionalism and quality health services delivery."
+    ]
+  },
+  {
+    "slug": "SI-HUB",
+    "title": "SUCCESS INSPIRERS HUB (SI-HUB)",
+    "image": "/programs/program-5.jpg",
+    "descriptions": [
+      "Through this program MKI aims to enable and to strengthen potentials among young generation and help them shape and build their future strong."
+    ]
+  }
+]

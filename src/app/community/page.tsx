@@ -5,6 +5,9 @@ const Community = () => {
   return (
     <>
       <div className="lg:p-10 p-4 pt-20">
+        <h1 className="text-center text-3xl text-accent uppercase font-bold mb-10 mt-4">
+          MKI community
+        </h1>
         <div className="flex flex-wrap items-center justify-evenly gap-4">
           <div className="p-3 aspect-[3/2] min-w-[250px] bg-pink rounded-md">
             <div className="w-full h-full rounded-md border-[1.5px] border-dashed border-primary-foreground flex flex-col items-center justify-center">

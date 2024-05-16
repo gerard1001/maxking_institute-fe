@@ -71,7 +71,7 @@ const PopularCourses = () => {
       : [];
 
   return (
-    <div className="lg:p-10 p-2">
+    <div className="lg:p-10 p-2" id="popular-courses">
       <SectionTitle
         title="POPULAR COURSES"
         image="/icons/popular-dark.svg"

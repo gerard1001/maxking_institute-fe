@@ -10,6 +10,7 @@ import {
   moduleSlice,
   chapterSlice,
   questionSlice,
+  commentSlice,
 } from "./slices";
 
 export const reducer = {
@@ -24,4 +25,5 @@ export const reducer = {
   module: moduleSlice.reducer,
   chapter: chapterSlice.reducer,
   question: questionSlice.reducer,
+  comment: commentSlice.reducer,
 };

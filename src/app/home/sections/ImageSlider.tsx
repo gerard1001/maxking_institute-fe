@@ -71,7 +71,7 @@ const ImageSlider = () => {
   };
 
   return (
-    <div className="w-full pb-8 wrapper1">
+    <div className="w-full pb-8 wrapper1" id="slides">
       <Slider prevArrow={<PreviousBtn />} nextArrow={<NextBtn />} {...settings}>
         {slides.map((values, idx) => {
           return (

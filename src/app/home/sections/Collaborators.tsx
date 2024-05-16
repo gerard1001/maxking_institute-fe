@@ -5,7 +5,7 @@ import { CgWebsite } from "react-icons/cg";
 
 const Collaborators = () => {
   return (
-    <div className="lg:p-10 p-2">
+    <div className="lg:p-10 p-2" id="collaborators">
       <SectionTitle title="MEET OUR OUR collaborators" icon={FaHandshake} />
       <div className="lg:p-10 p-2 flex items-start flex-wrap lg:gap-8 gap-2">
         <div className="flex flex-col justify-center items-center p-3 flex-wrap rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] relative cursor-pointer hover:scale-110 ease-in transition-all duration-200 ">

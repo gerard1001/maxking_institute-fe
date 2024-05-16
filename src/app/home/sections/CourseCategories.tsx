@@ -27,7 +27,7 @@ const CourseCategories = () => {
       });
   }, []);
   return (
-    <div className="p-10">
+    <div className="p-10" id="categories">
       <SectionTitle title="OUR COURSE CATEGORIES" image="/icons/category.svg" />
       <div className="flex flex-col items-center justify-center gap-8">
         <div className="flex items-center flex-wrap gap-8 justify-center w-full pt-10">
