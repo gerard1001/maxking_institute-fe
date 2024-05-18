@@ -20,36 +20,34 @@ const Quill: React.FC<IProps> = ({ setBody, body }) => {
 
   // Custom image
   const handleChangeImage = useCallback(() => {
-    if (typeof document !== "undefined") {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
-      input.click();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.click();
 
-      input.onchange = async () => {
-        const files = input.files;
-        if (!files)
-          return dispatch({
-            type: ALERT,
-            payload: { errors: "File does not exist." },
-          });
+    input.onchange = async () => {
+      const files = input.files;
+      if (!files)
+        return dispatch({
+          type: ALERT,
+          payload: { errors: "File does not exist." },
+        });
 
-        const file = files[0];
-        const check = checkImage(file);
-        if (check) return dispatch({ type: ALERT, payload: { errors: check } });
+      const file = files[0];
+      const check = checkImage(file);
+      if (check) return dispatch({ type: ALERT, payload: { errors: check } });
 
-        dispatch({ type: ALERT, payload: { loading: true } });
-        const photo = await imageUpload(file);
+      dispatch({ type: ALERT, payload: { loading: true } });
+      const photo = await imageUpload(file);
 
-        const quill = quillRef.current;
-        const range = quill?.getEditor().getSelection()?.index;
-        if (range !== undefined) {
-          quill?.getEditor().insertEmbed(range, "image", `${photo.url}`);
-        }
+      const quill = quillRef.current;
+      const range = quill?.getEditor().getSelection()?.index;
+      if (range !== undefined) {
+        quill?.getEditor().insertEmbed(range, "image", `${photo.url}`);
+      }
 
-        dispatch({ type: ALERT, payload: { loading: false } });
-      };
-    }
+      dispatch({ type: ALERT, payload: { loading: false } });
+    };
   }, [dispatch]);
 
   useEffect(() => {

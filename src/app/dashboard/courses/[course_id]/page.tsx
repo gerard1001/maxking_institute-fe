@@ -61,7 +61,6 @@ import Link from "next/link";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { RiFilePaper2Line } from "react-icons/ri";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
-import { IModule } from "@/lib/interfaces/module.interface";
 
 const createModuleSchema = yup.object().shape({
   title: yup.string().required(),

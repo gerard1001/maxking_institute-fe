@@ -71,6 +71,7 @@ const Articles = () => {
   const [articleId, setArticleId] = React.useState<string>("");
   const [commentId, setCommentId] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [fetchLoading, setFetchLoading] = React.useState<boolean>(false);
   const [editing, setEditing] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = React.useState<boolean>(false);
@@ -128,6 +129,7 @@ const Articles = () => {
   };
 
   useEffect(() => {
+    setFetchLoading(true);
     dispatch(fetchArticles())
       .unwrap()
       .then((res) => {})
@@ -136,10 +138,13 @@ const Articles = () => {
           variant: "error",
           preventDuplicate: true,
         });
+      })
+      .finally(() => {
+        setFetchLoading(false);
       });
 
     dispatch(fetchUserSavedArticles());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (commentId && commentId !== "") {
@@ -306,116 +311,140 @@ const Articles = () => {
         <SectionTitle
           title="recent ARTICLES"
           icon={FaBlog}
-          rightSideActions={ViewAll("/articles")}
+          rightSideActions={
+            state?.articles?.length > 0 ? ViewAll("/articles") : null
+          }
         />
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 lg:p-10 p-4 gap-4">
-          {state?.articles &&
-            state?.articles
-              ?.slice(0, 8)
-              ?.sort(
-                (a, b) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
-              )
-              .map((article) => {
-                return (
-                  <div key={article.id} className="max-w-[300px] sm:pb-6 pb-2">
-                    <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
-                      <img
-                        src={article.coverImage}
-                        alt=""
-                        className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
-                        onClick={() => {
-                          router.push(`/articles/${article.id}`);
-                        }}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
-                        <img
-                          src={article.author.profile.picture}
-                          alt="author image"
-                          className="w-7 aspect-square rounded-full object-cover cursor-pointer"
-                        />
-                        <h1>
-                          {article.author.firstName} {article.author.lastName}
-                        </h1>
-                      </div>
-                      <p className="my-2 text-xs font-semibold text-primary">
-                        {format(article.createdAt, "PP")}
-                      </p>
-                    </div>
-                    <h1 className="text-accent font-bold text-md line-clamp-2 min-h-12">
-                      {article.title}
-                    </h1>
-                    <p className="line-clamp-3 my-2 text-sm">
-                      {article.description}
-                    </p>
-                    <div className="flex items-center gap-3 justify-between">
-                      <div className="flex items-center gap-3">
+        {fetchLoading ? (
+          <div className="flex flex-col justify-center items-center h-40">
+            <LoadinProgress />
+          </div>
+        ) : (
+          <>
+            {state?.articles?.length === 0 ? (
+              <div className="flex flex-col justify-center items-center h-40">
+                <h1 className="text-accent text-xl">No articles added yet</h1>
+              </div>
+            ) : (
+              <div className="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 lg:p-10 p-4 gap-4">
+                {state?.articles &&
+                  state?.articles
+                    ?.slice(0, 8)
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((article) => {
+                      return (
                         <div
-                          className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer"
-                          onClick={() => {
-                            if (!userLoggedIn) {
-                              setGoToPage(`/#articles`);
-                              handleOpenModal();
-                            } else {
-                              likeOrUnlikePost(article.id);
-                            }
-                          }}
+                          key={article.id}
+                          className="max-w-[300px] sm:pb-6 pb-2"
                         >
-                          {article.likes.find(
-                            (like) => like.liker.id === userId
-                          ) ? (
-                            <IoMdHeart className="text-primary text-2xl" />
-                          ) : (
-                            <CiHeart className="text-2xl" />
-                          )}
+                          <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
+                            <img
+                              src={article.coverImage}
+                              alt=""
+                              className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                              onClick={() => {
+                                router.push(`/articles/${article.id}`);
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
+                              <img
+                                src={article.author.profile.picture}
+                                alt="author image"
+                                className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                              />
+                              <h1>
+                                {article.author.firstName}{" "}
+                                {article.author.lastName}
+                              </h1>
+                            </div>
+                            <p className="my-2 text-xs font-semibold text-primary">
+                              {format(article.createdAt, "PP")}
+                            </p>
+                          </div>
+                          <h1 className="text-accent font-bold text-md line-clamp-2 min-h-12">
+                            {article.title}
+                          </h1>
+                          <p className="line-clamp-3 my-2 text-sm">
+                            {article.description}
+                          </p>
+                          <div className="flex items-center gap-3 justify-between">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer"
+                                onClick={() => {
+                                  if (!userLoggedIn) {
+                                    setGoToPage(`/#articles`);
+                                    handleOpenModal();
+                                  } else {
+                                    likeOrUnlikePost(article.id);
+                                  }
+                                }}
+                              >
+                                {article.likes.find(
+                                  (like) => like.liker.id === userId
+                                ) ? (
+                                  <IoMdHeart className="text-primary text-2xl" />
+                                ) : (
+                                  <CiHeart className="text-2xl" />
+                                )}
 
-                          <span className="text-sm font-semibold">
-                            {article?.likes?.length}{" "}
-                            {article?.likes?.length === 1 ? "like" : "likes"}
-                          </span>
-                        </div>
-                        <div
-                          className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer"
-                          onClick={() => {
-                            setArticleId(article.id);
-                            openDrawer();
-                          }}
-                        >
-                          <GoComment className="text-xl" />
-                          <span className="text-sm font-semibold">
-                            {" "}
-                            {article?.comments?.length}{" "}
-                            {article?.comments?.length === 1
-                              ? "comment"
-                              : "comments"}
-                          </span>
-                        </div>
-                      </div>
-                      {userLoggedIn && (
-                        <div className="text-black/75">
-                          <IconButton
-                            onClick={() => {
-                              saveArticle(article.id);
-                            }}
-                            className=""
-                          >
-                            {!savedArticlesIds.includes(article.id) ? (
-                              <MdOutlinePlaylistAdd className={`text-xl`} />
-                            ) : (
-                              <MdOutlinePlaylistRemove className="text-xl text-red-500" />
+                                <span className="text-sm font-semibold">
+                                  {article?.likes?.length}{" "}
+                                  {article?.likes?.length === 1
+                                    ? "like"
+                                    : "likes"}
+                                </span>
+                              </div>
+                              <div
+                                className="flex items-center gap-[4px] text-black/75 hover:bg-slate-100 p-1 rounded-md cursor-pointer"
+                                onClick={() => {
+                                  setArticleId(article.id);
+                                  openDrawer();
+                                }}
+                              >
+                                <GoComment className="text-xl" />
+                                <span className="text-sm font-semibold">
+                                  {" "}
+                                  {article?.comments?.length}{" "}
+                                  {article?.comments?.length === 1
+                                    ? "comment"
+                                    : "comments"}
+                                </span>
+                              </div>
+                            </div>
+                            {userLoggedIn && (
+                              <div className="text-black/75">
+                                <IconButton
+                                  onClick={() => {
+                                    saveArticle(article.id);
+                                  }}
+                                  className=""
+                                >
+                                  {!savedArticlesIds.includes(article.id) ? (
+                                    <MdOutlinePlaylistAdd
+                                      className={`text-xl`}
+                                    />
+                                  ) : (
+                                    <MdOutlinePlaylistRemove className="text-xl text-red-500" />
+                                  )}
+                                </IconButton>
+                              </div>
                             )}
-                          </IconButton>
+                          </div>
+                          <Divider className="sm:hidden block mt-4" />
                         </div>
-                      )}
-                    </div>
-                    <Divider className="sm:hidden block mt-4" />
-                  </div>
-                );
-              })}
-        </div>
+                      );
+                    })}
+              </div>
+            )}
+          </>
+        )}
       </div>
       {/* <Drawer open={open} onClose={closeDrawer} className="" anchor="right">
         <div className="max-w-[600px] w-[400px] relative">

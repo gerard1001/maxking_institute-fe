@@ -6,7 +6,7 @@ interface SectionTitleProps {
   title: string;
   icon?: IconType;
   image?: string;
-  rightSideActions?: JSX.Element;
+  rightSideActions?: JSX.Element | JSX.Element[] | string | null;
 }
 
 const SectionTitle = (props: SectionTitleProps) => {

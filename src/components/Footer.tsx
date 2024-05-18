@@ -24,7 +24,7 @@ const Footer = () => {
           <FaLinkedin className="text-white text-2xl" />
         </div>
       </div>
-      <div className="flex justify-evenly py-4">
+      <div className="flex flex-wrap justify-evenly py-4">
         <div className="flex flex-col">
           <img src="/logo.png" alt="LOGO" className="w-[120px] h-auto" />
           <div className="text-white">

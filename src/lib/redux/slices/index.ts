@@ -10,3 +10,4 @@ export * from "./moduleSlice";
 export * from "./chapterSlice";
 export * from "./questionSlice";
 export * from "./commentSlice";
+export * from "./testimonialSlice";

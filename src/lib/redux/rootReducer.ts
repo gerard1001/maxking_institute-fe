@@ -12,6 +12,7 @@ import {
   questionSlice,
   commentSlice,
 } from "./slices";
+import { testimonialSlice } from "./slices/testimonialSlice";
 
 export const reducer = {
   counter: counterSlice.reducer,
@@ -26,4 +27,5 @@ export const reducer = {
   chapter: chapterSlice.reducer,
   question: questionSlice.reducer,
   comment: commentSlice.reducer,
+  tesimonial: testimonialSlice.reducer,
 };

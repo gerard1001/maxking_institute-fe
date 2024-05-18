@@ -80,7 +80,6 @@ export const testimonialSlice = createSlice({
       })
       .addCase(togglePinTestimonial.fulfilled, (state, action) => {
         state.loading = false;
-        state.testimonial = action.payload.data;
       })
       .addCase(togglePinTestimonial.rejected, (state, action) => {
         state.loading = false;

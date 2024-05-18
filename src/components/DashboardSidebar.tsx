@@ -16,6 +16,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { GrUpdate } from "react-icons/gr";
 import { RxUpdate } from "react-icons/rx";
+import { BsChatSquareQuote } from "react-icons/bs";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -94,19 +95,19 @@ const sidebarItems = (activePage: string[]) => [
     to: "/dashboard",
   },
   {
+    listkey: "Testimonials",
+    icon: <BsChatSquareQuote className="text-xl" />,
+    text: "testimonials",
+    active: false,
+    to: "/dashboard/testimonials",
+  },
+  {
     listkey: "Profile",
     icon: <CgProfile className="text-xl" />,
     text: "Profile",
     active: false,
     to: "/dashboard/profile",
   },
-  // {
-  //   listkey: "Sign out",
-  //   icon: <AiOutlineLogout className="text-xl" />,
-  //   text: "Sign out",
-  //   active: false,
-  //   to: "/",
-  // },
 ];
 
 const DashboardSidebar: React.FC = ({}) => {
@@ -125,9 +126,6 @@ const DashboardSidebar: React.FC = ({}) => {
     setActiveIndex(index);
   };
 
-  console.log(activeIndex, "activeIndex");
-  console.log(activePage, "activeIndex");
-
   useEffect(() => {
     if (activePage[2] === "courses") {
       setActiveIndex(1);
@@ -139,8 +137,10 @@ const DashboardSidebar: React.FC = ({}) => {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
       setActiveIndex(2);
-    } else if (activePage[2] === "profile") {
+    } else if (activePage[2] === "testimonials") {
       setActiveIndex(6);
+    } else if (activePage[2] === "profile") {
+      setActiveIndex(7);
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }

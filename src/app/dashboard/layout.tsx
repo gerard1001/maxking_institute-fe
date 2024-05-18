@@ -47,7 +47,7 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {onLearning ? <DashboardLearningSidebar /> : <DashboardSidebar />}
           {/* <DashboardSidebar /> */}
         </div>
-        <div className="w-full h-full overflow-y-auto" onScroll={scrollDiv}>
+        <div className="w-full overflow-y-auto" onScroll={scrollDiv}>
           <DashboardTopbar navBar={navBar} />
           {loginUserFetchLoading ? (
             <SuspenseLoading />
