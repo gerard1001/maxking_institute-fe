@@ -72,59 +72,170 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="lg:p-10 p-2" id="testimonials">
-      <SectionTitle title="WHAT PEOPLE SAY" icon={GrBlockQuote} />
-      <div className="lg:pt-10 pt-4 flex items-center gap-5 w-full justify-center min-h-80">
-        <div className="w-full pb-8 wrapper1" id="slides">
-          <Slider
-            prevArrow={<PreviousBtn />}
-            nextArrow={<NextBtn />}
-            {...settings}
-          >
-            {testimonialState.allTestimonials
-              .filter((testimonial) => testimonial.isPinned)
-              .map((testimonial) => (
-                <div key={testimonial.id} className="wrapper relative">
-                  <div
-                    className={`rounded-md p-6 w-full mx-auto max-w-[640px] mb-4 bg-white
+    <>
+      {testimonialState.allTestimonials.length === 0 ? null : (
+        <>
+          <div className="lg:p-10 p-2" id="testimonials">
+            <SectionTitle title="WHAT PEOPLE SAY" icon={GrBlockQuote} />
+            {testimonialState.allTestimonials.length === 1 ? (
+              <div className="lg:pt-10 pt-4 flex items-center gap-5 w-full justify-center min-h-80">
+                <div className="w-full pb-8 ">
+                  {/* <Slider
+                    prevArrow={<PreviousBtn />}
+                    nextArrow={<NextBtn />}
+                    {...settings}
+                  > */}
+                  {testimonialState.allTestimonials
+                    .filter((testimonial) => testimonial.isPinned)
+                    .map((testimonial) => (
+                      <div key={testimonial.id} className="relative">
+                        <div
+                          className={`rounded-md p-6 w-full mx-auto max-w-[640px] mb-4 bg-white
             `}
-                  >
-                    <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
-                      <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
-                      <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
-                      <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
-                      <p
-                        className="lg:text-2xl text-base leading-tight"
-                        style={{
-                          fontFamily: "Amarante, serif",
-                        }}
-                      >
-                        {testimonial.text}
-                      </p>{" "}
-                    </div>
-                    <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
-                      <img
-                        src={testimonial.user.profile.picture}
-                        alt="author image"
-                        className="w-7 aspect-square rounded-full object-cover cursor-pointer"
-                      />
-                      <div className="ml-2">
-                        <h1 className="text-accent text-lg font-semibold">
-                          {testimonial.user.firstName}{" "}
-                          {testimonial.user.lastName}
-                        </h1>
-                        <p className="text-muted text-xs">
-                          {new Date(testimonial.createdAt).toDateString()}
-                        </p>
+                        >
+                          <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
+                            <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
+                            <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
+                            <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
+                            <p
+                              className="lg:text-2xl text-base leading-tight"
+                              style={{
+                                fontFamily: "Amarante, serif",
+                              }}
+                            >
+                              {testimonial.text}
+                            </p>{" "}
+                          </div>
+                          <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
+                            <img
+                              src={testimonial.user.profile.picture}
+                              alt="author image"
+                              className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                            />
+                            <div className="ml-2">
+                              <h1 className="text-accent text-lg font-semibold">
+                                {testimonial.user.firstName}{" "}
+                                {testimonial.user.lastName}
+                              </h1>
+                              <p className="text-muted text-xs">
+                                {new Date(testimonial.createdAt).toDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    ))}
+                  {/* </Slider> */}
                 </div>
-              ))}
-          </Slider>
-        </div>
-      </div>
-    </div>
+              </div>
+            ) : (
+              <div className="lg:pt-10 pt-4 flex items-center gap-5 w-full justify-center min-h-80">
+                <div className="w-full pb-8 wrapper1">
+                  <Slider
+                    prevArrow={<PreviousBtn />}
+                    nextArrow={<NextBtn />}
+                    {...settings}
+                  >
+                    {testimonialState.allTestimonials
+                      .filter((testimonial) => testimonial.isPinned)
+                      .map((testimonial) => (
+                        <div key={testimonial.id} className="wrapper relative">
+                          <div
+                            className={`rounded-md p-6 w-full mx-auto max-w-[640px] mb-4 bg-white
+            `}
+                          >
+                            <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
+                              <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
+                              <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
+                              <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
+                              <p
+                                className="lg:text-2xl text-base leading-tight"
+                                style={{
+                                  fontFamily: "Amarante, serif",
+                                }}
+                              >
+                                {testimonial.text}
+                              </p>{" "}
+                            </div>
+                            <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
+                              <img
+                                src={testimonial.user.profile.picture}
+                                alt="author image"
+                                className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                              />
+                              <div className="ml-2">
+                                <h1 className="text-accent text-lg font-semibold">
+                                  {testimonial.user.firstName}{" "}
+                                  {testimonial.user.lastName}
+                                </h1>
+                                <p className="text-muted text-xs">
+                                  {new Date(
+                                    testimonial.createdAt
+                                  ).toDateString()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </Slider>
+                </div>
+              </div>
+            )}
+            {/* <div className="lg:pt-10 pt-4 flex items-center gap-5 w-full justify-center min-h-80">
+              <div className="w-full pb-8 wrapper1" id="slides">
+                <Slider
+                  prevArrow={<PreviousBtn />}
+                  nextArrow={<NextBtn />}
+                  {...settings}
+                >
+                  {testimonialState.allTestimonials
+                    .filter((testimonial) => testimonial.isPinned)
+                    .map((testimonial) => (
+                      <div key={testimonial.id} className="wrapper relative">
+                        <div
+                          className={`rounded-md p-6 w-full mx-auto max-w-[640px] mb-4 bg-white
+            `}
+                        >
+                          <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
+                            <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
+                            <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
+                            <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
+                            <p
+                              className="lg:text-2xl text-base leading-tight"
+                              style={{
+                                fontFamily: "Amarante, serif",
+                              }}
+                            >
+                              {testimonial.text}
+                            </p>{" "}
+                          </div>
+                          <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
+                            <img
+                              src={testimonial.user.profile.picture}
+                              alt="author image"
+                              className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                            />
+                            <div className="ml-2">
+                              <h1 className="text-accent text-lg font-semibold">
+                                {testimonial.user.firstName}{" "}
+                                {testimonial.user.lastName}
+                              </h1>
+                              <p className="text-muted text-xs">
+                                {new Date(testimonial.createdAt).toDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </Slider>
+              </div>
+            </div> */}
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

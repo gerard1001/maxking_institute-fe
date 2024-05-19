@@ -39,7 +39,6 @@ import {
   MdOutlinePlaylistRemove,
 } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import Drawer from "@mui/material/Drawer";
 import { useSnackbar } from "notistack";
 import LoadinProgress from "@/components/LoadingProgess";
 import { Controller, useForm } from "react-hook-form";
@@ -47,7 +46,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { LoginContext } from "@/lib/context/LoginContext";
 import SignInModal from "@/components/SignInModal";
-import { HiDotsHorizontal } from "react-icons/hi";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IoMdHeart } from "react-icons/io";
 import ArticleDrawer from "@/components/ArticleDrawer";
@@ -644,11 +642,7 @@ const Articles = () => {
         userRole={userRole}
         key={articleId}
       />
-      <SignInModal
-        openModal={openModal}
-        handleCloseModal={handleCloseModal}
-        setOpenModal={setOpenModal}
-      />
+      <SignInModal openModal={openModal} handleCloseModal={handleCloseModal} />
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}

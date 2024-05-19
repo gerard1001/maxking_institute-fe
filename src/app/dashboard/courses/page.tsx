@@ -31,7 +31,7 @@ const Courses = () => {
     "all" | "completed" | "ongoing"
   >("all");
   const [typedCourses, setTypedCourses] = React.useState<ICourse[]>(
-    courseState?.allCourses
+    courseState?.allCourses?.filter((course) => course?.isPublished)
   );
 
   console.log(typedCourses, "typedCourses");
@@ -50,7 +50,9 @@ const Courses = () => {
 
   React.useEffect(() => {
     if (courseType === "all") {
-      setTypedCourses(courseState?.allCourses);
+      setTypedCourses(
+        courseState?.allCourses?.filter((course) => course?.isPublished)
+      );
     } else if (courseType === "completed") {
       // const completedCourses = courseState?.allCourses?.filter((course) =>
       //   course?.users?.filter((user) => user?.user_course?.completed)
@@ -59,7 +61,7 @@ const Courses = () => {
       const completedCourses = courseState?.allCourses?.filter(
         (course) =>
           course?.users?.find((user) => user.id === userId)?.user_course
-            ?.completed
+            ?.completed && course?.isPublished
       );
 
       setTypedCourses(completedCourses);
@@ -71,7 +73,7 @@ const Courses = () => {
       const ongoingCourses = courseState?.allCourses?.filter(
         (course) =>
           course?.users?.find((user) => user.id === userId)?.user_course
-            ?.completed === false
+            ?.completed === false && course?.isPublished
       );
       setTypedCourses(ongoingCourses);
     }
@@ -116,7 +118,7 @@ const Courses = () => {
           </Button>
         )}
       </Box>
-      {isClient && (
+      {isClient && courseState?.allCourses?.length > 0 && (
         <div className="mt-6">
           <Stack direction="row" spacing={1}>
             <Chip
@@ -191,6 +193,15 @@ const Courses = () => {
                         </p>
                       </div>
                       <p className="line-clamp-4">{course.description}</p>
+                      <div className={`w-fit bg-white px-1`}>
+                        {course.price === 0 || !course.price ? (
+                          <h1 className="text-secondary font-semibold">Free</h1>
+                        ) : (
+                          <h1 className="text-primary font-semibold">
+                            $ {course.price}
+                          </h1>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-1">

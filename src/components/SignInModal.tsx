@@ -8,14 +8,9 @@ import SignUpForm from "./SignUpForm";
 type ModalType = {
   handleCloseModal: () => void;
   openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SignInModal = ({
-  handleCloseModal,
-  openModal,
-  setOpenModal,
-}: ModalType) => {
+const SignInModal = ({ handleCloseModal, openModal }: ModalType) => {
   //   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
 

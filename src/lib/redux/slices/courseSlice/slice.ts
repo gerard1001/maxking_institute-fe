@@ -13,6 +13,8 @@ import {
   findByUserAndModuleId,
   findByUserAndCourseId,
   deleteByUserAndModuleId,
+  togglePublishCourse,
+  userPayCourse,
 } from "./thunks";
 import { ICourse, CourseSliceState } from "@/lib/interfaces/course.interface";
 
@@ -104,6 +106,18 @@ export const courseSlice = createSlice({
       });
 
     builder
+      .addCase(togglePublishCourse.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(togglePublishCourse.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(togglePublishCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
       .addCase(createUserCourse.pending, (state) => {
         state.loading = true;
       })
@@ -183,6 +197,18 @@ export const courseSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteByUserAndModuleId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(userPayCourse.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(userPayCourse.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(userPayCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

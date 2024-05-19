@@ -14,10 +14,12 @@ import {
   selectCourses,
   selectTags,
   selectUsers,
+  togglePublishCourse,
   updateCourse,
   updateModule,
   useDispatch,
   useSelector,
+  userPayCourse,
 } from "@/lib/redux";
 import {
   Accordion,
@@ -48,7 +50,12 @@ import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FaPlus, FaRegEye } from "react-icons/fa6";
-import { MdCloudUpload, MdEdit, MdOutlineClose } from "react-icons/md";
+import {
+  MdCloudUpload,
+  MdEdit,
+  MdOutlineClose,
+  MdPayment,
+} from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
 import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -121,8 +128,10 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [selectedTutor, setSelectedTutor] = React.useState<any>("");
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openPayDialog, setOpenPayDialog] = React.useState(false);
   const [openModuleDialog, setOpenModuleDialog] = React.useState(false);
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
+  const [payLoading, setPayLoading] = React.useState<boolean>(false);
   const [moduleId, setModuleId] = React.useState<string>("");
   const [chapterId, setChapterId] = React.useState<string>("");
   const [deletingWhat, setDeletingWhat] = React.useState<string>("course");
@@ -183,6 +192,13 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   };
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOpenPayDialog = () => {
+    setOpenPayDialog(true);
+  };
+  const handleClosePayDialog = () => {
+    setOpenPayDialog(false);
   };
 
   const handleOpenModuleDialog = () => {
@@ -320,6 +336,33 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         });
     }
   }, [moduleId]);
+
+  const handleTogglePublishCourse = () => {
+    dispatch(togglePublishCourse(course_id))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          dispatch(fetchOneCourse(course_id))
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+  };
 
   const handleSaveArticle = (data: CreateCourseInputs) => {
     if (!picture && !picUrl) {
@@ -600,6 +643,40 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     }
   };
 
+  const payCourse = () => {
+    setPayLoading(true);
+    dispatch(userPayCourse(course_id))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          dispatch(fetchUserById(res.data.userId))
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+
+          dispatch(fetchOneCourse(course_id));
+          handleClosePayDialog();
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
+      .finally(() => {
+        setPayLoading(false);
+      });
+  };
+
   return (
     <>
       <div className="pb-10">
@@ -688,28 +765,77 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                   )}
                 </>
               ) : (
-                <Button
-                  className="bg-secondary text-white"
-                  startIcon={!loading && <FaPlus />}
-                  disabled={loading || !userId}
-                  onClick={() => {
-                    enrollInCourse();
-                  }}
-                >
-                  {loading ? "Enrollment in progess..." : " Enroll in course"}
-                </Button>
+                <>
+                  {courseState?.course?.isPublished &&
+                  courseState?.course?.price === 0 ? (
+                    <Button
+                      className="bg-secondary text-white"
+                      startIcon={!loading && <FaPlus />}
+                      disabled={loading || !userId}
+                      onClick={() => {
+                        enrollInCourse();
+                      }}
+                    >
+                      {loading
+                        ? "Enrollment in progess..."
+                        : " Enroll in course"}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="bg-primary text-white"
+                      startIcon={!loading && <FaPlus />}
+                      disabled={loading || !userId}
+                      onClick={() => {
+                        handleOpenPayDialog();
+                      }}
+                    >
+                      {loading ? "Enrollment in progess..." : "Add To Cart"}
+                    </Button>
+                  )}
+                </>
               )}
             </>
           ) : (
-            <Button
-              className="bg-secondary text-white"
-              startIcon={<FaPlus />}
-              onClick={() => {
-                router.push(`/dashboard/courses/${course_id}/create-module`);
-              }}
-            >
-              Add module
-            </Button>
+            <>
+              {!courseState?.course?.isPublished &&
+              courseState?.course?.modules?.length > 0 ? (
+                <>
+                  <Button
+                    className="bg-secondary text-white"
+                    onClick={() => {
+                      handleTogglePublishCourse();
+                    }}
+                  >
+                    Publish course
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {courseState?.course?.modules?.length > 0 && (
+                    <Button
+                      className="bg-secondary text-white"
+                      onClick={() => {
+                        handleTogglePublishCourse();
+                      }}
+                    >
+                      Remove from public view
+                    </Button>
+                  )}
+                </>
+              )}
+              {/* {courseState?.course?.modules?.length > 0 && (
+                <Button
+                  className="bg-secondary text-white"
+                  onClick={() => {
+                    router.push(
+                      `/dashboard/courses/${course_id}/create-module`
+                    );
+                  }}
+                >
+                  Publish course
+                </Button>
+              )} */}
+            </>
           )}
           {!isClient && (
             <div className="flex gap-2">
@@ -1757,6 +1883,45 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           <Button
             fullWidth
             onClick={handleCloseModuleDialog}
+            autoFocus
+            variant="contained"
+            className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Dialog>
+      <Dialog
+        open={openPayDialog}
+        onClose={handleClosePayDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+          <div className="w-fit p-4 rounded-full bg-green-200">
+            <MdPayment className="text-green-500 text-3xl font-semibold" />
+          </div>
+          <h1 className="text-xl font-semibold">Confirm Your payment?</h1>
+          <p className="text-center">
+            <p className="text-center">
+              Please confirm your payment to unlock the course content.
+            </p>
+          </p>
+          <Button
+            fullWidth
+            onClick={payCourse}
+            className="bg-green-500 text-white hover:bg-green-400 !h-9"
+            disabled={payLoading}
+          >
+            {payLoading ? (
+              <LoadinProgress className="!h-8 !w-8" />
+            ) : (
+              "Pay course"
+            )}
+          </Button>
+          <Button
+            fullWidth
+            onClick={handleClosePayDialog}
             autoFocus
             variant="contained"
             className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"

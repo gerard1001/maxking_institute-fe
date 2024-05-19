@@ -149,8 +149,8 @@ const Testimonials = () => {
           Write something about us
         </Button>
       </div>
-      {/* <div className="flex flex-wrap gap-2 h-auto pt-6"> */}
-      <div className="columns-3xs gap-3 overflow-y-scroll">
+      <div className="flex flex-wrap gap-2 h-auto pt-6">
+        {/* <div className="columns-3 gap-3 overflow-y-scroll"> */}
         {testimonialState.allTestimonials.map((testimonial) => (
           <div
             key={testimonial.id}

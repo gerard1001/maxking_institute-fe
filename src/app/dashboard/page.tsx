@@ -184,25 +184,56 @@ const Dashboard = () => {
                 <h1 className="text-accent ml-10 mb-6">No added courses yet</h1>
               ) : (
                 <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
-                  {courseState?.allCourses?.map((course) => {
-                    return (
-                      <div className="bg-white w-[250px]">
-                        <img
-                          src={course?.coverImage}
-                          alt=""
-                          className="w-full aspect-video"
-                        />
-                        <div className="p-2">
-                          <h1 className="text-base font-semibold text-accent line-clamp-2">
-                            {course?.title}
-                          </h1>
-                          <p className="line-clamp-3 mt-2 text-[15px]">
-                            {course?.description}
-                          </p>
+                  {courseState?.allCourses
+                    ?.filter(
+                      (course) =>
+                        course.isPublished && course.modules.length > 0
+                    )
+                    ?.map((course) => {
+                      return (
+                        <div
+                          key={course.id}
+                          className="max-w-[250px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg"
+                        >
+                          <div className="overflow-hidden bg-cover bg-no-repeat rounded-t-md w-full cursor-pointer relative">
+                            <img
+                              src={course.coverImage}
+                              alt=""
+                              className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                              onClick={() => {
+                                router.push(`/dashboard/courses/${course.id}`);
+                              }}
+                            />
+                            <div
+                              className={`w-fit absolute top-0 left-0 bg-white px-1`}
+                            >
+                              {course.price === 0 || !course.price ? (
+                                <h1 className="text-secondary font-semibold">
+                                  Free
+                                </h1>
+                              ) : (
+                                <h1 className="text-primary font-semibold">
+                                  $ {course.price}
+                                </h1>
+                              )}
+                            </div>
+                          </div>
+                          {/* <img
+                            src={course?.coverImage}
+                            alt=""
+                            className="w-full aspect-video"
+                          /> */}
+                          <div className="p-2">
+                            <h1 className="text-base font-semibold text-accent line-clamp-2">
+                              {course?.title}
+                            </h1>
+                            <p className="line-clamp-3 mt-2 text-[15px]">
+                              {course?.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               )}
             </div>

@@ -95,73 +95,84 @@ const PopularCourses = () => {
             </div>
           ) : (
             <div className="lg:pt-10 pt-2 flex flex-wrap items-center gap-5 w-full justify-center min-h-80">
-              {popularCourses?.map((course) => (
-                <div
-                  key={course.id}
-                  className="max-w-[250px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg"
-                >
-                  <div className="overflow-hidden bg-cover bg-no-repeat rounded-t-md w-full cursor-pointer">
-                    <img
-                      src={course.coverImage}
-                      alt=""
-                      className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
-                      onClick={() => {
-                        if (!userLoggedIn) {
-                          setGoToPage(`/dashboard/courses/${course.id}`);
-                          handleOpenModal();
-                        } else {
-                          router.push(`/dashboard/courses/${course.id}`);
-                        }
-                      }}
-                    />
-                  </div>
-
-                  <div className="p-2 pt-0 pb-1">
-                    <h1 className="text-accent font-bold text-base line-clamp-3 min-h-[72px]">
-                      {course.title}
-                    </h1>
-                    {/* <p className="line-clamp-3 my-2 text-sm">{course.description}</p> */}
-                  </div>
-                  <div className="flex items-center justify-between px-2 pt-1 py-0">
-                    <div className="flex items-center gap-3 py-2 pt-0 text-accent text-sm font-semibold">
+              {popularCourses
+                ?.filter(
+                  (course) => course.isPublished && course.modules.length > 0
+                )
+                ?.map((course) => (
+                  <div
+                    key={course.id}
+                    className="max-w-[250px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg"
+                  >
+                    <div className="overflow-hidden bg-cover bg-no-repeat rounded-t-md w-full cursor-pointer relative">
                       <img
-                        src={
-                          course.users.find(
-                            (user) => user.user_course.userType === "TUTOR"
-                          )?.profile?.picture
-                        }
-                        alt="author image"
-                        className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                        src={course.coverImage}
+                        alt=""
+                        className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                        onClick={() => {
+                          if (!userLoggedIn) {
+                            setGoToPage(`/dashboard/courses/${course.id}`);
+                            handleOpenModal();
+                          } else {
+                            router.push(`/dashboard/courses/${course.id}`);
+                          }
+                        }}
                       />
-                      <h1>
-                        {
-                          course.users.find(
-                            (user) => user.user_course.userType === "TUTOR"
-                          )?.firstName
-                        }{" "}
-                        {
-                          course.users.find(
-                            (user) => user.user_course.userType === "TUTOR"
-                          )?.lastName
-                        }
+                      <div
+                        className={`w-fit absolute top-0 left-0 bg-white px-1`}
+                      >
+                        {course.price === 0 || !course.price ? (
+                          <h1 className="text-secondary font-semibold">Free</h1>
+                        ) : (
+                          <h1 className="text-primary font-semibold">
+                            $ {course.price}
+                          </h1>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="p-2 pt-0 pb-1">
+                      <h1 className="text-accent font-bold text-base line-clamp-3 min-h-[72px]">
+                        {course.title}
                       </h1>
-                      <p className="my-2 text-xs font-semibold text-black/75">
-                        {format(course.createdAt, "PP")}
-                      </p>
+                      {/* <p className="line-clamp-3 my-2 text-sm">{course.description}</p> */}
+                    </div>
+                    <div className="flex items-center justify-between px-2 pt-1 py-0">
+                      <div className="flex items-center gap-3 py-2 pt-0 text-accent text-sm font-semibold">
+                        <img
+                          src={
+                            course.users.find(
+                              (user) => user.user_course.userType === "TUTOR"
+                            )?.profile?.picture
+                          }
+                          alt="author image"
+                          className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                        />
+                        <h1>
+                          {
+                            course.users.find(
+                              (user) => user.user_course.userType === "TUTOR"
+                            )?.firstName
+                          }{" "}
+                          {
+                            course.users.find(
+                              (user) => user.user_course.userType === "TUTOR"
+                            )?.lastName
+                          }
+                        </h1>
+                        <p className="my-2 text-xs font-semibold text-black/75">
+                          {format(course.createdAt, "PP")}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </>
       )}
 
-      <SignInModal
-        openModal={openModal}
-        handleCloseModal={handleCloseModal}
-        setOpenModal={setOpenModal}
-      />
+      <SignInModal openModal={openModal} handleCloseModal={handleCloseModal} />
     </div>
   );
 };

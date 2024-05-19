@@ -42,12 +42,23 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import BackIconButton from "@/components/BackIconButton";
 
+const courseDurations = [
+  "< 30 minutes",
+  "30 - 60 minutes",
+  "1 - 2 hours",
+  "2 - 4 hours",
+  "4 - 8 hours",
+  "8 - 10 hours",
+  "10+ hours",
+];
+
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
   description: yup.string().required().min(5).max(500),
   previewVideo: yup.string().nullable().max(16),
   previewText: yup.string().nullable().max(500),
   estimatedDuration: yup.string().required(),
+  price: yup.number().required().min(0),
   tutor: yup.string().uuid().required(),
 });
 
@@ -63,6 +74,7 @@ export interface CreateCourseInputs {
   previewVideo?: string | null;
   previewText?: string | null;
   estimatedDuration: string;
+  price: number;
   tutor: string;
 }
 
@@ -108,6 +120,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
       previewVideo: "",
       previewText: "",
       estimatedDuration: "",
+      price: 0,
       tutor: "",
     },
   });
@@ -158,8 +171,9 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("estimatedDuration", data.estimatedDuration);
-      formData.append("previewText", data.previewText ?? "");
-      formData.append("previewVideo", data.previewVideo ?? "");
+      formData.append("previewText", data.previewText || "");
+      formData.append("previewVideo", data.previewVideo || "");
+      formData.append("price", String(data.price || 0));
       formData.append("coverImage", picture);
       formData.append("tutor", data.tutor);
       for (let i = 0; i < selectedTags.length; i++) {
@@ -415,6 +429,45 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
                 )}
               />
               <Controller
+                name="price"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    sx={{
+                      input: {
+                        color: "#021527",
+                      },
+                      mt: 2,
+                      color: "#242E8F",
+                      "& label.Mui-focused": {
+                        color: "#242E8F",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "1.5px solid #242E8F",
+                        },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        py: "14px",
+                      },
+                      "& .MuiFormLabel-root": {
+                        mt: "3px",
+                      },
+                    }}
+                    inputProps={{ style: { height: 18 } }}
+                    label="Price (eg: 1000) in $"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                    className="text-xs"
+                    type="number"
+                    error={!!errors.price}
+                    helperText={errors.price ? errors.price.message : ""}
+                  />
+                )}
+              />
+              {/* <Controller
                 name="estimatedDuration"
                 control={control}
                 render={({ field }) => (
@@ -450,6 +503,60 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
                     error={!!errors.title}
                     helperText={errors.title ? errors.title.message : ""}
                   />
+                )}
+              /> */}
+              <Controller
+                name="estimatedDuration"
+                control={control}
+                render={({ field }) => (
+                  <FormControl
+                    fullWidth
+                    sx={{
+                      "& .MuiInputLabel-root": {
+                        top: "12px",
+                      },
+                      color: "#242E8F",
+                      "& label.Mui-focused": {
+                        color: "#242E8F",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          border: "1.5px solid #242E8F",
+                        },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        py: "11.5px",
+                      },
+                    }}
+                  >
+                    <InputLabel id="demo-simple-select-label">
+                      Estimated Duration
+                    </InputLabel>
+                    <Select
+                      {...field}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Estimated Duration"
+                      sx={{
+                        input: {
+                          color: "#021527",
+                        },
+                        mt: 2,
+                      }}
+                      inputProps={{ style: { height: 16 } }}
+                      error={!!errors.estimatedDuration}
+                    >
+                      {courseDurations.map((duration, index) => (
+                        <MenuItem value={duration} key={index}>
+                          {duration}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText error>
+                      {errors.estimatedDuration &&
+                        errors.estimatedDuration?.message}
+                    </FormHelperText>
+                  </FormControl>
                 )}
               />
             </div>

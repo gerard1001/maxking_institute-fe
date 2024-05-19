@@ -40,20 +40,22 @@ const updateProfileSchema = yup.object().shape({
     .string()
     .required()
     .oneOf(["MALE", "FEMALE", "OTHER"], "Gender must be male or female"),
+  specialty: yup.string().required().max(20).label("Country"),
   country: yup.string().required().max(40).label("Country"),
   city: yup.string().required().label("City"),
-  address1: yup.string().required().label("Adddress 1"),
-  address2: yup.string().nullable().label("Adddress 2"),
+  addressLine: yup.string().required().label("Adddress 1"),
+  bio: yup.string().nullable().label("Adddress 2"),
   birthDate: dayjsDate.required().label("Birth date"),
 });
 
 interface UpdateProfileInputs {
   phoneNumber: string;
   gender: string;
+  specialty: string;
   country: string;
   city: string;
-  address1: string;
-  address2?: string | null;
+  addressLine: string;
+  bio?: string | null;
   birthDate: Dayjs | null | any;
 }
 
@@ -79,11 +81,12 @@ const UpdateUserProfile = ({
     resolver: yupResolver(updateProfileSchema),
     defaultValues: {
       gender: "",
+      specialty: "",
       phoneNumber: "",
       country: "",
       city: "",
-      address1: "",
-      address2: "",
+      addressLine: "",
+      bio: "",
       birthDate: null,
     },
   });
@@ -119,8 +122,8 @@ const UpdateUserProfile = ({
       watchProfileChange.gender !== userState.profile?.gender ||
       watchProfileChange.country !== userState.profile?.country ||
       watchProfileChange.city !== userState.profile?.city ||
-      watchProfileChange.address1 !== userState.profile?.address1 ||
-      watchProfileChange.address2 !== userState.profile?.address2 ||
+      watchProfileChange.addressLine !== userState.profile?.addressLine ||
+      watchProfileChange.bio !== userState.profile?.bio ||
       picUrl !== null
     ) {
       setCanEditProfile(true);
@@ -135,12 +138,14 @@ const UpdateUserProfile = ({
     profile?.birthDate &&
       setProfileValue("birthDate", dayjs(profile?.birthDate));
     profile?.gender && setProfileValue("gender", profile?.gender);
+    profile?.specialty && setProfileValue("specialty", profile?.specialty);
     profile?.phoneNumber &&
       setProfileValue("phoneNumber", profile?.phoneNumber);
     profile?.country && setProfileValue("country", profile?.country);
     profile?.city && setProfileValue("city", profile?.city);
-    profile?.address1 && setProfileValue("address1", profile?.address1);
-    profile?.address2 && setProfileValue("address2", profile?.address2);
+    profile?.addressLine &&
+      setProfileValue("addressLine", profile?.addressLine);
+    profile?.bio && setProfileValue("bio", profile?.bio);
   }, [userState]);
 
   useEffect(() => {
@@ -158,16 +163,17 @@ const UpdateUserProfile = ({
       setProfileValue("birthDate", dayjs(userState?.profile?.birthDate));
     userState?.profile?.gender &&
       setProfileValue("gender", userState?.profile?.gender);
+    userState?.profile?.specialty &&
+      setProfileValue("specialty", userState?.profile?.specialty);
     userState?.profile?.phoneNumber &&
       setProfileValue("phoneNumber", userState?.profile?.phoneNumber);
     userState?.profile?.country &&
       setProfileValue("country", userState?.profile?.country);
     userState?.profile?.city &&
       setProfileValue("city", userState?.profile?.city);
-    userState?.profile?.address1 &&
-      setProfileValue("address1", userState?.profile?.address1);
-    userState?.profile?.address2 &&
-      setProfileValue("address2", userState?.profile?.address2);
+    userState?.profile?.addressLine &&
+      setProfileValue("addressLine", userState?.profile?.addressLine);
+    userState?.profile?.bio && setProfileValue("bio", userState?.profile?.bio);
     picUrl && setPicUrl(userState?.profile?.picture);
   };
 
@@ -177,10 +183,11 @@ const UpdateUserProfile = ({
     formData.append("phoneNumber", data.phoneNumber);
     formData.append("birthDate", data.birthDate.format("YYYY-MM-DD"));
     formData.append("gender", data.gender);
+    formData.append("specialty", data.specialty);
     formData.append("country", data.country);
     formData.append("city", data.city);
-    formData.append("address1", data.address1);
-    formData.append("address2", data.address2);
+    formData.append("addressLine", data.addressLine);
+    formData.append("bio", data.bio);
     if (picUrl) {
       formData.append("picture", picture);
     }
@@ -470,7 +477,7 @@ const UpdateUserProfile = ({
           )}
         />
         <Controller
-          name="address1"
+          name="addressLine"
           control={profileControl}
           render={({ field }) => (
             <TextField
@@ -497,22 +504,24 @@ const UpdateUserProfile = ({
                 },
               }}
               inputProps={{ style: { height: 18 } }}
-              label="Address 1"
+              label="Address Line"
               variant="outlined"
               fullWidth
               size="small"
               className="text-xs"
-              error={!!profileErrors.address1}
+              error={!!profileErrors.addressLine}
               helperText={
-                profileErrors.address1 ? profileErrors.address1.message : ""
+                profileErrors.addressLine
+                  ? profileErrors.addressLine.message
+                  : ""
               }
             />
           )}
         />
       </Box>
-      <Box className="flex gap-4">
+      <Box className=" gap-4">
         <Controller
-          name="address2"
+          name="specialty"
           control={profileControl}
           render={({ field }) => (
             <TextField
@@ -539,15 +548,58 @@ const UpdateUserProfile = ({
                 },
               }}
               inputProps={{ style: { height: 18 } }}
-              label="Address 2 (Optional)"
+              label="Specialty"
+              placeholder="What is your profession?"
               variant="outlined"
               fullWidth
               size="small"
               className="text-xs"
-              error={!!profileErrors.address2}
+              error={!!profileErrors.specialty}
               helperText={
-                profileErrors.address2 ? profileErrors.address2.message : ""
+                profileErrors.specialty ? profileErrors.specialty.message : ""
               }
+            />
+          )}
+        />
+        <Controller
+          name="bio"
+          control={profileControl}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              sx={{
+                input: {
+                  color: "#021527",
+                },
+                mt: 2,
+                color: "#242E8F",
+                "& label.Mui-focused": {
+                  color: "#242E8F",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    border: "1.5px solid #242E8F",
+                  },
+                },
+                "& .MuiOutlinedInput-input": {
+                  py: "14px",
+                },
+                "& .MuiFormLabel-root": {
+                  mt: "3px",
+                },
+              }}
+              inputProps={{ style: { height: 18 } }}
+              label="Bio"
+              placeholder="Tell us about yourself"
+              variant="outlined"
+              fullWidth
+              multiline
+              maxRows={4}
+              minRows={4}
+              size="small"
+              className="text-xs"
+              error={!!profileErrors.bio}
+              helperText={profileErrors.bio ? profileErrors.bio.message : ""}
             />
           )}
         />

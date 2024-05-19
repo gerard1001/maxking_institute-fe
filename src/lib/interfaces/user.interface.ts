@@ -50,12 +50,13 @@ export interface Profile {
   userId: string;
   phoneNumber: string;
   gender: string;
+  specialty: string;
   birthDate: string;
   picture: string;
   country: string;
   city: string;
-  address1: string;
-  address2: string;
+  addressLine: string;
+  bio: string;
   createdAt: Date;
   updatedAt: Date;
 }

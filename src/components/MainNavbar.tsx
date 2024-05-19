@@ -26,12 +26,19 @@ import {
   Typography,
 } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
-import { fetchUserByToken, useDispatch } from "@/lib/redux";
+import {
+  fetchAllCourses,
+  fetchUserByToken,
+  selectCourses,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { LoginContext } from "@/lib/context/LoginContext";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import SignInModal from "./SignInModal";
+import SearchModal from "./SearchModal";
 
 const navBarLinks = [
   {
@@ -64,11 +71,13 @@ const MainNavbar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const courseState = useSelector(selectCourses);
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const [navBar, setNavBar] = useState<boolean>(false);
   const [open, setOpen] = React.useState<boolean>(false);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const [openSearchModal, setOpenSearchModal] = React.useState<boolean>(false);
   const [signStep, setSignStep] = React.useState<string>("in");
   const {
     loginData,
@@ -87,6 +96,9 @@ const MainNavbar = () => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
+  const handleOpenSearchModal = () => setOpenSearchModal(true);
+  const handleCloseSearchModal = () => setOpenSearchModal(false);
+
   useEffect(() => {
     const scrollAction = () => {
       if (window.scrollY >= 80) {
@@ -96,6 +108,7 @@ const MainNavbar = () => {
       }
     };
     window.addEventListener("scroll", scrollAction);
+    dispatch(fetchAllCourses());
   }, []);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -156,7 +169,7 @@ const MainNavbar = () => {
             );
             setLoginData(res.data);
             setTimeout(() => {
-              router.push("/dashboard");
+              router.push(goToPage);
             }, 500);
           } else {
             enqueueSnackbar(res.message, { variant: "error" });
@@ -266,15 +279,19 @@ const MainNavbar = () => {
           ))}
         </ul>
         <div className="flex items-center gap-5">
-          <IconButton
-            size="small"
-            sx={{
-              backgroundColor: "transparent",
-              border: "1px solid #D9D9D9",
-            }}
-          >
-            <IoSearch className="text-white" />
-          </IconButton>
+          {courseState?.allCourses?.length > 0 && (
+            <IconButton
+              size="small"
+              sx={{
+                backgroundColor: "transparent",
+                border: "1px solid #D9D9D9",
+              }}
+              onClick={handleOpenSearchModal}
+            >
+              <IoSearch className="text-white" />
+            </IconButton>
+          )}
+
           <ul className="flex items-center gap-5">
             {secondaryNavLinks.map((link: string, index: number) => (
               <li
@@ -301,15 +318,18 @@ const MainNavbar = () => {
           <Image src="/pagelogo.png" alt="logo" width={40} height={40} />
         </div>
         <div className="flex items-center gap-2">
-          {" "}
-          <IconButton
-            size="small"
-            sx={{
-              backgroundColor: "transparent",
-            }}
-          >
-            <IoSearch className="text-white text-xl" />
-          </IconButton>
+          {courseState?.allCourses?.length > 0 && (
+            <IconButton
+              size="small"
+              sx={{
+                backgroundColor: "transparent",
+              }}
+              onClick={handleOpenSearchModal}
+            >
+              <IoSearch className="text-white text-xl" />
+            </IconButton>
+          )}
+
           <IconButton
             size="small"
             sx={{
@@ -401,11 +421,13 @@ const MainNavbar = () => {
           </List>
         </nav>
       </Drawer>
-      <SignInModal
-        openModal={openModal}
-        handleCloseModal={handleCloseModal}
-        setOpenModal={setOpenModal}
+      <SignInModal openModal={openModal} handleCloseModal={handleCloseModal} />
+
+      <SearchModal
+        openModal={openSearchModal}
+        handleCloseModal={handleCloseSearchModal}
       />
+
       {/* <Modal
         open={openModal}
         onClose={handleCloseModal}

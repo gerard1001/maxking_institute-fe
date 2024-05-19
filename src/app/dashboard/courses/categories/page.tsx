@@ -423,6 +423,10 @@ const Categories = () => {
               variant: "error",
               preventDuplicate: true,
             });
+          })
+          .finally(() => {
+            setLoading(false);
+            setOnEdit(false);
           });
       }
     } else {
@@ -631,7 +635,7 @@ const Categories = () => {
                                 ({subject?.courses?.length} Courses)
                               </p>
                             </div>
-                            {!isClient ?? (
+                            {!isClient && (
                               <IconButton
                                 onClick={(
                                   event: React.MouseEvent<HTMLButtonElement>

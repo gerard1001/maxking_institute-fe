@@ -109,6 +109,18 @@ export const findByUserAndCourseId = createAppAsyncThunk(
   }
 );
 
+export const userPayCourse = createAppAsyncThunk(
+  "userCourse/userPayCourse",
+  async (id: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user-course/pay-course/${id}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const createUserModule = createAppAsyncThunk(
   "userModule/createUserModule",
   async (data: any, { rejectWithValue }): Promise<any> => {
@@ -146,6 +158,18 @@ export const updateUserCourse = createAppAsyncThunk(
   ): Promise<any> => {
     try {
       const res = await axios.patch(`/user-course/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const togglePublishCourse = createAppAsyncThunk(
+  "course/togglePublishCourse",
+  async (id: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/course/toggle-publish/${id}`);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
