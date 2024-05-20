@@ -34,22 +34,13 @@ import { useSnackbar } from "notistack";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { ICourse } from "@/lib/interfaces/course.interface";
 import { CgClose } from "react-icons/cg";
+import courseDurations from "@/lib/data/courseDurations.json";
 
 interface SubjectProps {
   params: {
     subject_id: string;
   };
 }
-
-const courseDurations = [
-  "< 30 minutes",
-  "30 - 60 minutes",
-  "1 - 2 hours",
-  "2 - 4 hours",
-  "4 - 8 hours",
-  "8 - 10 hours",
-  "10+ hours",
-];
 
 const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
   const dispatch = useDispatch();
@@ -137,16 +128,14 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
               onClick={() => {
                 setIsFreeCoursesSet((state) => !state);
               }}
-              // onDelete={}
             />
-            <Chip
+            {/* <Chip
               label="Certified courses"
               variant={`${isCertifiedCoursesSet ? "filled" : "outlined"}`}
               onClick={() => {
                 setIsCertifiedCoursesSet((state) => !state);
               }}
-              // onDelete={}
-            />
+            /> */}
           </div>
           <div className="">
             <FormControl component="fieldset">

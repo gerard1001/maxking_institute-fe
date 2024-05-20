@@ -589,7 +589,7 @@ const Categories = () => {
                 <h1 className="text-xl font-semibold text-accent text-center">
                   {state?.category?.name}
                 </h1>
-                {/* {subjectState?.allCSubjects?.length > 0 && (
+                {/* {subjectState?.allSubjects?.length > 0 && (
                   <IconButton
                     onClick={handleOpenSubjectModal}
                     className="bg-slate-100 hover:bg-slate-200"
@@ -598,7 +598,7 @@ const Categories = () => {
                   </IconButton>
                 )} */}
               </div>
-              {subjectState?.allCSubjects?.length === 0 ? (
+              {subjectState?.allSubjects?.length === 0 ? (
                 <div className="p-4">
                   <h1 className="text-center text-xl text-accent font-bold">
                     No subjects here yet
@@ -612,7 +612,7 @@ const Categories = () => {
                 </div>
               ) : (
                 <div className="grid lg:grid-cols-2 xs:grid-cols-2 grid-cols-1 gap-2 pt-4 cursor-pointer">
-                  {subjectState?.allCSubjects?.map((subject, index) => {
+                  {subjectState?.allSubjects?.map((subject, index) => {
                     return (
                       <div
                         key={subject.id}
@@ -654,7 +654,7 @@ const Categories = () => {
                   })}
                   {!isClient && (
                     <div className="flex flex-col justify-center w-fit h-full pl-4 py-1">
-                      {subjectState?.allCSubjects?.length > 0 && (
+                      {subjectState?.allSubjects?.length > 0 && (
                         <IconButton
                           onClick={handleOpenSubjectModal}
                           className="bg-slate-100 hover:bg-slate-200"

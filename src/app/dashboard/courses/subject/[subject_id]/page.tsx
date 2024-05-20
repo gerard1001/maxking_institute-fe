@@ -2,6 +2,7 @@
 
 import BackIconButton from "@/components/BackIconButton";
 import { LoginContext } from "@/lib/context/LoginContext";
+import { ICourse } from "@/lib/interfaces/course.interface";
 import {
   fetchCoursesBySubjectId,
   fetchOneSubject,
@@ -10,11 +11,24 @@ import {
   useDispatch,
   useSelector,
 } from "@/lib/redux";
-import { Box, Button, Chip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React from "react";
+import { CgClose } from "react-icons/cg";
 import { FaPlus } from "react-icons/fa6";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import courseDurations from "@/lib/data/courseDurations.json";
 
 interface SubjectProps {
   params: {
@@ -28,7 +42,14 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const state = useSelector(selectSubjects);
   const courseState = useSelector(selectCourses);
-  const { isClient, userId } = React.useContext(LoginContext);
+  const [isFreeCoursesSet, setIsFreeCoursesSet] =
+    React.useState<boolean>(false);
+  const [isCertifiedCoursesSet, setIsCertifiedCoursesSet] =
+    React.useState<boolean>(false);
+  const [selectedDuration, setSelectedDuration] = React.useState<string>("");
+  const { userId, userLoggedIn, setGoToPage, isClient } =
+    React.useContext(LoginContext);
+  const [filteredData, setFilteredData] = React.useState<ICourse[]>([]);
 
   React.useEffect(() => {
     dispatch(fetchOneSubject(subject_id))
@@ -47,6 +68,38 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
         // enqueueSnackbar(err.message, { variant: "error" });
       });
   }, [state.subject, courseState.course]);
+
+  React.useEffect(() => {
+    if (selectedDuration === "") {
+      setFilteredData(courseState?.allCourses);
+    } else {
+      const results = courseState?.allCourses.filter(
+        (item) => item.estimatedDuration === selectedDuration
+      );
+      setFilteredData(results);
+    }
+    if (isFreeCoursesSet && selectedDuration !== "") {
+      const results = courseState?.allCourses.filter(
+        (item) =>
+          item.price === 0 && item.estimatedDuration === selectedDuration
+      );
+      setFilteredData(results);
+    } else if (isFreeCoursesSet) {
+      const results = courseState?.allCourses.filter(
+        (item) => item.price === 0
+      );
+      setFilteredData(results);
+    }
+  }, [
+    selectedDuration,
+    courseState?.allCourses,
+    isFreeCoursesSet,
+    isCertifiedCoursesSet,
+  ]);
+
+  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDuration(event.target.value);
+  };
 
   return (
     <div>
@@ -88,36 +141,62 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
         )}
       </div>
       <div className="w-full flex gap-4 mb-8">
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px]"></div>
+        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] p-8">
+          <div className="flex items-center gap-2 border-b">
+            <h1 className="text-accent text-xl font-semibold">Filters</h1>
+            <HiOutlineAdjustmentsHorizontal className="text-xl" />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <Chip
+              label="Free courses"
+              variant={`${isFreeCoursesSet ? "filled" : "outlined"}`}
+              color="warning"
+              onClick={() => {
+                setIsFreeCoursesSet((state) => !state);
+              }}
+            />
+            {/* <Chip
+              label="Certified courses"
+              variant={`${isCertifiedCoursesSet ? "filled" : "outlined"}`}
+              onClick={() => {
+                setIsCertifiedCoursesSet((state) => !state);
+              }}
+              // onDelete={}
+            /> */}
+          </div>
+          <div className="">
+            <FormControl component="fieldset">
+              <FormLabel
+                component="legend"
+                className="text-accent text-base font-semibold flex items-center gap-2 justify-between"
+              >
+                Filter by Duration{" "}
+                <IconButton
+                  onClick={() => {
+                    setSelectedDuration("");
+                  }}
+                >
+                  <CgClose />
+                </IconButton>
+              </FormLabel>
+              <RadioGroup
+                value={selectedDuration}
+                onChange={handleDurationChange}
+              >
+                {courseDurations.map((duration) => (
+                  <FormControlLabel
+                    key={duration}
+                    value={duration}
+                    control={<Radio />}
+                    label={duration}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </div>
+        </div>
         <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
-          {/* {courseState.allCourses.map((course) => (
-            <div
-              key={course.id}
-              className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-4 rounded-lg mt-4"
-            >
-              <div className="w-full flex gap-2 border-b pb-2">
-                <img
-                  src={course.coverImage}
-                  alt=""
-                  className="w-[320px] aspect-video rounded-lg object-cover"
-                />
-                <div className="w-full">
-                  <h1 className="text-2xl font-bold">{course.title}</h1>
-                  <p className="text-base line-clamp-3">{course.description}</p>
-                  <Button
-                    className="bg-secondary text-white"
-                    onClick={() => {
-                      router.push(`/dashboard/courses/${course.id}`);
-                    }}
-                  >
-                    View Course
-                  </Button>
-                </div>
-              </div>
-              <div className="w-full min-h-8"></div>
-            </div>
-          ))} */}
-          {courseState?.allCourses?.length === 0 ? (
+          {filteredData?.length === 0 ? (
             <div>
               <h1 className="text-center text-xl text-accent font-bold">
                 No courses here yet
@@ -133,7 +212,7 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
             </div>
           ) : (
             <div>
-              {courseState?.allCourses?.map((course) => (
+              {filteredData?.map((course) => (
                 <div
                   key={course.id}
                   className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-4"

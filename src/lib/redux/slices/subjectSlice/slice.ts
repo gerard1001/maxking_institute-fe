@@ -13,7 +13,7 @@ import {
 } from "@/lib/interfaces/subject.interface";
 
 const initialState: SubjectSliceState = {
-  allCSubjects: [],
+  allSubjects: [],
   subject: {} as ISubject,
   loading: false,
   error: {},
@@ -42,7 +42,7 @@ export const subjectSlice = createSlice({
       })
       .addCase(fetchAllSubjects.fulfilled, (state, action) => {
         state.loading = false;
-        state.allCSubjects = action.payload.data;
+        state.allSubjects = action.payload.data;
       })
       .addCase(fetchAllSubjects.rejected, (state, action) => {
         state.loading = false;
@@ -68,7 +68,7 @@ export const subjectSlice = createSlice({
       })
       .addCase(fetchSubjectsByCategoryId.fulfilled, (state, action) => {
         state.loading = false;
-        state.allCSubjects = action.payload.data;
+        state.allSubjects = action.payload.data;
       })
       .addCase(fetchSubjectsByCategoryId.rejected, (state, action) => {
         state.loading = false;

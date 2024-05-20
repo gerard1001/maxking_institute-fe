@@ -1,8 +1,11 @@
 "use client";
 
+import AdminAnalyticsGraphs from "@/components/AdminAnaltyicsPage";
+import { LoginContext } from "@/lib/context/LoginContext";
 import { IModule } from "@/lib/interfaces/module.interface";
 import {
   fetchAllCourses,
+  fetchAllUsers,
   fetchUserById,
   fetchUserByToken,
   selectCourses,
@@ -35,6 +38,7 @@ const Dashboard = () => {
       }
     | undefined
   >({});
+  const { isClient } = React.useContext(LoginContext);
 
   const calculateValues = (
     moduleObject: any,
@@ -119,6 +123,15 @@ const Dashboard = () => {
           preventDuplicate: true,
         });
       });
+
+    dispatch(fetchAllUsers())
+      .unwrap()
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
   }, []);
 
   React.useEffect(() => {
@@ -169,136 +182,157 @@ const Dashboard = () => {
   }, [userActualModule, userActualChapter, userState]);
   return (
     <div className="">
-      <h1 className="text-2xl text-accent font-semibold ml-10">Your Courses</h1>
-      {userState?.user && (
+      {!isClient ? (
         <>
-          {userState?.user?.courses?.length === 0 ? (
-            <div className="">
-              <h1 className="text-accent ml-10 mb-6">
-                You haven't started learning any courses yet
-              </h1>
-              <h1 className="text-2xl text-accent font-semibold ml-10">
-                Take a look at some courses here
-              </h1>
-              {courseState?.allCourses?.length === 0 ? (
-                <h1 className="text-accent ml-10 mb-6">No added courses yet</h1>
-              ) : (
-                <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
-                  {courseState?.allCourses
-                    ?.filter(
-                      (course) =>
-                        course.isPublished && course.modules.length > 0
-                    )
-                    ?.map((course) => {
-                      return (
-                        <div
-                          key={course.id}
-                          className="max-w-[250px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg"
-                        >
-                          <div className="overflow-hidden bg-cover bg-no-repeat rounded-t-md w-full cursor-pointer relative">
-                            <img
-                              src={course.coverImage}
-                              alt=""
-                              className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
-                              onClick={() => {
-                                router.push(`/dashboard/courses/${course.id}`);
-                              }}
-                            />
+          <AdminAnalyticsGraphs
+            users={userState?.allUsers}
+            courses={courseState?.allCourses}
+          />
+        </>
+      ) : (
+        <>
+          <h1 className="text-2xl text-accent font-semibold ml-10">
+            Your Courses
+          </h1>
+          {userState?.user && (
+            <>
+              {userState?.user?.courses?.length === 0 ? (
+                <div className="">
+                  <h1 className="text-accent ml-10 mb-6">
+                    You haven't started learning any courses yet
+                  </h1>
+                  <h1 className="text-2xl text-accent font-semibold ml-10">
+                    Take a look at some courses here
+                  </h1>
+                  {courseState?.allCourses?.length === 0 ? (
+                    <h1 className="text-accent ml-10 mb-6">
+                      No added courses yet
+                    </h1>
+                  ) : (
+                    <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
+                      {courseState?.allCourses
+                        ?.filter(
+                          (course) =>
+                            course.isPublished && course.modules.length > 0
+                        )
+                        ?.map((course) => {
+                          return (
                             <div
-                              className={`w-fit absolute top-0 left-0 bg-white px-1`}
+                              key={course.id}
+                              className="max-w-[250px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg"
                             >
-                              {course.price === 0 || !course.price ? (
-                                <h1 className="text-secondary font-semibold">
-                                  Free
-                                </h1>
-                              ) : (
-                                <h1 className="text-primary font-semibold">
-                                  $ {course.price}
-                                </h1>
-                              )}
-                            </div>
-                          </div>
-                          {/* <img
+                              <div className="overflow-hidden bg-cover bg-no-repeat rounded-t-md w-full cursor-pointer relative">
+                                <img
+                                  src={course.coverImage}
+                                  alt=""
+                                  className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                                  onClick={() => {
+                                    router.push(
+                                      `/dashboard/courses/${course.id}`
+                                    );
+                                  }}
+                                />
+                                <div
+                                  className={`w-fit absolute top-0 left-0 bg-white px-1`}
+                                >
+                                  {course.price === 0 || !course.price ? (
+                                    <h1 className="text-secondary font-semibold">
+                                      Free
+                                    </h1>
+                                  ) : (
+                                    <h1 className="text-primary font-semibold">
+                                      $ {course.price}
+                                    </h1>
+                                  )}
+                                </div>
+                              </div>
+                              {/* <img
                             src={course?.coverImage}
                             alt=""
                             className="w-full aspect-video"
                           /> */}
-                          <div className="p-2">
-                            <h1 className="text-base font-semibold text-accent line-clamp-2">
-                              {course?.title}
-                            </h1>
-                            <p className="line-clamp-3 mt-2 text-[15px]">
-                              {course?.description}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                              <div className="p-2">
+                                <h1 className="text-base font-semibold text-accent line-clamp-2">
+                                  {course?.title}
+                                </h1>
+                                <p className="line-clamp-3 mt-2 text-[15px]">
+                                  {course?.description}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="flex flex-wrap lg:p-10 p-4 gap-4">
-              {userState?.user?.courses?.map((course) => {
-                return (
-                  <div className="bg-white w-[250px]">
-                    <img
-                      src={course?.coverImage}
-                      alt=""
-                      className="w-full aspect-video"
-                    />
-                    {course?.user_course?.completed ? (
-                      <Chip
-                        label={
-                          <h1 className="flex">
-                            <p className="mr-1 font-semibold">100%</p> Complete
-                          </h1>
-                        }
-                        className="mt-2 ml-2 bg-green-300"
-                      />
-                    ) : (
-                      <>
-                        {" "}
-                        {result && (
+              ) : (
+                <div className="flex flex-wrap lg:p-10 p-4 gap-4">
+                  {userState?.user?.courses?.map((course) => {
+                    return (
+                      <div className="bg-white w-[250px]">
+                        <img
+                          src={course?.coverImage}
+                          alt=""
+                          className="w-full aspect-video"
+                        />
+                        {course?.user_course?.completed ? (
+                          <Chip
+                            label={
+                              <h1 className="flex">
+                                <p className="mr-1 font-semibold">100%</p>{" "}
+                                Complete
+                              </h1>
+                            }
+                            className="mt-2 ml-2 bg-green-300"
+                          />
+                        ) : (
                           <>
-                            {Object.keys(result).includes(course.id) && (
-                              <Chip
-                                label={
-                                  <h1 className="flex">
-                                    <p className="mr-1 font-semibold">
-                                      {Number.isNaN(
-                                        Math.round(result[course.id] * 100)
-                                      ) ? (
-                                        "0 %"
-                                      ) : (
-                                        <>
-                                          {Math.round(result[course.id] * 100)}%
-                                        </>
-                                      )}
-                                    </p>{" "}
-                                    Complete
-                                  </h1>
-                                }
-                                className="mt-2 ml-2"
-                              />
+                            {" "}
+                            {result && (
+                              <>
+                                {Object.keys(result).includes(course.id) && (
+                                  <Chip
+                                    label={
+                                      <h1 className="flex">
+                                        <p className="mr-1 font-semibold">
+                                          {Number.isNaN(
+                                            Math.round(result[course.id] * 100)
+                                          ) ? (
+                                            "0 %"
+                                          ) : (
+                                            <>
+                                              {Math.round(
+                                                result[course.id] * 100
+                                              )}
+                                              %
+                                            </>
+                                          )}
+                                        </p>{" "}
+                                        Complete
+                                      </h1>
+                                    }
+                                    className="mt-2 ml-2"
+                                  />
+                                )}
+                              </>
                             )}
                           </>
                         )}
-                      </>
-                    )}
 
-                    <div className="p-2">
-                      <h1 className="text-base font-semibold text-accent line-clamp-2">
-                        {course?.title}
-                      </h1>
-                      <p className="line-clamp-3 mt-2 text-[15px]">
-                        {course?.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                        <div className="p-2">
+                          <h1 className="text-base font-semibold text-accent line-clamp-2">
+                            {course?.title}
+                          </h1>
+                          <p className="line-clamp-3 mt-2 text-[15px]">
+                            {course?.description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
         </>
       )}

@@ -12,11 +12,24 @@ import {
   useSelector,
 } from "@/lib/redux";
 import { useSnackbar } from "notistack";
-import { Button, Chip, IconButton, Stack } from "@mui/material";
+import {
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Stack,
+} from "@mui/material";
 import { FaPlus } from "react-icons/fa6";
 import { BsBookmarkPlus } from "react-icons/bs";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { ICourse } from "@/lib/interfaces/course.interface";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import { CgClose } from "react-icons/cg";
+import courseDurations from "@/lib/data/courseDurations.json";
 
 const Courses = () => {
   const dispatch = useDispatch();
@@ -33,11 +46,13 @@ const Courses = () => {
   const [typedCourses, setTypedCourses] = React.useState<ICourse[]>(
     courseState?.allCourses?.filter((course) => course?.isPublished)
   );
-
-  console.log(typedCourses, "typedCourses");
-  console.log(courseType, "typedCourses");
-
-  const { isClient, userId } = React.useContext(LoginContext);
+  const [isFreeCoursesSet, setIsFreeCoursesSet] =
+    React.useState<boolean>(false);
+  const [isCertifiedCoursesSet, setIsCertifiedCoursesSet] =
+    React.useState<boolean>(false);
+  const [selectedDuration, setSelectedDuration] = React.useState<string>("");
+  const { userId, setGoToPage, isClient } = React.useContext(LoginContext);
+  const [filteredData, setFilteredData] = React.useState<ICourse[]>([]);
 
   React.useEffect(() => {
     dispatch(fetchAllCourses())
@@ -78,6 +93,31 @@ const Courses = () => {
       setTypedCourses(ongoingCourses);
     }
   }, [courseType, courseState?.allCourses]);
+
+  React.useEffect(() => {
+    if (selectedDuration === "") {
+      setFilteredData(typedCourses);
+    } else {
+      const results = typedCourses.filter(
+        (item) => item.estimatedDuration === selectedDuration
+      );
+      setFilteredData(results);
+    }
+    if (isFreeCoursesSet && selectedDuration !== "") {
+      const results = typedCourses.filter(
+        (item) =>
+          item.price === 0 && item.estimatedDuration === selectedDuration
+      );
+      setFilteredData(results);
+    } else if (isFreeCoursesSet) {
+      const results = typedCourses.filter((item) => item.price === 0);
+      setFilteredData(results);
+    }
+  }, [selectedDuration, typedCourses, isFreeCoursesSet, isCertifiedCoursesSet]);
+
+  const handleDurationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDuration(event.target.value);
+  };
 
   return (
     <div className="">
@@ -168,82 +208,151 @@ const Courses = () => {
               </p>
             </div>
           ) : (
-            <div>
-              {typedCourses?.map((course) => (
-                <div
-                  key={course.id}
-                  className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-4"
-                >
-                  <div className="flex gap-2 border-b border-muted-foreground pb-4">
-                    <img
-                      src={course.coverImage}
-                      alt=""
-                      className="w-[320px] aspect-video rounded-lg object-cover"
-                    />
-                    <div className="w-full">
-                      <h1 className="text-xl text-secondary font-bold">
-                        {course.title}
-                      </h1>
-                      <div className="flex items-center gap-2 py-1">
-                        <p className="border-r border-muted-foreground leading-4 text-muted pr-2">
-                          {course?.modules?.length} modules
-                        </p>
-                        <p className="leading-4 text-muted pr-2">
-                          {course?.estimatedDuration}
-                        </p>
-                      </div>
-                      <p className="line-clamp-4">{course.description}</p>
-                      <div className={`w-fit bg-white px-1`}>
-                        {course.price === 0 || !course.price ? (
-                          <h1 className="text-secondary font-semibold">Free</h1>
-                        ) : (
-                          <h1 className="text-primary font-semibold">
-                            $ {course.price}
-                          </h1>
-                        )}
-                      </div>
-                    </div>
+            <>
+              <div className="w-full flex gap-4 mb-8">
+                <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] p-8">
+                  <div className="flex items-center gap-2 border-b">
+                    <h1 className="text-accent text-xl font-semibold">
+                      Filters
+                    </h1>
+                    <HiOutlineAdjustmentsHorizontal className="text-xl" />
                   </div>
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="">
-                      {/* <IconButton>
-                        <BsBookmarkPlus className="text-muted" />
-                      </IconButton> */}
-                      {course?.users?.find((user) => user.id === userId)
-                        ?.user_course ? (
-                        <>
-                          {course?.users?.find((user) => user.id === userId)
-                            ?.user_course?.completed ? (
-                            <Chip
-                              label={<h1 className="flex">Completed course</h1>}
-                              className="mt-2 ml-2 bg-green-300"
-                            />
-                          ) : (
-                            <Chip
-                              label={<h1 className="flex">Ongoing course</h1>}
-                              className="mt-2 ml-2 bg-zinc-300"
-                            />
-                          )}
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                    <div className="">
-                      {" "}
-                      <Button
-                        className="bg-secondary text-white"
-                        onClick={() => {
-                          router.push(`/dashboard/courses/${course.id}`);
-                        }}
+                  <div className="flex gap-2 pt-2">
+                    <Chip
+                      label="Free courses"
+                      variant={`${isFreeCoursesSet ? "filled" : "outlined"}`}
+                      color="warning"
+                      onClick={() => {
+                        setIsFreeCoursesSet((state) => !state);
+                      }}
+                    />
+                    {/* <Chip
+              label="Certified courses"
+              variant={`${isCertifiedCoursesSet ? "filled" : "outlined"}`}
+              onClick={() => {
+                setIsCertifiedCoursesSet((state) => !state);
+              }}
+              // onDelete={}
+            /> */}
+                  </div>
+                  <div className="">
+                    <FormControl component="fieldset">
+                      <FormLabel
+                        component="legend"
+                        className="text-accent text-base font-semibold flex items-center gap-2 justify-between"
                       >
-                        Go to Course
-                      </Button>
-                    </div>
+                        Filter by Duration{" "}
+                        <IconButton
+                          onClick={() => {
+                            setSelectedDuration("");
+                          }}
+                        >
+                          <CgClose />
+                        </IconButton>
+                      </FormLabel>
+                      <RadioGroup
+                        value={selectedDuration}
+                        onChange={handleDurationChange}
+                      >
+                        {courseDurations.map((duration) => (
+                          <FormControlLabel
+                            key={duration}
+                            value={duration}
+                            control={<Radio />}
+                            label={duration}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
+                  <div>
+                    {filteredData?.map((course) => (
+                      <div
+                        key={course.id}
+                        className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-4"
+                      >
+                        <div className="flex gap-2 border-b border-muted-foreground pb-4">
+                          <img
+                            src={course.coverImage}
+                            alt=""
+                            className="w-[320px] aspect-video rounded-lg object-cover"
+                          />
+                          <div className="w-full">
+                            <h1 className="text-xl text-secondary font-bold">
+                              {course.title}
+                            </h1>
+                            <div className="flex items-center gap-2 py-1">
+                              <p className="border-r border-muted-foreground leading-4 text-muted pr-2">
+                                {course?.modules?.length} modules
+                              </p>
+                              <p className="leading-4 text-muted pr-2">
+                                {course?.estimatedDuration}
+                              </p>
+                            </div>
+                            <p className="line-clamp-4">{course.description}</p>
+                            <div className={`w-fit bg-white px-1`}>
+                              {course.price === 0 || !course.price ? (
+                                <h1 className="text-secondary font-semibold">
+                                  Free
+                                </h1>
+                              ) : (
+                                <h1 className="text-primary font-semibold">
+                                  $ {course.price}
+                                </h1>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="">
+                            {/* <IconButton>
+                        <BsBookmarkPlus className="text-muted" />
+                      </IconButton> */}
+                            {course?.users?.find((user) => user.id === userId)
+                              ?.user_course ? (
+                              <>
+                                {course?.users?.find(
+                                  (user) => user.id === userId
+                                )?.user_course?.completed ? (
+                                  <Chip
+                                    label={
+                                      <h1 className="flex">Completed course</h1>
+                                    }
+                                    className="mt-2 ml-2 bg-green-300"
+                                  />
+                                ) : (
+                                  <Chip
+                                    label={
+                                      <h1 className="flex">Ongoing course</h1>
+                                    }
+                                    className="mt-2 ml-2 bg-zinc-300"
+                                  />
+                                )}
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                          <div className="">
+                            {" "}
+                            <Button
+                              className="bg-secondary text-white"
+                              onClick={() => {
+                                router.push(`/dashboard/courses/${course.id}`);
+                              }}
+                            >
+                              Go to Course
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>

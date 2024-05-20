@@ -44,16 +44,7 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoChevronBackOutline, IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
-
-const courseDurations = [
-  "< 30 minutes",
-  "30 - 60 minutes",
-  "1 - 2 hours",
-  "2 - 4 hours",
-  "4 - 8 hours",
-  "8 - 10 hours",
-  "10+ hours",
-];
+import courseDurations from "@/lib/data/courseDurations.json";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -700,7 +691,7 @@ const CreateCourse = () => {
                       inputProps={{ style: { height: 16 } }}
                       error={!!errors.tutor}
                     >
-                      {subjectState?.allCSubjects?.map((subject, index) => (
+                      {subjectState?.allSubjects?.map((subject, index) => (
                         <MenuItem value={subject?.id} key={index}>
                           {subject?.name}
                         </MenuItem>

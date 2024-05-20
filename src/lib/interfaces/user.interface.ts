@@ -63,7 +63,7 @@ export interface Profile {
 
 export interface Role {
   id: string;
-  type: string;
+  type: ENUM_ROLE_TYPE;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -81,4 +81,12 @@ export interface RoleSliceState {
   role: Role;
   loading: boolean;
   error: any;
+}
+
+export enum ENUM_ROLE_TYPE {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+  MENTOR = "MENTOR",
+  CLIENT = "CLIENT",
 }

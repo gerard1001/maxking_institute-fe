@@ -17,7 +17,7 @@ export interface ICreateSubject {
 }
 
 export interface SubjectSliceState {
-  allCSubjects: ISubject[];
+  allSubjects: ISubject[];
   subject: ISubject;
   loading: boolean;
   error: any;
