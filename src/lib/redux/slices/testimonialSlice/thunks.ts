@@ -15,24 +15,24 @@ export const createTestimonial = createAppAsyncThunk(
 
 export const fetchTestimonials = createAppAsyncThunk(
   "testimonial/fetchTestimonials",
-  async (): Promise<any> => {
+  async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get("/testimonial");
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchSingleTestimonial = createAppAsyncThunk(
   "testimonial/fetchSingleTestimonial",
-  async (testimonialId: string): Promise<any> => {
+  async (testimonialId: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/testimonial/${testimonialId}`);
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );

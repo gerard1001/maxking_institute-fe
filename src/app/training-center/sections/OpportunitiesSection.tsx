@@ -7,7 +7,7 @@ const OpportunitiesSection = () => {
       <h1 className="text-primary-foreground text-xl font-bold uppercase mx-auto">
         Opportunities
       </h1>
-      <div className="flex items-center flex-wrap gap-8 lg:justify-start justify-center w-full pt-6">
+      <div className="flex items-center flex-wrap gap-8 justify-center w-full pt-6">
         {opportunities?.map((opportunity, index: number) => {
           return (
             <div

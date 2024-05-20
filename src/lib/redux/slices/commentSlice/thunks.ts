@@ -57,36 +57,36 @@ export const editComment = createAppAsyncThunk(
 
 export const fetchComments = createAppAsyncThunk(
   "comment/fetchComments",
-  async (): Promise<any> => {
+  async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get("/comment");
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchCommentsByArticleId = createAppAsyncThunk(
   "comment/fetchCommentsByArticleId",
-  async (articleId: string): Promise<any> => {
+  async (articleId: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/comment/article/${articleId}`);
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchSingleComment = createAppAsyncThunk(
   "comment/fetchSingleComment",
-  async (commentId: string): Promise<any> => {
+  async (commentId: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/comment/${commentId}`);
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );

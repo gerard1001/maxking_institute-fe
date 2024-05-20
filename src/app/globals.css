@@ -91,7 +91,10 @@ body {
     --primary: 28 90% 34%;
     --primary-foreground: 37 94% 54%;
 
-    --secondary: 234 60% 35%;
+    /* --secondary: 234 60% 35%; */
+    /* --secondary: 145 63% 43%; */
+    /* --secondary: 204 70% 53%; */
+    --secondary: 204 64% 34%;
     --secondary-foreground: ;
 
     --accent: 209 90% 8%;

@@ -69,48 +69,48 @@ export const fetchUserSavedArticles = createAppAsyncThunk(
 
 export const fetchArticles = createAppAsyncThunk(
   "article/fetchArticles",
-  async (): Promise<any> => {
+  async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get("/article");
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchFeaturedArticles = createAppAsyncThunk(
   "article/fetchFeaturedArticles",
-  async (): Promise<any> => {
+  async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get("/article/featured");
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchSingleArticle = createAppAsyncThunk(
   "article/fetchSingleArticle",
-  async (articleId: string): Promise<any> => {
+  async (articleId: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/article/${articleId}`);
       return res.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
 export const fetchRelatedArticles = createAppAsyncThunk(
   "article/fetchRelatedArticles",
-  async (articleId: string): Promise<any> => {
+  async (articleId: string, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/article/${articleId}/related`);
       return res.data.data;
     } catch (error: any) {
-      throw new Error(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );

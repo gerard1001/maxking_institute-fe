@@ -58,6 +58,10 @@ const navBarLinks = [
     path: "/programs",
   },
   {
+    name: "SERVICES",
+    path: "/services",
+  },
+  {
     name: "MKI COMMUNITY",
     path: "/community",
   },

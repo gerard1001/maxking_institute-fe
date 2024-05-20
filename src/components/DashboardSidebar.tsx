@@ -92,7 +92,7 @@ const sidebarItems = (activePage: string[]) => [
     icon: <RxUpdate className="text-xl" />,
     text: "Updates",
     active: false,
-    to: "/dashboard",
+    to: "/dashboard/updates",
   },
   {
     listkey: "Testimonials",
@@ -133,6 +133,8 @@ const DashboardSidebar: React.FC = ({}) => {
     } else if (activePage[2] === "articles") {
       setActiveIndex(4);
       setShowDropdown({ 4: true });
+    } else if (activePage[2] === "updates") {
+      setActiveIndex(5);
     } else if (activePage[2] === "users") {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
@@ -161,10 +163,11 @@ const DashboardSidebar: React.FC = ({}) => {
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src="/logo.png"
-              className={`overflow-hidden transition-all ${
+              className={`overflow-hidden transition-all cursor-pointer ${
                 expanded ? "w-12" : "w-0"
               }`}
               alt=""
+              onClick={() => router.push("/")}
             />
             <button
               onClick={() => setExpanded((curr) => !curr)}

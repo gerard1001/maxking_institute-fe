@@ -17,9 +17,9 @@ const schema = yup.object().shape({
     .matches(/^[a-zA-Z0-9\s]+$/, "Symbols are not allowed"),
 });
 
-interface SignInInputs {
+type InputTypes = {
   name: string;
-}
+};
 
 interface CreateTagProps {
   closeModal: () => void;
@@ -34,7 +34,7 @@ const CreateTagForm = ({ closeModal }: CreateTagProps) => {
     control,
     reset,
     formState: { errors },
-  } = useForm<SignInInputs>({
+  } = useForm<InputTypes>({
     resolver: yupResolver(schema),
     defaultValues: {
       name: "",
