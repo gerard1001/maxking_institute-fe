@@ -119,6 +119,18 @@ export const fetchAllUsers = createAppAsyncThunk(
   }
 );
 
+export const fetchPublicUsers = createAppAsyncThunk(
+  "user/fetchPublicUsers",
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user/public/all`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteUser = createAppAsyncThunk(
   "user/deletUser",
   async (id: string, { rejectWithValue }): Promise<any> => {

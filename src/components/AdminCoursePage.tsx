@@ -53,7 +53,7 @@ import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
 import { BsChevronDown } from "react-icons/bs";
 import Link from "next/link";
-import { CreateCourseInputs } from "@/app/dashboard/courses/subject/[subject_id]/create-course/page";
+// import { CreateCourseInputs } from "@/app/dashboard/courses/subject/[subject_id]/create-course/page";
 
 const createModuleSchema = yup.object().shape({
   title: yup.string().required(),
@@ -65,12 +65,23 @@ type CreateModuleInputs = {
   description: string;
 };
 
+interface CreateCourseInputs {
+  title: string;
+  description: string;
+  previewVideo?: string | null;
+  previewText?: string | null;
+  estimatedDuration: string;
+  price?: number | null;
+  tutor: string;
+}
+
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
   description: yup.string().required().min(5).max(500),
   previewVideo: yup.string().nullable().max(16),
   previewText: yup.string().nullable().max(500),
   estimatedDuration: yup.string().required(),
+  price: yup.number().optional().nullable(),
   tutor: yup.string().required(),
 });
 
@@ -111,6 +122,7 @@ const AdminCoursePage = ({ course_id }: any) => {
       previewVideo: "",
       previewText: "",
       estimatedDuration: "",
+      price: 0,
       tutor: "",
     },
   });

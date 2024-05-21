@@ -3,10 +3,19 @@
 import React, { useState } from "react";
 import { GoDash } from "react-icons/go";
 import { BsDot } from "react-icons/bs";
-import { IconButton, Menu } from "@mui/material";
+import { IconButton, Menu, Tooltip } from "@mui/material";
 import { Tweet } from "react-tweet";
 import { MdOutlineClose } from "react-icons/md";
 import Footer from "@/components/Footer";
+import {
+  fetchPublicUsers,
+  findPinnedTweet,
+  selectTweets,
+  selectUsers,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
+import { useSnackbar } from "notistack";
 
 const members = [
   {
@@ -61,9 +70,14 @@ const members = [
 ];
 
 const AboutUs = () => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const tweetState = useSelector(selectTweets);
+  const userState = useSelector(selectUsers);
   const [structure, setStructure] = useState<number>(0);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [clickedPerson, setClickedPerson] = useState<number>(0);
+  const [clickedPersonId, setClickedPersonId] = useState<string>("");
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -71,6 +85,22 @@ const AboutUs = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  console.log(userState?.publicUsers);
+
+  React.useEffect(() => {
+    dispatch(findPinnedTweet())
+      .unwrap()
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
+      });
+
+    dispatch(fetchPublicUsers())
+      .unwrap()
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
+      });
+  }, []);
 
   return (
     <div className="lg:pt-10 pt-14">
@@ -414,12 +444,12 @@ const AboutUs = () => {
             )}
           </div>
           <div className="w-full mx-auto mb-12" id="about-section-3">
-            <h1 className="text-xl text-accent font-bold py-2 capitalize">
+            <h1 className="text-4xl text-accent font-bold py-2 capitalize text-slate-500 text-center mb-8">
               meet Our team
             </h1>
             <div className="min-h-[80px] w-full">
               <div className="flex items-start gap-5 justify-center flex-wrap">
-                {members.map((member, index) => (
+                {userState?.publicUsers?.map((member, index) => (
                   <div
                     key={index}
                     className="flex flex-col items-center justify-center  relative max-w-[200px] w-full"
@@ -432,17 +462,22 @@ const AboutUs = () => {
                         }
                         aria-haspopup="true"
                         aria-expanded={open ? "true" : undefined}
-                        src={member.image}
+                        src={member?.profile?.picture}
                         onClick={(event) => {
                           handleClick(event);
                           setClickedPerson(index);
+                          setClickedPersonId(member.id);
                         }}
                         className="w-[250px] aspect-square object-cover rounded-full max-w-[140px] bg-black/20 cursor-pointer transition duration-300 ease-in-out hover:scale-110"
                       />
                     </div>
-                    <h1 className="text-accent font-bold">{member.name}</h1>
+                    <Tooltip title={`${member.firstName} ${member.lastName}`}>
+                      <h1 className="text-accent font-bold text-center line-clamp-1">
+                        {member.firstName} {member.lastName}
+                      </h1>
+                    </Tooltip>
                     <p className="text-accent-foreground text-sm">
-                      {member.role}
+                      {member.profile?.specialty}
                     </p>
                     <Menu
                       id="demo-positioned-menu"
@@ -474,24 +509,52 @@ const AboutUs = () => {
                         </IconButton>
                         <div className="flex flex-col items-center">
                           <img
-                            src={members[clickedPerson].image}
+                            // src={members[clickedPerson].image}
+                            src={
+                              userState?.publicUsers?.find(
+                                (user) => user.id === clickedPersonId
+                              )?.profile?.picture
+                            }
                             className="w-[250px] aspect-square object-cover rounded-full max-w-[140px] bg-black/20"
                           />
                           <h1 className="text-accent font-bold">
-                            {members[clickedPerson].name}
+                            {
+                              userState?.publicUsers?.find(
+                                (user) => user.id === clickedPersonId
+                              )?.firstName
+                            }{" "}
+                            {
+                              userState?.publicUsers?.find(
+                                (user) => user.id === clickedPersonId
+                              )?.lastName
+                            }
                           </h1>
                           <p className="text-accent-foreground text-sm">
-                            {members[clickedPerson].role}
+                            {
+                              userState?.publicUsers?.find(
+                                (user) => user.id === clickedPersonId
+                              )?.profile?.specialty
+                            }
                           </p>
                         </div>
+                        {userState?.publicUsers?.find(
+                          (user) => user.id === clickedPersonId
+                        )?.profile?.bio && (
+                          <div className="mt-2">
+                            <h1 className="text-lg font-bold text-accent">
+                              Bio
+                            </h1>
+                            <p className="text-accent-foreground ">
+                              {
+                                userState?.publicUsers?.find(
+                                  (user) => user.id === clickedPersonId
+                                )?.profile?.bio
+                              }
+                            </p>
+                          </div>
+                        )}
 
-                        <div className="mt-2">
-                          <h1 className="text-lg font-bold text-accent">Bio</h1>
-                          <p className="text-accent-foreground ">
-                            {members[clickedPerson].bio}
-                          </p>
-                        </div>
-                        <div className="mt-2">
+                        {/* <div className="mt-2">
                           <h1 className="text-lg font-bold text-accent">
                             Hobbies
                           </h1>
@@ -508,7 +571,7 @@ const AboutUs = () => {
                               )
                             )}
                           </ul>
-                        </div>
+                        </div> */}
                       </div>
                     </Menu>
                   </div>
@@ -517,11 +580,13 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-        <div className="w-[22%] 2xl:block hidden max-h-[100px] light text-xs pt-12">
-          <div className="tweet-class">
-            <Tweet id="1672031185634033665" />
+        {tweetState?.tweet && (
+          <div className="w-[22%] 2xl:block hidden max-h-[100px] light text-xs pt-12">
+            <div className="tweet-class">
+              <Tweet id={tweetState?.tweet?.tweetId} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <Footer />
     </div>

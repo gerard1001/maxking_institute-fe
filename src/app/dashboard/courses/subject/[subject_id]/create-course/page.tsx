@@ -68,7 +68,7 @@ interface SubjectProps {
   };
 }
 
-export interface CreateCourseInputs {
+interface CreateCourseInputs {
   title: string;
   description: string;
   previewVideo?: string | null;

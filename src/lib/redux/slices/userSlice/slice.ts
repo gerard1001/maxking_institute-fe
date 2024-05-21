@@ -3,6 +3,7 @@ import {
   createUser,
   deleteUser,
   fetchAllUsers,
+  fetchPublicUsers,
   fetchUserById,
   fetchUserByToken,
   googleLogin,
@@ -17,6 +18,7 @@ import { User, UserSliceState } from "@/lib/interfaces/user.interface";
 
 const initialState: UserSliceState = {
   allUsers: [],
+  publicUsers: [],
   user: {} as User,
   loggedInUser: {} as User,
   loading: false,
@@ -125,6 +127,19 @@ export const userSlice = createSlice({
         state.allUsers = action.payload.data;
       })
       .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchPublicUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchPublicUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.publicUsers = action.payload.data;
+      })
+      .addCase(fetchPublicUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

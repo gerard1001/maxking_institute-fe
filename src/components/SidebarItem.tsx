@@ -22,9 +22,9 @@ const SidebarItem = ({
 
   return (
     <Tooltip
-      title="Add"
+      title={`${text}`}
       placement="right-start"
-      arrow
+      // arrow
       TransitionComponent={Fade}
       aria-disabled
     >

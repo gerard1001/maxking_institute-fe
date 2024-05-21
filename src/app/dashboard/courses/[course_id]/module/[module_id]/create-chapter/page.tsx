@@ -10,36 +10,24 @@ import {
 } from "@/lib/redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Drawer,
-  FormControl,
-  IconButton,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  Modal,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { MdCloudUpload, MdOutlineClose } from "react-icons/md";
+// import { MdCloudUpload, MdOutlineClose } from "react-icons/md";
 import "react-quill/dist/quill.snow.css";
-import ReactQuill from "@/components/ReactQuill";
+// import ReactQuill from "@/components/ReactQuill";
 import LoadinProgress from "@/components/LoadingProgess";
-import { ITag } from "@/lib/interfaces/tag.interface";
-import { LuPlus } from "react-icons/lu";
-import CreateTagForm from "@/components/CreateTagForm";
-import { IoOptionsOutline } from "react-icons/io5";
+// import { ITag } from "@/lib/interfaces/tag.interface";
+// import { LuPlus } from "react-icons/lu";
+// import CreateTagForm from "@/components/CreateTagForm";
+// import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("@/components/ReactQuill"), {
+  ssr: false,
+});
 
 const schema = yup.object().shape({
   title: yup.string().required(),

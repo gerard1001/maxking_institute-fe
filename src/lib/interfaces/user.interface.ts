@@ -70,6 +70,7 @@ export interface Role {
 
 export interface UserSliceState {
   allUsers: User[];
+  publicUsers: User[];
   user: User;
   loggedInUser: User;
   loading: boolean;

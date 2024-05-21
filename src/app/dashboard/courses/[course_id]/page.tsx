@@ -57,7 +57,6 @@ import {
   MdPayment,
 } from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
-import { CreateCourseInputs } from "../subject/[subject_id]/create-course/page";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ITag } from "@/lib/interfaces/tag.interface";
@@ -79,12 +78,23 @@ type CreateModuleInputs = {
   description: string;
 };
 
+interface CreateCourseInputs {
+  title: string;
+  description: string;
+  previewVideo?: string | null;
+  previewText?: string | null;
+  estimatedDuration: string;
+  price?: number | null;
+  tutor: string;
+}
+
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
   description: yup.string().required().min(5).max(500),
   previewVideo: yup.string().nullable().max(16),
   previewText: yup.string().nullable().max(500),
   estimatedDuration: yup.string().required(),
+  price: yup.number().optional().nullable(),
   tutor: yup.string().required(),
 });
 
@@ -161,6 +171,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       previewVideo: "",
       previewText: "",
       estimatedDuration: "",
+      price: 0,
       tutor: "",
     },
   });

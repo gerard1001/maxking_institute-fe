@@ -34,10 +34,10 @@ import { MdCloudUpload, MdOutlineClose } from "react-icons/md";
 import "react-quill/dist/quill.snow.css";
 // import ReactQuill from "@/components/ReactQuill";
 import LoadinProgress from "@/components/LoadingProgess";
-import { ITag } from "@/lib/interfaces/tag.interface";
-import { LuPlus } from "react-icons/lu";
-import CreateTagForm from "@/components/CreateTagForm";
-import { IoOptionsOutline } from "react-icons/io5";
+// import { ITag } from "@/lib/interfaces/tag.interface";
+// import { LuPlus } from "react-icons/lu";
+// import CreateTagForm from "@/components/CreateTagForm";
+// import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
 

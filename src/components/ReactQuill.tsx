@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import { useDispatch } from "react-redux";
-
 import { checkImage, imageUpload } from "@/lib/utils/ImageUpload";
 import { ALERT } from "@/lib/interfaces/alert.interface";
 

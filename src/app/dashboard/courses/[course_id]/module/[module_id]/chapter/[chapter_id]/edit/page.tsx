@@ -34,7 +34,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { MdCloudUpload, MdOutlineClose } from "react-icons/md";
 import "react-quill/dist/quill.snow.css";
-import ReactQuill from "@/components/ReactQuill";
+// import ReactQuill from "@/components/ReactQuill";
 import LoadinProgress from "@/components/LoadingProgess";
 import { ITag } from "@/lib/interfaces/tag.interface";
 import { LuPlus } from "react-icons/lu";
@@ -42,6 +42,10 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("@/components/ReactQuill"), {
+  ssr: false,
+});
 
 const schema = yup.object().shape({
   title: yup.string().required(),

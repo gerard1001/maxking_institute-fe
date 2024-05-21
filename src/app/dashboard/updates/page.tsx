@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { MdOutlineClose } from "react-icons/md";
+import { MdOutlineClose, MdPushPin } from "react-icons/md";
 import { Tweet } from "react-tweet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,13 +18,17 @@ import LoadinProgress from "@/components/LoadingProgess";
 import { useSnackbar } from "notistack";
 import {
   createTweet,
+  deleteTweet,
   fetchTweets,
   selectTweets,
+  togglePinTweet,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
 import { useRouter } from "next/navigation";
 import { fetchTweet } from "react-tweet/api";
+import { BsFillTrashFill, BsPin } from "react-icons/bs";
+import { RiPushpin2Fill, RiPushpin2Line } from "react-icons/ri";
 
 const schema = yup.object().shape({
   tweetId: yup
@@ -44,7 +48,6 @@ const UpdatesPage = () => {
   const tweetState = useSelector(selectTweets);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [tweetValue, setTweetValue] = React.useState<string>("");
   const {
     handleSubmit,
     control,
@@ -59,17 +62,14 @@ const UpdatesPage = () => {
   });
   const fieldValue = watch("tweetId");
 
+  console.log(tweetState?.allTweets, "*******");
+
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   React.useEffect(() => {
     dispatch(fetchTweets())
       .unwrap()
-      .then((res) => {
-        if (res.statusCode === 200) {
-          setTweetValue(res.data[0].id);
-        }
-      })
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -85,7 +85,13 @@ const UpdatesPage = () => {
           enqueueSnackbar(res.message, { variant: "success" });
           setTimeout(() => {
             reset();
+            handleCloseModal();
           }, 500);
+          dispatch(fetchTweets())
+            .unwrap()
+            .catch((err) => {
+              enqueueSnackbar(err.message, { variant: "error" });
+            });
         }
       })
       .catch((err) => {
@@ -93,6 +99,40 @@ const UpdatesPage = () => {
       })
       .finally(() => {
         setLoading(false);
+      });
+  };
+
+  const handleTogglePinTweet = (id: string) => {
+    dispatch(togglePinTweet(id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          dispatch(fetchTweets())
+            .unwrap()
+            .catch((err) => {
+              enqueueSnackbar(err.message, { variant: "error" });
+            });
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  };
+
+  const handleDeleteTweet = (id: string) => {
+    dispatch(deleteTweet(id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          dispatch(fetchTweets())
+            .unwrap()
+            .catch((err) => {
+              enqueueSnackbar(err.message, { variant: "error" });
+            });
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
       });
   };
   return (
@@ -105,14 +145,43 @@ const UpdatesPage = () => {
       >
         Add New Tweet
       </Button>
-      <div className="flex items-start justify-center">
-        {tweetState?.allTweets?.map((tweet) => (
-          <div className="w-fit 2xl:block hidden h-fulllight text-xs p-12">
-            <div className="tweet-class">
-              <Tweet id={tweet.tweetId} />
+      <div className="flex items-start justify-center gap-2 flex-wrap pt-4">
+        {tweetState?.allTweets
+          ?.slice()
+          ?.sort((a: any, b: any) => b.isPinned - a.isPinned)
+          ?.map((tweet) => (
+            <div
+              className={`w-1/3 h-full text-xs p-4 pt-2 rounded-md ${
+                tweet.isPinned ? "bg-secondary/30" : "bg-white"
+              }`}
+            >
+              <div className="tweet-class">
+                <div className="w-full flex items-center gap-2 p-2">
+                  <IconButton
+                    onClick={() => {
+                      handleTogglePinTweet(tweet.id);
+                    }}
+                    className="bg-slate-200"
+                  >
+                    {tweet?.isPinned ? (
+                      <RiPushpin2Fill className="text-accent" />
+                    ) : (
+                      <RiPushpin2Line className="text-accent" />
+                    )}
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      handleDeleteTweet(tweet.id);
+                    }}
+                    className="bg-slate-200"
+                  >
+                    <BsFillTrashFill className="text-accent max-w-md" />
+                  </IconButton>
+                </div>
+                <Tweet id={tweet.tweetId} />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       <Modal
         open={openModal}

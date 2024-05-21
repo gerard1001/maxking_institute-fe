@@ -51,23 +51,18 @@ import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FaPlus, FaRegEye } from "react-icons/fa6";
-import { MdCloudUpload, MdEdit, MdOutlineClose } from "react-icons/md";
 import { TbTrash } from "react-icons/tb";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { ITag } from "@/lib/interfaces/tag.interface";
-import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
+import { IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
 import { BsChevronDown } from "react-icons/bs";
-import Link from "next/link";
-import { LoginContext } from "@/lib/context/LoginContext";
-import { RiFilePaper2Line } from "react-icons/ri";
-import { objectIsEmpty } from "@/lib/functions/object_check.function";
-import { IModule } from "@/lib/interfaces/module.interface";
-import ReactQuill from "@/components/ReactQuill";
+// import ReactQuill from "@/components/ReactQuill";
 import { set } from "date-fns";
 import { Choice } from "@/lib/interfaces/question.interface";
 import BackIconButton from "@/components/BackIconButton";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("@/components/ReactQuill"), {
+  ssr: false,
+});
 
 interface PageProps {
   params: {
