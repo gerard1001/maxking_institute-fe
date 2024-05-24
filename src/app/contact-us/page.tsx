@@ -53,7 +53,7 @@ const ContactUs = () => {
           <h1 className="text-accent text-2xl font-semibold mt-8">
             Our Social Media
           </h1>
-          <div className="w-full bg-secondary-foreground/50 h-fit flex items-center gap-4 py-2 pt-4">
+          <div className="w-full h-fit flex items-center gap-4 py-2 pt-4">
             <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#316FF6]">
               <FaFacebookSquare className="text-white text-2xl" />
             </div>

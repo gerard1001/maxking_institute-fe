@@ -44,7 +44,7 @@ const updateProfileSchema = yup.object().shape({
   country: yup.string().required().max(40).label("Country"),
   city: yup.string().required().label("City"),
   addressLine: yup.string().required().label("Adddress 1"),
-  bio: yup.string().nullable().label("Adddress 2"),
+  bio: yup.string().nullable().label("Bio"),
   birthDate: dayjsDate.required().label("Birth date"),
 });
 
@@ -422,7 +422,7 @@ const UpdateUserProfile = ({
                   mt: 2,
                 }}
                 inputProps={{ style: { height: 16 } }}
-                error={!!profileErrors.gender}
+                error={!!profileErrors.country}
               >
                 {countries?.map((country, index) => (
                   <MenuItem value={country.name} key={index}>
@@ -431,7 +431,7 @@ const UpdateUserProfile = ({
                 ))}
               </Select>
               <FormHelperText error>
-                {profileErrors.gender && profileErrors.gender?.message}
+                {profileErrors.country && profileErrors.country?.message}
               </FormHelperText>
             </FormControl>
           )}

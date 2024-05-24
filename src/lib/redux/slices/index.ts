@@ -12,3 +12,4 @@ export * from "./questionSlice";
 export * from "./commentSlice";
 export * from "./testimonialSlice";
 export * from "./tweetSlice";
+export * from "./documentSlice";

@@ -1,0 +1,129 @@
+{
+  "membership": {
+    "title": "RMA Membership",
+    "benefits": [
+      {
+        "title": "Professional Recognition",
+        "description": "Achieve recognition through our awards and certification programs, highlighting your dedication and excellence in the medical field."
+      },
+      {
+        "title": "Networking Opportunities",
+        "description": "Connect with a community of healthcare professionals, enabling collaboration, mentorship, and the exchange of innovative ideas across various medical specialties."
+      },
+      {
+        "title": "Members-Only Events",
+        "description": "Enjoy invitations to members-only events, including seminars, retreats, and conferences, offering unique learning and networking experiences."
+      },
+      {
+        "title": "Exclusive Member Discounts",
+        "description": "Unlock exclusive discounts on medical courses, equipment, and conference fees, exclusively available to our members."
+      },
+      {
+        "title": "Unlimited Access to Premium Content",
+        "description": "Enjoy full access to our comprehensive library of cutting-edge medical research, articles, and educational resources."
+      },
+      {
+        "title": "Priority Registration for Events",
+        "description": "Get priority booking privileges for our highly sought-after medical conferences, seminars, and workshops around the world."
+      },
+      {
+        "title": "Continuing Education Credits",
+        "description": "Earn continuing education credits through our accredited programs, supporting your career growth and professional development."
+      },
+      {
+        "title": "Exclusive Access to Job Listings",
+        "description": "Gain early access to job openings and career opportunities within the healthcare sector, available only to our members."
+      },
+      {
+        "title": "Personalized Learning Pathways",
+        "description": "Receive tailored recommendations for courses and content based on your specialty, interests, and career goals."
+      },
+      {
+        "title": "Exclusive Access to Educational Resources",
+        "description": "Unlock a treasure trove of medical journals, e-books, and research papers tailored to advance your medical knowledge."
+      },
+      {
+        "title": "Career Advancement Programs",
+        "description": "Benefit from career services, including job placement assistance, resume building, and interview preparation, designed to accelerate your professional growth in the medical field."
+      },
+      {
+        "title": "Advocacy",
+        "description": "Have a voice in the healthcare industry with our dedicated advocacy efforts on healthcare policies and regulations that impact your profession and patients."
+      }
+    ]
+  },
+  "applicationRequirements": {
+    "title": "Membership Application Requirements",
+    "requirements": [
+      {
+        "title": "Clear Profile Photo",
+        "description": "Provide a recent, clear headshot photograph for identification and community engagement purposes."
+      },
+      {
+        "title": "Email Address",
+        "description": "Submit a valid email address for communication and account setup."
+      },
+      {
+        "title": "Telephone Contact",
+        "description": "Share your active telephone number for direct communication and emergency contacts."
+      },
+      {
+        "title": "Your Country",
+        "description": "Easily customize your membership experience by adding your country of origin, enabling us to provide you with more relevant resources and opportunities."
+      },
+      {
+        "title": "Profession",
+        "description": "Detail your current profession including any specialties, to help us understand your role in the healthcare ecosystem."
+      },
+      {
+        "title": "Short Biography",
+        "description": "A concise biography (50-100 words) outlining your professional journey, motivations for joining, and what you hope to contribute to the Rwanda Medical Academy community."
+      },
+      {
+        "title": "Membership Fee",
+        "description": "Payment of the initial membership fee as specified by Rwanda Medical Academy guidelines at the time of application."
+      },
+      {
+        "title": "Accept Terms and Conditions Regarding Members",
+        "description": "By joining, you agree to uphold the highest standards of medical professionalism and adhere to our terms, fostering a respectful and ethical learning environment."
+      }
+    ]
+  },
+  "form": {
+    "title": "Fill in the Form to Request for Membership",
+    "fields": [
+      {
+        "label": "Profile Photo",
+        "type": "file"
+      },
+      {
+        "label": "Email Address",
+        "type": "email"
+      },
+      {
+        "label": "Telephone Contact",
+        "type": "tel"
+      },
+      {
+        "label": "Your Country",
+        "type": "text"
+      },
+      {
+        "label": "Profession",
+        "type": "text"
+      },
+      {
+        "label": "Short Biography",
+        "type": "textarea"
+      },
+      {
+        "label": "Membership Fee",
+        "type": "number"
+      },
+      {
+        "label": "Accept Terms and Conditions",
+        "type": "checkbox"
+      }
+    ]
+  }
+}

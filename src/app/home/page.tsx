@@ -1,3 +1,5 @@
+"use client";
+
 import ImageSlider from "./sections/ImageSlider";
 import WhyUs from "./sections/WhyUs";
 import CourseCategories from "./sections/CourseCategories";
@@ -6,8 +8,30 @@ import Articles from "./sections/Articles";
 import Collaborators from "./sections/Collaborators";
 import Testimonials from "./sections/Testimonials";
 import Footer from "@/components/Footer";
+// @ts-ignore
+import TawkTo from "next-tawkto";
+import React from "react";
 
 const HomePage = () => {
+  React.useEffect(() => {
+    var tawk = new TawkTo(
+      process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID,
+      process.env.NEXT_PUBLIC_TAWK_ID
+    );
+
+    tawk.onStatusChange((status: any) => {
+      // console.log(status);
+    });
+  }, []);
+
+  // React.useEffect(() => {
+  //   if (!window) return;
+
+  //   if (process.env.NEXT_PUBLIC_ENVIRONMENT !== "live") return;
+
+  //   new tawkTo(   process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID,
+  // process.env.NEXT_PUBLIC_TAWK_ID);
+  // }, []);
   return (
     <div className="pt-4">
       <ImageSlider />

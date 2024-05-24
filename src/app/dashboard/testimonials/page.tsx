@@ -27,7 +27,6 @@ import { Controller, useForm } from "react-hook-form";
 import { MdOutlineClose, MdOutlineMoreVert } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { FaRegEdit } from "react-icons/fa";
 import { BsFillTrashFill } from "react-icons/bs";
 import { GiPin } from "react-icons/gi";
 import { LuPin } from "react-icons/lu";

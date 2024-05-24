@@ -11,9 +11,10 @@ import {
   chapterSlice,
   questionSlice,
   commentSlice,
+  documentSlice,
+  testimonialSlice,
+  tweetSlice,
 } from "./slices";
-import { testimonialSlice } from "./slices/testimonialSlice";
-import { tweetSlice } from "./slices/tweetSlice";
 
 export const reducer = {
   counter: counterSlice.reducer,
@@ -30,4 +31,5 @@ export const reducer = {
   comment: commentSlice.reducer,
   testimonial: testimonialSlice.reducer,
   tweet: tweetSlice.reducer,
+  document: documentSlice.reducer,
 };

@@ -17,6 +17,7 @@ import { LoginContext } from "@/lib/context/LoginContext";
 import { GrUpdate } from "react-icons/gr";
 import { RxUpdate } from "react-icons/rx";
 import { BsChatSquareQuote } from "react-icons/bs";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -88,6 +89,13 @@ const sidebarItems = (activePage: string[]) => [
     to: "/dashboard/articles",
   },
   {
+    listkey: "Documents",
+    icon: <IoDocumentTextOutline className="text-xl" />,
+    text: "Documents",
+    active: false,
+    to: "/dashboard/documents",
+  },
+  {
     listkey: "Updates",
     icon: <RxUpdate className="text-xl" />,
     text: "Updates",
@@ -133,16 +141,18 @@ const DashboardSidebar: React.FC = ({}) => {
     } else if (activePage[2] === "articles") {
       setActiveIndex(4);
       setShowDropdown({ 4: true });
-    } else if (activePage[2] === "updates") {
+    } else if (activePage[2] === "documents") {
       setActiveIndex(5);
+    } else if (activePage[2] === "updates") {
+      setActiveIndex(6);
     } else if (activePage[2] === "users") {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
       setActiveIndex(2);
     } else if (activePage[2] === "testimonials") {
-      setActiveIndex(6);
-    } else if (activePage[2] === "profile") {
       setActiveIndex(7);
+    } else if (activePage[2] === "profile") {
+      setActiveIndex(8);
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }
