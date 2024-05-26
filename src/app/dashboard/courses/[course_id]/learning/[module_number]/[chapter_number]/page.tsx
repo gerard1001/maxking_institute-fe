@@ -87,8 +87,6 @@ const ModuleLearning = ({
   );
   const { userId, loginData } = React.useContext(LoginContext);
 
-  console.log(result, "result");
-
   const calculateValues = (
     moduleIndex: number,
     chapterIndex: number,
@@ -140,19 +138,11 @@ const ModuleLearning = ({
     dispatch(fetchUserByToken(loginToken?.login_token))
       .unwrap()
       .then((res) => {
-        console.log(res, "rest");
         if (res.statusCode === 200) {
           dispatch(fetchUserById(res.data.id))
             .unwrap()
             .then((nextRes: any) => {
               if (nextRes.statusCode === 200) {
-                console.log(
-                  nextRes?.data?.courses?.find(
-                    (course: ICourse) => course.id === course_id
-                  ),
-                  course_id,
-                  "::::::"
-                );
                 if (
                   nextRes?.data?.courses?.find(
                     (course: ICourse) => course.id === course_id

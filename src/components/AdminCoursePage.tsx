@@ -141,8 +141,6 @@ const AdminCoursePage = ({ course_id }: any) => {
     },
   });
 
-  console.log(state.course.modules);
-
   const tags = tagState.allTags;
 
   const handleOpenModal = () => setOpenModal(true);

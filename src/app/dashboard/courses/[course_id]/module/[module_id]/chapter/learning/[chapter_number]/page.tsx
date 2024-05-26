@@ -37,9 +37,6 @@ const ModuleLearning = ({
     moduleState?.module?.chapters?.find(
       (chapter) => chapter.chapterNumber === Number(chapter_number)
     );
-  console.log(currentChapter, "currentChapter");
-  console.log(moduleState, "moduleState");
-  console.log(chapter_number, "chapnb");
 
   React.useEffect(() => {
     dispatch(fetchOneModule(module_id))

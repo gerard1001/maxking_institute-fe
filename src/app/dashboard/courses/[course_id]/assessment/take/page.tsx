@@ -95,13 +95,10 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
   const [grade, setGrade] = React.useState<string | null>(null);
   const { userId } = React.useContext(LoginContext);
 
-  console.log(questionState);
   React.useEffect(() => {
     dispatch(findByModuleOrCourseId(course_id))
       .unwrap()
-      .then((res) => {
-        console.log(res, "res");
-      })
+      .then((res) => {})
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -118,7 +115,6 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
 
   // const [value, setValue] = React.useState<{ [x: number]: string }>({});
   // const [helperText, setHelperText] = React.useState("Choose wisely");
-  // console.log(value, "value");
   // const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setValue((event.target as HTMLInputElement).value);
   //   setHelperText(" ");
@@ -178,7 +174,6 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
         dispatch(findByUserAndCourseId({ userId, courseId: course_id }))
           .unwrap()
           .then((res) => {
-            console.log(res, "Grade");
             if (res.statusCode === 200) {
               if (res.data.rank) {
                 enqueueSnackbar("You have already taken this assessment", {

@@ -97,7 +97,6 @@ const Dashboard = () => {
     dispatch(fetchUserByToken(loginToken?.login_token))
       .unwrap()
       .then((res) => {
-        console.log(res, "rest");
         if (res.statusCode === 200) {
           dispatch(fetchUserById(res.data.id))
             .unwrap()
@@ -144,7 +143,6 @@ const Dashboard = () => {
       const courseObject: { [x: string]: number } = {};
       const moduleObject: { [x: string]: number } = {};
       for (let i = 0; i < userState?.user?.courses?.length; i++) {
-        console.log(userState?.user?.courses, "^^^^");
         courseObject[userState?.user?.courses[i]?.id] =
           userState?.user?.courses[i]?.user_course?.currentModule - 1;
       }

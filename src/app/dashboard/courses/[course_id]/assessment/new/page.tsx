@@ -105,9 +105,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
   React.useEffect(() => {
     dispatch(findByModuleOrCourseId(course_id))
       .unwrap()
-      .then((res) => {
-        console.log(res, "res");
-      })
+      .then((res) => {})
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
@@ -149,12 +147,6 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
     }
 
     if (body.trim() !== "" && trueAnswer.trim() !== "" && choices.length > 0) {
-      console.log({
-        question: body,
-        choices,
-        trueAnswer,
-      });
-
       dispatch(
         addQuestion({
           id: course_id,
@@ -172,9 +164,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
             setTrueAnswer("");
             dispatch(findByModuleOrCourseId(course_id))
               .unwrap()
-              .then((res) => {
-                console.log(res, "res");
-              })
+              .then((res) => {})
               .catch((err) => {
                 enqueueSnackbar(err.message, { variant: "error" });
               });
@@ -196,9 +186,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
           handleCloseModuleDialog();
           dispatch(findByModuleOrCourseId(course_id))
             .unwrap()
-            .then((res) => {
-              console.log(res, "res");
-            })
+            .then((res) => {})
             .catch((err) => {
               enqueueSnackbar(err.message, { variant: "error" });
             });

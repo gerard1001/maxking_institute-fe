@@ -145,8 +145,6 @@ const ArticlesPage = () => {
         .unwrap()
         .then((res) => {
           if (res.statusCode === 200) {
-            console.log(res, "99999");
-
             if (editing && openEditModal) {
               setValueUpdate("text", res.data.text);
             }
@@ -262,7 +260,6 @@ const ArticlesPage = () => {
       .unwrap()
       .then((res) => {
         if (res.statusCode === 200) {
-          console.log(res.data?.split(" ")[1], "555555");
           if (res.data?.split(" ")[1] === "article") {
             dispatch(fetchArticles());
           } else {

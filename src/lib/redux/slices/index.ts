@@ -13,3 +13,4 @@ export * from "./commentSlice";
 export * from "./testimonialSlice";
 export * from "./tweetSlice";
 export * from "./documentSlice";
+export * from "./eventSlice";

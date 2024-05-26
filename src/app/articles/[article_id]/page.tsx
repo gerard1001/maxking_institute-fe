@@ -214,7 +214,6 @@ const SingleArticle = ({ params: { article_id } }: SingleArticleProps) => {
       .unwrap()
       .then((res) => {
         if (res.statusCode === 200) {
-          console.log(res.data?.split(" "), "555555");
           if (res.data?.split(" ")[1] === "article") {
             dispatch(fetchSingleArticle(postId));
           } else {

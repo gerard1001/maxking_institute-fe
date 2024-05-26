@@ -22,12 +22,8 @@ const CourseCategories = () => {
     setLoading(true);
     dispatch(fetchAllCategories())
       .unwrap()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      .then((res) => {})
+      .catch((err) => {})
       .finally(() => {
         setLoading(false);
       });

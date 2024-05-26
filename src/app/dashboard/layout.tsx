@@ -21,8 +21,6 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [navBar, setNavBar] = useState<boolean>(false);
   const [onLearning, setOnLearning] = useState<boolean>(false);
 
-  console.log(onLearning);
-
   const scrollDiv = (e: any) => {
     if (e.target.scrollTop >= 40) {
       setNavBar(true);
@@ -32,7 +30,6 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const splits = pathName.split("/");
-  console.log(splits);
   React.useEffect(() => {
     if (splits[2] === "courses" && splits[4] === "learning") {
       setOnLearning(true);

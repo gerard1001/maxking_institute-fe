@@ -67,8 +67,6 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [userId, setUserId] = React.useState<string>("");
   const [userRole, setUserRole] = React.useState<string>("");
 
-  console.log(isClient, "isClient");
-
   useEffect(() => {
     const loginToken = JSON.parse(
       (typeof window !== "undefined" && localStorage.getItem("loginData")) ||
@@ -93,7 +91,6 @@ const LoginContextProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch(fetchUserByToken(loginToken?.login_token))
       .unwrap()
       .then((res) => {
-        console.log(res, "rest");
         setLoginUserFetchLoading(true);
         if (res.statusCode === 200) {
           setLoginData(res.data);

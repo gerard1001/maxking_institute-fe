@@ -1,9 +1,49 @@
+"use client";
+
 import React from "react";
 import { Button } from "@mui/material";
 import { RxExternalLink } from "react-icons/rx";
 import Footer from "@/components/Footer";
+import {
+  fetchArticles,
+  fetchDocuments,
+  selectArticles,
+  selectDocuments,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 
 const TrainingCenter = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const documentState = useSelector(selectDocuments);
+  const articleState = useSelector(selectArticles);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const articlesCount = articleState.articles?.length || 0;
+  const booksCount = documentState.allDocuments?.filter(
+    (doc) => doc.type === "book"
+  ).length;
+  const publicationsCount = documentState.allDocuments?.filter(
+    (doc) => doc.type === "publication"
+  ).length;
+
+  React.useEffect(() => {
+    dispatch(fetchDocuments())
+      .unwrap()
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
+      });
+
+    dispatch(fetchArticles())
+      .unwrap()
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
+      });
+  }, []);
+
   return (
     <>
       <div className="lg:p-10 p-4 py-14 max-w-[1400px] mx-auto">
@@ -17,19 +57,19 @@ const TrainingCenter = () => {
           <div className="w-full flex flex-wrap items-center justify-evenly gap-6">
             <div className="min-w-[240px] aspect-video bg-secondary rounded-md flex flex-col items-center justify-center">
               <h1 className="text-primary-foreground text-4xl font-semibold text-center">
-                3.5K
+                {booksCount}
               </h1>
               <h1 className="text-white text-xl text-center">Books</h1>
             </div>
             <div className="min-w-[240px] aspect-video bg-secondary rounded-md flex flex-col items-center justify-center">
               <h1 className="text-primary-foreground text-4xl font-semibold text-center">
-                3.5K
+                {articlesCount}
               </h1>
               <h1 className="text-white text-xl text-center">Articles</h1>
             </div>
             <div className="min-w-[240px] aspect-video bg-secondary rounded-md flex flex-col items-center justify-center">
               <h1 className="text-primary-foreground text-4xl font-semibold text-center">
-                3.5K
+                {publicationsCount}
               </h1>
               <h1 className="text-white text-xl text-center">Publications</h1>
             </div>
@@ -44,13 +84,19 @@ const TrainingCenter = () => {
             />
             <div className="absolute inset-0 bg-black/50 top-overlay-linear-gradient rounded-lg flex flex-col items-center justify-center">
               <h1 className="text-3xl text-white font-semibold">E-Library</h1>
-              <Button
-                variant="contained"
-                className="xs:mt-5 mt-1 bg-primary min-w-[180px] text-base"
+              <a
+                target="_blank"
+                href="/library/#books"
+                rel="noopener noreferrer"
               >
-                Visit
-                <RxExternalLink className="text-[14px] ml-2 text-primary-foreground" />
-              </Button>
+                <Button
+                  variant="contained"
+                  className="xs:mt-5 mt-1 bg-primary min-w-[180px] text-base"
+                >
+                  Visit
+                  <RxExternalLink className="text-[14px] ml-2 text-primary-foreground" />
+                </Button>
+              </a>
             </div>
           </div>
           <div className="max-w-[300px] relative mx-auto rounded-lg">
@@ -82,13 +128,19 @@ const TrainingCenter = () => {
               <h1 className="text-3xl text-white font-semibold">
                 Publications
               </h1>
-              <Button
-                variant="contained"
-                className="xs:mt-5 mt-1 bg-primary min-w-[180px] text-base"
+              <a
+                target="_blank"
+                href="/library/#publications"
+                rel="noopener noreferrer"
               >
-                Visit{" "}
-                <RxExternalLink className="text-[14px] ml-2 text-primary-foreground" />
-              </Button>
+                <Button
+                  variant="contained"
+                  className="xs:mt-5 mt-1 bg-primary min-w-[180px] text-base"
+                >
+                  Visit{" "}
+                  <RxExternalLink className="text-[14px] ml-2 text-primary-foreground" />
+                </Button>
+              </a>
             </div>
           </div>
         </div>

@@ -66,7 +66,6 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
   });
 
   const handleCreateChapter = (data: CreateModuleInputs) => {
-    console.log(data);
     setLoading(true);
     dispatch(
       createChapter({
@@ -80,7 +79,6 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
     )
       .unwrap()
       .then((res) => {
-        console.log(res, "*****************8");
         if (res.statusCode === 201) {
           enqueueSnackbar(res.message, { variant: "success" });
           setBody("");

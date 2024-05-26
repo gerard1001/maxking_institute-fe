@@ -155,8 +155,6 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     courseState?.course?.modules?.length > 0 &&
     courseState?.course?.modules?.find((module) => module.moduleNumber === 1)!;
 
-  console.log(firstModule, "firstModule");
-
   const {
     handleSubmit,
     control,

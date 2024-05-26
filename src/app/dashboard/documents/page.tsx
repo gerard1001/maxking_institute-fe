@@ -109,14 +109,11 @@ const Documents = () => {
   React.useEffect(() => {
     dispatch(fetchDocuments())
       .unwrap()
-      .then((data) => {
-        console.log(data, "documents");
-      })
+      .then((data) => {})
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
       });
   }, []);
-  console.log(documentState, "documentState");
 
   const handleDeleteDocument = () => {
     if (!docId) return;
@@ -147,8 +144,6 @@ const Documents = () => {
       alert("Please select a PDF file first.");
       return;
     }
-    console.log(data, "data");
-    console.log(file, "file");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -163,7 +158,6 @@ const Documents = () => {
     dispatch(createDocument(formData))
       .unwrap()
       .then((res) => {
-        console.log(res, "res");
         if (res.statusCode === 201) {
           enqueueSnackbar(res.message, { variant: "success" });
           reset();
@@ -212,14 +206,16 @@ const Documents = () => {
                       </h2>
                       <div className="w-full min-h-8 bg-secondary flex items-center justify-between gap-1 py-1 px-2">
                         <div className="w-full min-h-8 bg-secondary flex items-center gap-1 py-1 px-2">
-                          <IconButton
-                            onClick={() => {
-                              handleOpenDialog();
-                              setDocId(document.id);
-                            }}
-                          >
-                            <FaTrashCan className="text-primary-foreground text-lg" />
-                          </IconButton>
+                          {!isClient && (
+                            <IconButton
+                              onClick={() => {
+                                handleOpenDialog();
+                                setDocId(document.id);
+                              }}
+                            >
+                              <FaTrashCan className="text-primary-foreground text-lg" />
+                            </IconButton>
+                          )}
                           <IconButton
                             onClick={() => {
                               router.push(
@@ -266,14 +262,16 @@ const Documents = () => {
                       </h2>
                       <div className="w-full min-h-8 bg-secondary flex items-center justify-between gap-1 py-1 px-2">
                         <div className="w-full min-h-8 bg-secondary flex items-center gap-1 py-1 px-2">
-                          <IconButton
-                            onClick={() => {
-                              handleOpenDialog();
-                              setDocId(document.id);
-                            }}
-                          >
-                            <FaTrashCan className="text-primary-foreground text-lg" />
-                          </IconButton>
+                          {!isClient && (
+                            <IconButton
+                              onClick={() => {
+                                handleOpenDialog();
+                                setDocId(document.id);
+                              }}
+                            >
+                              <FaTrashCan className="text-primary-foreground text-lg" />
+                            </IconButton>
+                          )}
                           <IconButton
                             onClick={() => {
                               router.push(

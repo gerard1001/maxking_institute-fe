@@ -77,7 +77,6 @@ const CreateModule = ({ params: { course_id } }: CourseProps) => {
   });
 
   const handleCreateModule = (data: CreateModuleInputs) => {
-    console.log(data);
     setLoading(true);
     dispatch(
       createModule({
@@ -91,7 +90,6 @@ const CreateModule = ({ params: { course_id } }: CourseProps) => {
     )
       .unwrap()
       .then((res: any) => {
-        console.log(res, "*****************8");
         if (res.statusCode === 201) {
           enqueueSnackbar(res.message, { variant: "success" });
         }

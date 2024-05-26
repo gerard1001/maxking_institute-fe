@@ -86,8 +86,6 @@ const AboutUs = () => {
     setAnchorEl(null);
   };
 
-  console.log(userState?.publicUsers);
-
   React.useEffect(() => {
     dispatch(findPinnedTweet())
       .unwrap()
