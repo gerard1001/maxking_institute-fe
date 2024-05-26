@@ -26,7 +26,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl }) => {
   });
 
   return (
-    <div style={{ width: "300px", height: "500px" }}>
+    <div className="">
       <Worker
         workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
         children={

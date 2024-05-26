@@ -186,3 +186,7 @@ tbody tr {
   width: 100% !important;
   margin-bottom: 10px;
 }
+.rpv-thumbnail__cover-image {
+  height: 258px;
+  width: 200px;
+}

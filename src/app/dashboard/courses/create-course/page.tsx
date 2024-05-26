@@ -689,7 +689,7 @@ const CreateCourse = () => {
                         mt: 2,
                       }}
                       inputProps={{ style: { height: 16 } }}
-                      error={!!errors.tutor}
+                      error={!!errors.subjectId}
                     >
                       {subjectState?.allSubjects?.map((subject, index) => (
                         <MenuItem value={subject?.id} key={index}>
@@ -698,7 +698,7 @@ const CreateCourse = () => {
                       ))}
                     </Select>
                     <FormHelperText error>
-                      {errors.tutor && errors.tutor?.message}
+                      {errors.subjectId && errors.subjectId?.message}
                     </FormHelperText>
                   </FormControl>
                 )}
