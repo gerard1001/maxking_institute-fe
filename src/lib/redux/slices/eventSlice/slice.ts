@@ -4,6 +4,7 @@ import {
   deleteEvent,
   fetchEvents,
   fetchSingleEvent,
+  updateEvent,
 } from "./thunks";
 import { EventSliceState, IEvent } from "@/lib/interfaces/event.interface";
 
@@ -53,6 +54,19 @@ export const eventSlice = createSlice({
         state.event = action.payload.data;
       })
       .addCase(fetchSingleEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(updateEvent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.event = action.payload.data;
+      })
+      .addCase(updateEvent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

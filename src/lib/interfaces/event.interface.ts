@@ -5,8 +5,11 @@ export interface IEvent {
   about: string;
   venue: string;
   type: string;
-  date: Date;
-  requirements: string | string[];
+  startDate: Date;
+  startTime: Date;
+  endDate: Date;
+  endTime: Date;
+  requirements: string;
   createdAt: Date;
   updatedAt: Date;
 }

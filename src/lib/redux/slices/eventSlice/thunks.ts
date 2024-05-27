@@ -37,6 +37,21 @@ export const fetchSingleEvent = createAppAsyncThunk(
   }
 );
 
+export const updateEvent = createAppAsyncThunk(
+  "event/updateEvent",
+  async (
+    { id, data }: { id: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.patch(`/event/${id}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteEvent = createAppAsyncThunk(
   "event/deleteEvent",
   async (eventId: string, { rejectWithValue }): Promise<any> => {

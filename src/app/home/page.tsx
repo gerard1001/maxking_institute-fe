@@ -11,17 +11,23 @@ import Footer from "@/components/Footer";
 // @ts-ignore
 import TawkTo from "next-tawkto";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const HomePage = () => {
-  React.useEffect(() => {
-    var tawk = new TawkTo(
-      process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID,
-      process.env.NEXT_PUBLIC_TAWK_ID
-    );
+  const pathName = usePathname();
+  const isHome = pathName.split("/")[1] === "";
 
-    tawk.onStatusChange((status: any) => {
-      // console.log(status);
-    });
+  React.useEffect(() => {
+    if (isHome) {
+      var tawk = new TawkTo(
+        process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID,
+        process.env.NEXT_PUBLIC_TAWK_ID
+      );
+
+      tawk.onStatusChange((status: any) => {
+        // console.log(status);
+      });
+    }
   }, []);
 
   // React.useEffect(() => {
