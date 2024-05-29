@@ -2,21 +2,25 @@
   {
     "id": 1,
     "title": "Jobs",
-    "description": "Jobs are available for the students who are looking for a job."
+    "description": "Jobs are available for the students who are looking for a job.",
+    "link": "/community/jobs"
   },
   {
     "id": 2,
     "title": "Trainings",
-    "description": "Trainings are available for the students who are looking for a training."
+    "description": "Trainings are available for the students who are looking for a training.",
+    "link": "/community/trainings"
   },
   {
     "id": 3,
     "title": "Internships",
-    "description": "Internships are available for the students who are looking for an internship."
+    "description": "Internships are available for the students who are looking for an internship.",
+    "link": "/community/internships"
   },
   {
     "id": 4,
-    "title": "Career events",
-    "description": "Career events are available for the students who are looking for a career event."
+    "title": "Events",
+    "description": "Career events are available for the students who are looking for a career event.",
+    "link": "/community/events"
   }
 ]

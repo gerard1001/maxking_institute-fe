@@ -328,6 +328,7 @@ const AddNewArticle = () => {
                 sx={{
                   "& .MuiInputLabel-root": {
                     top: "12px",
+                    backgroundColor: "#fff",
                   },
                   color: "#242E8F",
                   "& label.Mui-focused": {

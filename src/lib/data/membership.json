@@ -1,6 +1,6 @@
 {
   "membership": {
-    "title": "RMA Membership",
+    "title": "Membership",
     "benefits": [
       {
         "title": "Professional Recognition",
@@ -78,10 +78,6 @@
       {
         "title": "Short Biography",
         "description": "A concise biography (50-100 words) outlining your professional journey, motivations for joining, and what you hope to contribute to the Rwanda Medical Academy community."
-      },
-      {
-        "title": "Membership Fee",
-        "description": "Payment of the initial membership fee as specified by Rwanda Medical Academy guidelines at the time of application."
       },
       {
         "title": "Accept Terms and Conditions Regarding Members",

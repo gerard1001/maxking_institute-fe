@@ -514,6 +514,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
                     sx={{
                       "& .MuiInputLabel-root": {
                         top: "12px",
+                        backgroundColor: "#fff",
                       },
                       color: "#242E8F",
                       "& label.Mui-focused": {
@@ -581,6 +582,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
                 sx={{
                   "& .MuiInputLabel-root": {
                     top: "12px",
+                    backgroundColor: "#fff",
                   },
                   color: "#242E8F",
                   "& label.Mui-focused": {
@@ -648,6 +650,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
                     sx={{
                       "& .MuiInputLabel-root": {
                         top: "12px",
+                        backgroundColor: "#fff",
                       },
                       color: "#242E8F",
                       "& label.Mui-focused": {

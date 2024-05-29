@@ -13,6 +13,7 @@ import {
   createUser,
   deleteUser,
   fetchAllUsers,
+  fetchAllUserWithMembers,
   fetchRoles,
   selectRoles,
   selectUsers,
@@ -24,7 +25,12 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import {
   Box,
   Button,
+  Chip,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormHelperText,
   IconButton,
@@ -33,6 +39,8 @@ import {
   MenuItem,
   Modal,
   Select,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -48,7 +56,7 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 import { IoChevronDown, IoWarningOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
@@ -56,7 +64,7 @@ import {
   fetchUserById,
   updatePublicDisplay,
 } from "@/lib/redux/slices/userSlice/thunks";
-import { BiChevronRight } from "react-icons/bi";
+import BackIconButton from "@/components/BackIconButton";
 
 const options = [
   {
@@ -91,7 +99,7 @@ interface CreateUserInputs {
   roleId: string;
 }
 
-const Users = () => {
+const MembersTable = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -109,7 +117,7 @@ const Users = () => {
       roleId: "",
     },
   });
-  const state = useSelector(selectUsers);
+  const userState = useSelector(selectUsers);
   const roleState = useSelector(selectRoles);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [age, setAge] = React.useState("");
@@ -119,8 +127,11 @@ const Users = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [publicAnchorEl, setPublicAnchorEl] =
     React.useState<null | HTMLElement>(null);
+  const [approvalAnchorEl, setApprovalAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const openPublicMenu = Boolean(publicAnchorEl);
+  const openApprovalMenu = Boolean(approvalAnchorEl);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [userId, setUserId] = useState<string>("");
   const { loginUserFetchLoading } = useContext(LoginContext);
@@ -155,6 +166,13 @@ const Users = () => {
     setPublicAnchorEl(null);
   };
 
+  const handleOpenApprovalMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setApprovalAnchorEl(event.currentTarget);
+  };
+  const handleCloseApprovalMenu = () => {
+    setApprovalAnchorEl(null);
+  };
+
   const openPublicStatusMenu = (
     id: string,
     e: React.MouseEvent<HTMLElement>
@@ -168,6 +186,29 @@ const Users = () => {
           //   variant: "success",
           //   preventDuplicate: true,
           // });
+        } else {
+          enqueueSnackbar(res.message, { variant: "error" });
+        }
+      })
+      .catch((error: any) => {
+        enqueueSnackbar(error.message || "Error on Public display", {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        setOpenMenuLoading(false);
+      });
+  };
+
+  const openApprovalStatusMenu = (
+    id: string,
+    e: React.MouseEvent<HTMLElement>
+  ) => {
+    setOpenMenuLoading(true);
+    dispatch(fetchUserById(id))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
         } else {
           enqueueSnackbar(res.message, { variant: "error" });
         }
@@ -199,7 +240,7 @@ const Users = () => {
       columnHelper.accessor((row) => `${row.firstName} ${row.lastName}`, {
         id: "Full Name",
         header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1  text-secondary-foreground">
             Full Name
           </p>
         ),
@@ -211,7 +252,7 @@ const Users = () => {
       }),
       columnHelper.accessor("email", {
         header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1 text-secondary-foreground">
             Email
           </p>
         ),
@@ -222,24 +263,9 @@ const Users = () => {
           </div>
         ),
       }),
-      columnHelper.accessor("roles", {
-        header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">Role</p>
-        ),
-        size: 20,
-        cell: (info) => (
-          <div className="pl-2 pr-2 flex items-center gap-1">
-            {info.getValue().map((role) => (
-              <p key={role.id} className="line-clamp-1">
-                {role.type}
-              </p>
-            ))}
-          </div>
-        ),
-      }),
       columnHelper.accessor("profile.phoneNumber", {
         header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1 text-secondary-foreground">
             Phone Number
           </p>
         ),
@@ -252,70 +278,87 @@ const Users = () => {
           </div>
         ),
       }),
-      columnHelper.accessor(
-        (row) => `${row.profile.country} / ${row.profile.city}`,
-        {
-          id: "Country/City",
-          header: () => (
-            <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
-              Country/City
-            </p>
-          ),
-          cell: (info) => (
-            <div className="pl-2 pr-2 min-w-40 max-w-44">
+      columnHelper.accessor("approvalStatus", {
+        header: () => (
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1 text-secondary-foreground">
+            status
+          </p>
+        ),
+        size: 20,
+        cell: (info) => {
+          console.log(info.getValue(), "info");
+          return (
+            <div className="pl-2 pr-2">
               <p className="line-clamp-1">
-                {info.row.original.profile.country &&
-                info.row.original.profile.city
-                  ? info.getValue()
-                  : "--"}
+                {info.getValue() === "pending" && (
+                  <div
+                    className={`border-[1px] flex items-center gap-1 justify-center rounded-md bg-yellow-400 text-sm px-2 text-white w-fit cursor-pointer`}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      setUserId(info.row.original.id);
+                      openApprovalStatusMenu(info.row.original.id, e);
+                      handleOpenApprovalMenu(e);
+                    }}
+                  >
+                    pending{" "}
+                    <IoChevronDown
+                      className={`group-hover:text-primary-foreground`}
+                    />
+                  </div>
+                )}
+                {info.getValue() === "approved" && (
+                  <div
+                    className={`border-[1px] flex items-center gap-1 justify-center rounded-md bg-green-400 text-sm px-2 text-white w-fit cursor-pointer`}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      setUserId(info.row.original.id);
+                      openApprovalStatusMenu(info.row.original.id, e);
+                      handleOpenApprovalMenu(e);
+                    }}
+                  >
+                    approved{" "}
+                    <IoChevronDown
+                      className={`group-hover:text-primary-foreground`}
+                    />
+                  </div>
+                )}
+                {info.getValue() === "rejected" && (
+                  <div
+                    className={`border-[1px] flex items-center gap-1 justify-center rounded-md bg-red-400 text-sm px-2 text-white w-fit cursor-pointer`}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => {
+                      setUserId(info.row.original.id);
+                      openApprovalStatusMenu(info.row.original.id, e);
+                      handleOpenApprovalMenu(e);
+                    }}
+                  >
+                    rejected{" "}
+                    <IoChevronDown
+                      className={`group-hover:text-primary-foreground`}
+                    />
+                  </div>
+                )}
               </p>
             </div>
-          ),
-        }
-      ),
-      // columnHelper.accessor("profile.country", {
-      //   header: () => (
-      //     <p className="pl-2 py-1 font-semibold uppercase">Country</p>
-      //   ),
-      //   size: 20,
-      //   cell: (info) => (
-      //     <div className="pl-2 pr-2">
-      //       <p className="line-clamp-1">
-      //         {info.getValue() ? info.getValue() : "--"}
-      //       </p>
-      //     </div>
-      //   ),
-      // }),
-      // columnHelper.accessor("profile.city", {
-      //   header: () => <p className="pl-2 py-1 font-semibold uppercase">City</p>,
-      //   size: 20,
-      //   cell: (info) => (
-      //     <div className="pl-2 pr-2">
-      //       <p className="line-clamp-1">
-      //         {info.getValue() ? info.getValue() : "--"}
-      //       </p>
-      //     </div>
-      //   ),
-      // }),
-      // columnHelper.accessor("profile.birthDate", {
-      //   header: () => (
-      //     <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
-      //       Birth date
-      //     </p>
-      //   ),
-      //   size: 20,
-      //   cell: (info) => (
-      //     <div className="pl-2 pr-2">
-      //       <p className="line-clamp-1">
-      //         {info.getValue() ? format(info.getValue(), "PP") : "--"}
-      //       </p>
-      //     </div>
-      //   ),
-      // }),
+          );
+        },
+      }),
+      columnHelper.accessor((row) => `${row.profile.country}`, {
+        id: "Country",
+        header: () => (
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1 text-secondary-foreground">
+            Country
+          </p>
+        ),
+        cell: (info) => (
+          <div className="pl-2 pr-2 max-w-44">
+            <p className="line-clamp-1">
+              {info.row.original.profile.country ? info.getValue() : "--"}
+            </p>
+          </div>
+        ),
+      }),
       columnHelper.accessor("publicDisplay", {
         header: () => (
-          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1">
-            Public view
+          <p className="pl-2 py-1 font-semibold uppercase line-clamp-1  text-secondary-foreground">
+            view
           </p>
         ),
         size: 20,
@@ -375,9 +418,16 @@ const Users = () => {
     []
   );
 
-  const focusUser = state.user;
+  //   const users = userState.allUsers?.filter(
+  //     (user) => user.requestedMembership === true
+  //   );
 
-  const users = useMemo(() => state.allUsers, [state]);
+  const users = useMemo(
+    () =>
+      userState.allUsers?.filter((user) => user.requestedMembership === true),
+    [userState]
+  );
+  const focusUser = userState.user;
 
   const table = useReactTable({
     data: users,
@@ -388,7 +438,7 @@ const Users = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchAllUsers())
+    dispatch(fetchAllUserWithMembers())
       .unwrap()
       .then((res: any) => {
         if (res.statusCode !== 200) {
@@ -435,7 +485,7 @@ const Users = () => {
       })
       .finally(() => {
         setRegisterLoading(false);
-        dispatch(fetchAllUsers())
+        dispatch(fetchAllUserWithMembers())
           .unwrap()
           .then((res: any) => {
             if (res.statusCode !== 200) {
@@ -474,7 +524,7 @@ const Users = () => {
       })
       .finally(() => {
         setDeleteLoading(false);
-        dispatch(fetchAllUsers())
+        dispatch(fetchAllUserWithMembers())
           .unwrap()
           .then((res: any) => {
             if (res.statusCode !== 200) {
@@ -496,7 +546,34 @@ const Users = () => {
       .then((res: any) => {
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, { variant: "success" });
-          dispatch(fetchAllUsers())
+          dispatch(fetchAllUserWithMembers())
+            .unwrap()
+            .then((res: any) => {
+              if (res.statusCode !== 200) {
+                enqueueSnackbar("Failed to fetch users", {
+                  variant: "error",
+                });
+                setUserId("");
+              }
+            })
+            .catch((error: any) => {});
+        }
+      })
+      .catch((error: any) => {
+        enqueueSnackbar("Failed to update public status", {
+          variant: "success",
+        });
+      });
+  };
+
+  const handleApprovalDisplay = (data: any) => {
+    setApprovalAnchorEl(null);
+    dispatch(updatePublicDisplay({ id: userId, data: data }))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, { variant: "success" });
+          dispatch(fetchAllUserWithMembers())
             .unwrap()
             .then((res: any) => {
               if (res.statusCode !== 200) {
@@ -545,26 +622,20 @@ const Users = () => {
               />
             </Tabs>
           </Box> */}
-          <div className="flex justify-between w-full py-2 gap-3 ">
-            <Button
-              variant="contained"
-              className="bg-secondary text-white hover:bg-secondary/80"
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Add User
-            </Button>
-            <Button
-              endIcon={<BiChevronRight />}
-              variant="contained"
-              className="bg-primary text-white hover:bg-primary/80"
-              onClick={() => {
-                router.push("/dashboard/users/members");
-              }}
-            >
-              Membership requests
-            </Button>
+          <BackIconButton />
+          <div className="flex justify-between w-full py-2">
+            <div></div>
+            <div className="">
+              {/* <Button
+                variant="contained"
+                className="bg-secondary text-white hover:bg-secondary/80"
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
+                Add User
+              </Button> */}
+            </div>
           </div>
           <div className="boxshadow px-1 bg-white">
             <table className="users-table inset-0">
@@ -983,6 +1054,40 @@ const Users = () => {
         </Box>
       </Dialog>
       <Menu
+        id="basic-menu-1"
+        anchorEl={approvalAnchorEl}
+        open={openApprovalMenu && !openMenuLoading}
+        onClose={handleCloseApprovalMenu}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            handleApprovalDisplay({
+              approvalStatus: "approved",
+            });
+          }}
+          className={`${
+            focusUser?.publicDisplay ? "bg-green-500/55" : "bg-none"
+          }`}
+        >
+          approve
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleApprovalDisplay({
+              approvalStatus: "rejected",
+            });
+          }}
+          className={`${
+            focusUser?.publicDisplay ? "bg-none" : "bg-red-500/55"
+          }`}
+        >
+          reject
+        </MenuItem>
+      </Menu>
+      <Menu
         id="basic-menu"
         anchorEl={publicAnchorEl}
         open={openPublicMenu && !openMenuLoading}
@@ -1016,56 +1121,4 @@ const Users = () => {
   );
 };
 
-export default Users;
-
-// "use client";
-
-// import MembersTable from "@/components/MembersTable";
-// import UsersTable from "@/components/UsersTable";
-// import { Box, Tab, Tabs } from "@mui/material";
-// import { useRouter } from "next/navigation";
-// import React from "react";
-
-// const Users = () => {
-//   const router = useRouter();
-//   const [value, setValue] = React.useState<"users" | "members">("users");
-
-//   const handleChange = (
-//     event: React.SyntheticEvent,
-//     newValue: "users" | "members"
-//   ) => {
-//     setValue(newValue);
-//   };
-//   return (
-//     <div>
-//       <Box className="">
-//         <Tabs
-//           value={value}
-//           onChange={handleChange}
-//           textColor="primary"
-//           indicatorColor="primary"
-//           aria-label="primary tabs example"
-//         >
-//           <Tab
-//             value="users"
-//             label="Users"
-//             onClick={() => {
-//               router.push("/dashboard/users");
-//             }}
-//           />
-//           <Tab
-//             value="members"
-//             label="Members"
-//             onClick={() => {
-//               router.push("/dashboard/users/members");
-//             }}
-//           />
-//         </Tabs>
-//       </Box>
-//       <UsersTable />
-//       {/* {value === "members" && <MembersTable />} */}
-//     </div>
-//   );
-// };
-
-// export default Users;
+export default MembersTable;

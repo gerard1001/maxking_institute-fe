@@ -148,7 +148,6 @@ const Events = () => {
       dispatch(fetchSingleEvent(eventId))
         .unwrap()
         .then((res) => {
-          console.log(res, "*****");
           if (res.statusCode === 200) {
             setValue("title", res.data.title);
             setValue("about", res.data.about);

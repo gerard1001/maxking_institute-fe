@@ -24,7 +24,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import PhoneInput from "react-phone-input-2";
 import countries from "@/lib/data/countries.json";
-import { Dayjs } from "dayjs";
+import Checkbox from "@mui/material/Checkbox";
+import { FaCamera, FaUserLarge } from "react-icons/fa6";
+import { requestMembership, updateProfile, useDispatch } from "@/lib/redux";
+import { enqueueSnackbar } from "notistack";
 
 const schema = yup.object().shape({
   firstName: yup.string().required().min(4).max(40).label("First name"),
@@ -33,7 +36,7 @@ const schema = yup.object().shape({
   country: yup.string().required().max(40).label("Country"),
   phoneNumber: yup.string().required().min(4).max(16).label("Phone Number"),
   specialty: yup.string().required().max(20).label("Country"),
-  bio: yup.string().required().label("Bio"),
+  bio: yup.string().required().min(50).label("Bio"),
 });
 
 interface IFormInputs {
@@ -47,10 +50,18 @@ interface IFormInputs {
 }
 
 const MembershipPage = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [picture, setPicture] = React.useState<Blob | any>("");
   const [picUrl, setPicUrl] = React.useState<any>(null);
+  const [checked, setChecked] = React.useState<boolean>(false);
+  const [imageError, setImageError] = React.useState<string | null>(null);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
   const {
     handleSubmit,
     control,
@@ -69,6 +80,20 @@ const MembershipPage = () => {
     },
   });
 
+  React.useEffect(() => {
+    if (picture) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        setPicUrl(e.target.result);
+      };
+      reader.readAsDataURL(picture);
+    }
+
+    if (picUrl) {
+      setImageError(null);
+    }
+  }, [picture]);
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -86,30 +111,90 @@ const MembershipPage = () => {
     </Typography>,
   ];
 
-  const onSubmit = (data: IFormInputs) => {};
+  const onSubmit = (data: IFormInputs) => {
+    if (!picture && !picUrl) {
+      router.push("/community/membership/#profile-picture");
+      return setImageError("Please select a cover image");
+    } else {
+      setLoading(true);
+      dispatch(
+        requestMembership({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+        })
+      )
+        .unwrap()
+        .then((res: any) => {
+          if (res.statusCode === 200) {
+            const formData = new FormData();
+            formData.append("phoneNumber", data.phoneNumber);
+            formData.append("specialty", data.specialty);
+            formData.append("country", data.country);
+            formData.append("bio", data.bio);
+            formData.append("picture", picture);
+            setLoading(true);
+            dispatch(
+              updateProfile({
+                id: res.data?.profile?.id,
+                data: formData,
+              })
+            )
+              .unwrap()
+              .then((res) => {
+                if (res.statusCode === 200) {
+                  reset();
+                  setPicUrl(null);
+                  setPicture("");
+                  setChecked(false);
+                  enqueueSnackbar("Membership request sent successfully", {
+                    variant: "success",
+                  });
+                }
+              })
+              .catch((err) => {
+                enqueueSnackbar("Failed to send membership request", {
+                  variant: "error",
+                });
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          enqueueSnackbar(err.message, {
+            variant: "error",
+          });
+        });
+    }
+  };
   return (
     <>
       <div className="container mx-auto p-6">
-        <Stack spacing={2} sx={{ my: 2 }}>
+        {/* <Stack spacing={2} sx={{ my: 2 }}>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
           </Breadcrumbs>
-        </Stack>
+        </Stack> */}
         <section className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-secondary-foreground text-center">
             {membershipData.membership.title}
           </h1>
           <ul className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mx-auto p-10 w-[80%] rounded-xl list-disc">
-            {membershipData.membership.benefits.map((benefit) => {
-              return (
-                <li className="max-w mb-4">
-                  <h1 className="text-accent font-bold inline mr-2">
-                    {benefit.title}:
-                  </h1>
-                  {benefit.description}
-                </li>
-              );
-            })}
+            {membershipData.membership.benefits.map(
+              (benefit, index: number) => {
+                return (
+                  <li className="max-w mb-4" key={index}>
+                    <h1 className="text-accent font-bold inline mr-2">
+                      {benefit.title}:
+                    </h1>
+                    {benefit.description}
+                  </li>
+                );
+              }
+            )}
           </ul>
         </section>
 
@@ -133,7 +218,7 @@ const MembershipPage = () => {
           </ul>
         </section>
 
-        <section className="mb-8">
+        <section className="mb-8 mx-auto w-fit">
           <h2 className="text-3xl font-bold mb-4 text-secondary-foreground">
             Fill in the Form to Request for Membership
           </h2>
@@ -143,10 +228,33 @@ const MembershipPage = () => {
             noValidate
             onSubmit={handleSubmit(onSubmit)}
             className="max-w-[640px] p-6 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-xl"
+            id="membership-form"
           >
-            <h1 className="text-accent text-lg font-semibold">
-              Membership form
-            </h1>
+            <div
+              className="p-4 w-fit bg-[#e8f0fe] relative overflow-hidden cursor-pointer aspect-square rounded-full"
+              id="profile-picture"
+            >
+              {picUrl ? (
+                <img className="w-24 h-24 object-cover" src={picUrl} alt="" />
+              ) : (
+                <FaCamera className="text-4xl text-secondary-foreground/30" />
+              )}
+              <input
+                onChange={(e: any) => {
+                  setPicture(e.target.files[0]);
+                }}
+                id="picture"
+                type="file"
+                accept="image/*"
+                className="w-full h-full absolute top-0 left-0 opacity-0 z-20 cursor-pointer"
+              />
+            </div>
+            {imageError ? (
+              <div className="text-[#d32f2f] text-xs">{imageError}</div>
+            ) : (
+              <h1 className="text-accent text-sm">Upload Your picture</h1>
+            )}
+
             <Controller
               name="firstName"
               control={control}
@@ -269,9 +377,11 @@ const MembershipPage = () => {
                 <PhoneInput
                   {...field}
                   country={"rw"}
-                  buttonStyle={{
-                    height: "46px",
-                  }}
+                  buttonStyle={
+                    {
+                      // height: "46px",
+                    }
+                  }
                   inputStyle={{
                     height: "46px",
                   }}
@@ -300,6 +410,7 @@ const MembershipPage = () => {
                   sx={{
                     "& .MuiInputLabel-root": {
                       top: "12px",
+                      backgroundColor: "#fff",
                     },
                     color: "#242E8F",
                     "& label.Mui-focused": {
@@ -427,7 +538,11 @@ const MembershipPage = () => {
               {/* <label className="block text-gray-700 font-bold mb-2">
                 Accept Terms and Conditions:
               </label> */}
-              <input type="checkbox" className="mr-2" />
+              <Checkbox
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ "aria-label": "controlled" }}
+              />
               <span>I agree to the terms and conditions</span>
             </div>
             <Button
@@ -435,14 +550,14 @@ const MembershipPage = () => {
               variant="contained"
               className="bg-primary hover:bg-primary/90 w-full mt-4 !h-[46px]"
               size="large"
-              disabled={loading}
+              disabled={loading || !checked}
             >
               {loading ? <LoadinProgress /> : "Submit"}
             </Button>
           </Box>
         </section>
       </div>{" "}
-      <Footer />{" "}
+      {/* <Footer />{" "} */}
     </>
   );
 };

@@ -40,6 +40,8 @@ export interface User {
   modules?: IModule[];
   isVerified: boolean;
   publicDisplay: boolean;
+  approvalStatus: string;
+  requestedMembership: boolean;
   user_course: IUserCourse;
   createdAt: Date;
   updatedAt: Date;

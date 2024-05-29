@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   createUser,
   deleteUser,
+  fetchAllUserWithMembers,
   fetchAllUsers,
   fetchPublicUsers,
   fetchUserById,
@@ -9,6 +10,7 @@ import {
   googleLogin,
   loginUser,
   registerUser,
+  requestMembership,
   updateProfile,
   updatePublicDisplay,
   updateUser,
@@ -36,9 +38,21 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.data;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(requestMembership.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(requestMembership.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(requestMembership.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
@@ -127,6 +141,19 @@ export const userSlice = createSlice({
         state.allUsers = action.payload.data;
       })
       .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchAllUserWithMembers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllUserWithMembers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allUsers = action.payload.data;
+      })
+      .addCase(fetchAllUserWithMembers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

@@ -24,6 +24,18 @@ export const registerUser = createAppAsyncThunk(
   }
 );
 
+export const requestMembership = createAppAsyncThunk(
+  "user/requestMembership",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.post(`/user`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const createUser = createAppAsyncThunk(
   "user/createUser",
   async (userData: ICreateUser, { rejectWithValue }): Promise<any> => {
@@ -112,6 +124,18 @@ export const fetchAllUsers = createAppAsyncThunk(
   async (_, { rejectWithValue }): Promise<any> => {
     try {
       const res = await axios.get(`/user`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchAllUserWithMembers = createAppAsyncThunk(
+  "user/fetchAllUserWithMembers",
+  async (_, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/user/all`);
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

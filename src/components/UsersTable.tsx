@@ -7,7 +7,6 @@ import {
   flexRender,
   getCoreRowModel,
   createColumnHelper,
-  getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
   createUser,
@@ -24,7 +23,12 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import {
   Box,
   Button,
+  Chip,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormHelperText,
   IconButton,
@@ -42,13 +46,8 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadinProgress from "@/components/LoadingProgess";
-import {
-  MdOutlineClose,
-  MdOutlineDoubleArrow,
-  MdOutlineKeyboardArrowLeft,
-  MdOutlineKeyboardArrowRight,
-} from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { MdOutlineClose } from "react-icons/md";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 import { IoChevronDown, IoWarningOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
@@ -56,7 +55,6 @@ import {
   fetchUserById,
   updatePublicDisplay,
 } from "@/lib/redux/slices/userSlice/thunks";
-import { BiChevronRight } from "react-icons/bi";
 
 const options = [
   {
@@ -91,7 +89,7 @@ interface CreateUserInputs {
   roleId: string;
 }
 
-const Users = () => {
+const UsersTable = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -109,7 +107,7 @@ const Users = () => {
       roleId: "",
     },
   });
-  const state = useSelector(selectUsers);
+  const userState = useSelector(selectUsers);
   const roleState = useSelector(selectRoles);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [age, setAge] = React.useState("");
@@ -124,14 +122,6 @@ const Users = () => {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [userId, setUserId] = useState<string>("");
   const { loginUserFetchLoading } = useContext(LoginContext);
-  const [value, setValue] = React.useState<"users" | "members">("users");
-
-  const handleChange = (
-    event: React.SyntheticEvent,
-    newValue: "users" | "members"
-  ) => {
-    setValue(newValue);
-  };
 
   const handleShowMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -321,7 +311,7 @@ const Users = () => {
         size: 20,
         cell: (info) => (
           <div className="pl-2 pr-2">
-            <div className="line-clamp-1">
+            <p className="line-clamp-1">
               {info.getValue() ? (
                 <div
                   className={`border-[1px] flex items-center gap-1 justify-center rounded-md border-sky-500 bg-sky-500/10 text-sm px-2 text-sky-500 w-fit cursor-pointer`}
@@ -352,7 +342,7 @@ const Users = () => {
                   />
                 </div>
               )}
-            </div>
+            </p>
           </div>
         ),
       }),
@@ -375,16 +365,14 @@ const Users = () => {
     []
   );
 
-  const focusUser = state.user;
-
-  const users = useMemo(() => state.allUsers, [state]);
+  const users = userState.allUsers;
+  const focusUser = userState.user;
 
   const table = useReactTable({
     data: users,
     columns,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   useEffect(() => {
@@ -521,50 +509,19 @@ const Users = () => {
       <div className="flex flex-col items-center justify-center">
         <div className="">
           {" "}
-          {/* <Box className="">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              textColor="primary"
-              indicatorColor="primary"
-              aria-label="primary tabs example"
-            >
-              <Tab
-                value="users"
-                label="Users"
+          <div className="flex justify-between w-full py-2">
+            <div></div>
+            <div className="">
+              <Button
+                variant="contained"
+                className="bg-secondary text-white hover:bg-secondary/80"
                 onClick={() => {
-                  router.push("/dashboard/users");
+                  setOpenModal(true);
                 }}
-              />
-              <Tab
-                value="members"
-                label="Members"
-                onClick={() => {
-                  router.push("/dashboard/users/members");
-                }}
-              />
-            </Tabs>
-          </Box> */}
-          <div className="flex justify-between w-full py-2 gap-3 ">
-            <Button
-              variant="contained"
-              className="bg-secondary text-white hover:bg-secondary/80"
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Add User
-            </Button>
-            <Button
-              endIcon={<BiChevronRight />}
-              variant="contained"
-              className="bg-primary text-white hover:bg-primary/80"
-              onClick={() => {
-                router.push("/dashboard/users/members");
-              }}
-            >
-              Membership requests
-            </Button>
+              >
+                Add User
+              </Button>
+            </div>
           </div>
           <div className="boxshadow px-1 bg-white">
             <table className="users-table inset-0">
@@ -610,55 +567,6 @@ const Users = () => {
                 ))}
               </tbody>
             </table>
-            <div className="py-2 flex justify-between">
-              <div className="">
-                <Button
-                  onClick={() => table.firstPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <MdOutlineDoubleArrow className="text-2xl rotate-180" />
-                </Button>
-                <Button
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <MdOutlineKeyboardArrowLeft className="text-2xl" />
-                </Button>
-                <Button
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <MdOutlineKeyboardArrowRight className="text-2xl" />
-                </Button>
-                <Button
-                  onClick={() => table.lastPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <MdOutlineDoubleArrow className="text-2xl" />
-                </Button>{" "}
-                <select
-                  value={table.getState().pagination.pageSize}
-                  onChange={(e) => {
-                    table.setPageSize(Number(e.target.value));
-                  }}
-                >
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      {pageSize}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center gap-3 pr-6">
-                <span className="flex items-center gap-1">
-                  <div>Page</div>
-                  <strong>
-                    {table.getState().pagination.pageIndex + 1} of{" "}
-                    {table.getPageCount().toLocaleString()}
-                  </strong>
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1016,56 +924,4 @@ const Users = () => {
   );
 };
 
-export default Users;
-
-// "use client";
-
-// import MembersTable from "@/components/MembersTable";
-// import UsersTable from "@/components/UsersTable";
-// import { Box, Tab, Tabs } from "@mui/material";
-// import { useRouter } from "next/navigation";
-// import React from "react";
-
-// const Users = () => {
-//   const router = useRouter();
-//   const [value, setValue] = React.useState<"users" | "members">("users");
-
-//   const handleChange = (
-//     event: React.SyntheticEvent,
-//     newValue: "users" | "members"
-//   ) => {
-//     setValue(newValue);
-//   };
-//   return (
-//     <div>
-//       <Box className="">
-//         <Tabs
-//           value={value}
-//           onChange={handleChange}
-//           textColor="primary"
-//           indicatorColor="primary"
-//           aria-label="primary tabs example"
-//         >
-//           <Tab
-//             value="users"
-//             label="Users"
-//             onClick={() => {
-//               router.push("/dashboard/users");
-//             }}
-//           />
-//           <Tab
-//             value="members"
-//             label="Members"
-//             onClick={() => {
-//               router.push("/dashboard/users/members");
-//             }}
-//           />
-//         </Tabs>
-//       </Box>
-//       <UsersTable />
-//       {/* {value === "members" && <MembersTable />} */}
-//     </div>
-//   );
-// };
-
-// export default Users;
+export default UsersTable;
