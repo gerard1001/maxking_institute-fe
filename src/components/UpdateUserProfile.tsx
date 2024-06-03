@@ -253,7 +253,7 @@ const UpdateUserProfile = ({
         />
         {/* )} */}
       </Box>
-      <Box className="flex gap-4">
+      <Box className="flex sm:flex-row flex-col sm:gap-4">
         <Controller
           name="birthDate"
           control={profileControl}
@@ -354,7 +354,7 @@ const UpdateUserProfile = ({
           )}
         />
       </Box>
-      <Box className="flex gap-4">
+      <Box className="flex sm:flex-row flex-col sm:gap-4">
         <Box className="block w-full">
           <Controller
             name="phoneNumber"
@@ -439,7 +439,7 @@ const UpdateUserProfile = ({
           )}
         />
       </Box>
-      <Box className="flex gap-4">
+      <Box className="flex sm:flex-row flex-col sm:gap-4">
         <Controller
           name="city"
           control={profileControl}

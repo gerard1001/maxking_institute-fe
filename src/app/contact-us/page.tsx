@@ -11,8 +11,8 @@ import {
 const ContactUs = () => {
   return (
     <>
-      <div className="flex p-10 mb-12">
-        <div className="w-full p-10">
+      <div className="flex lg:flex-row flex-col items-center lg:p-10 md:p-4 p-2 mb-12">
+        <div className="w-full md:p-10 p-0 lg:mt-0 md:mt-4 mt-12 flex flex-col items-center justify-center">
           <h1 className="text-accent text-3xl font-semibold text-center">
             CONTACT US
           </h1>
@@ -44,11 +44,16 @@ const ContactUs = () => {
             Send Message
           </Button>
         </div>
-        <div className="w-[50%] min-h-[70vh]">
+        <div className="lg:w-[50%] w-fit bg-slate-200 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] lg:p-10 sm:p-4 p-2 sm:mt-0 mt-10">
           <h1 className="text-accent text-2xl font-semibold">Our Contacts</h1>
           <div className="flex flex-col mt-4">
-            <p className="text-muted">Phone1: +250 788 387 888</p>
-            <p className="text-muted">Phone2: +250 788 668 657</p>
+            <p className="text-muted">
+              <span className="font-bold">Phone 1:</span> +250 788 387 888
+            </p>
+            <p className="text-muted">
+              {" "}
+              <span className="font-bold">Phone 2:</span> +250 788 668 657
+            </p>
           </div>
           <h1 className="text-accent text-2xl font-semibold mt-8">
             Our Social Media

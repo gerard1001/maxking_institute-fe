@@ -41,6 +41,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IoMdHeart } from "react-icons/io";
+import BackIconButton from "@/components/BackIconButton";
 
 interface SingleArticleProps {
   params: {
@@ -230,7 +231,8 @@ const SingleArticle = ({ params: { article_id } }: SingleArticleProps) => {
   };
 
   return (
-    <div className="pt-2 lg:px-10 xs:px-2 px-0 pb-12">
+    <div className="lg:px-10 xs:px-2 px-0 pb-12">
+      <BackIconButton />
       {state.loading ? (
         <SuspenseLoading />
       ) : (

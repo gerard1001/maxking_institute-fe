@@ -18,6 +18,7 @@ import { FaEye, FaTrashCan } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import Footer from "@/components/Footer";
 import SignInModal from "@/components/SignInModal";
+import { BsFillTrashFill } from "react-icons/bs";
 
 const Documents = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const Documents = () => {
                                 setDocId(document.id);
                               }}
                             >
-                              <FaTrashCan className="text-primary-foreground text-lg" />
+                              <BsFillTrashFill className="text-primary-foreground text-lg" />
                             </IconButton>
                           )}
                           <IconButton
@@ -168,7 +169,7 @@ const Documents = () => {
                                 setDocId(document.id);
                               }}
                             >
-                              <FaTrashCan className="text-primary-foreground text-lg" />
+                              <BsFillTrashFill className="text-primary-foreground text-lg" />
                             </IconButton>
                           )}
                           <IconButton
@@ -200,7 +201,7 @@ const Documents = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

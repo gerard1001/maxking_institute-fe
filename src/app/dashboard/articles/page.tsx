@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { Box, Button, Dialog, IconButton } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Box, Button, Chip, Dialog, IconButton } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
 import {
   deleteArticle,
   featureArticle,
@@ -37,6 +37,7 @@ const Articles = () => {
   const router = useRouter();
   const state = useSelector(selectArticles);
   const { enqueueSnackbar } = useSnackbar();
+  const pathName = usePathname();
 
   const articles = state.articles;
   const featuredArticles = state.featuredArticles;
@@ -45,6 +46,7 @@ const Articles = () => {
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [articleId, setArticleId] = useState<string>("");
   const { isClient } = React.useContext(LoginContext);
+  const [page, setPage] = useState<"main" | "saved">("main");
 
   useEffect(() => {
     dispatch(fetchArticles());
@@ -134,6 +136,15 @@ const Articles = () => {
       });
   };
 
+  const splits = pathName.split("/");
+  React.useEffect(() => {
+    if (splits[2] === "articles" && splits[3] === "saved") {
+      setPage("saved");
+    } else {
+      setPage("main");
+    }
+  }, [pathName]);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -202,7 +213,6 @@ const Articles = () => {
   }, []);
 
   const savedArticlesIds = savedArticles.map((article) => article.id);
-
   return (
     <ProtectedRoute>
       <section className="w-full flex flex-col gap-6 pb-10">
@@ -260,7 +270,9 @@ const Articles = () => {
                                   className="xs:mt-5 mt-1 bg-primary"
                                   onClick={() => {
                                     // window.location.href = `/articles/${article.id}`;
-                                    router.push(`/articles/${article.id}`);
+                                    router.push(
+                                      `/dashboard/articles/${article.id}`
+                                    );
                                   }}
                                 >
                                   Read more
@@ -273,7 +285,7 @@ const Articles = () => {
                                   <h1 className="2xl:text-2xl font-bold text-md uppercase text-center max-w-[550px] pb-3 border-b">
                                     {article.title}
                                   </h1>
-                                  <p className="lg:block hidden text-center text-accent line-clamp-3 mt-2">
+                                  <p className="2xl:block hidden text-center text-accent line-clamp-1 mt-2">
                                     {article.description}
                                   </p>
                                   <Button
@@ -282,7 +294,9 @@ const Articles = () => {
                                     className="mt-5 bg-primary"
                                     onClick={() => {
                                       // window.location.href = `/articles/${article.id}`;
-                                      router.push(`/articles/${article.id}`);
+                                      router.push(
+                                        `/dashboard/articles/${article.id}`
+                                      );
                                     }}
                                   >
                                     Read more
@@ -292,7 +306,7 @@ const Articles = () => {
                               <img
                                 src={article.coverImage}
                                 alt=""
-                                className="object-cover object-center border border-[#afafaf33] w-full xl:max-w-[766px] sm:max-w-[440px] aspect-video"
+                                className="object-cover object-center border border-[#afafaf33] w-full 2xl:max-w-[766px] xl:max-w-[550px] sm:max-w-[440px] aspect-video lg:mt-4 lg:mr-4"
                               />
                               <div className="absolute inset-0 bg-black/25 top-overlay-linear-gradient sm:hidden block"></div>
                             </div>
@@ -330,7 +344,9 @@ const Articles = () => {
                                     endIcon={<IoArrowForward />}
                                     className="xs:mt-5 mt-1 bg-primary"
                                     onClick={() => {
-                                      router.push(`/articles/${article.id}`);
+                                      router.push(
+                                        `/dashboard/articles/${article.id}`
+                                      );
                                     }}
                                   >
                                     Read more
@@ -351,7 +367,9 @@ const Articles = () => {
                                       endIcon={<IoArrowForward />}
                                       className="mt-5 bg-primary"
                                       onClick={() => {
-                                        router.push(`/articles/${article.id}`);
+                                        router.push(
+                                          `/dashboard/articles/${article.id}`
+                                        );
                                       }}
                                     >
                                       Read more
@@ -380,6 +398,28 @@ const Articles = () => {
           <h1 className="text-xl font-semibold ml-1 text-accent">
             All Articles
           </h1>
+          <div className="flex items-center gap-2 pb-2">
+            <Chip
+              label="All"
+              className={`cursor-pointer ${
+                page === "main" && " bg-muted text-white"
+              }`}
+              onClick={() => {
+                setPage("main");
+              }}
+            />
+            <Chip
+              label="Saved"
+              className={`cursor-pointer ${
+                page === "saved" && " bg-muted text-white"
+              }`}
+              onClick={() => {
+                setPage("saved");
+                router.push("/dashboard/articles/saved");
+              }}
+            />
+          </div>
+
           {articles?.length === 0 ? (
             <div className="w-full h-full flex items-center justify-center py-8 rounded-lg bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
               <h1 className="text-lg font-semibold text-black/75">
@@ -400,7 +440,7 @@ const Articles = () => {
                         alt=""
                         className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
                         onClick={() => {
-                          router.push(`/articles/${article.id}`);
+                          router.push(`/dashboard/articles/${article.id}`);
                         }}
                       />
                     </div>
@@ -499,7 +539,7 @@ const Articles = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

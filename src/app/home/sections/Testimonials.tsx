@@ -96,7 +96,7 @@ const Testimonials = () => {
                           <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
                             <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
                             <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
-                            <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
+                            {/* <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" /> */}
                             <p
                               className="lg:text-2xl text-base leading-tight"
                               style={{
@@ -106,7 +106,7 @@ const Testimonials = () => {
                               {testimonial.text}
                             </p>{" "}
                           </div>
-                          <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
+                          <div className="flex items-center py-2 w-full pl-2 border-l-2 border-primary">
                             <img
                               src={testimonial.user.profile.picture}
                               alt="author image"
@@ -147,7 +147,7 @@ const Testimonials = () => {
                             <div className="flex items-center py-12 bg-primary text-white lg:p-6 p-2 relative rounded-t-xl rounded-br-xl z-50">
                               <BiSolidQuoteLeft className="absolute text-8xl text-primary-foreground top-4 left-4 opacity-30" />
                               <BiSolidQuoteRight className="absolute text-8xl text-primary-foreground bottom-4 right-4 opacity-30" />
-                              <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" />
+                              {/* <div className="bg-primary lg:w-[40px] w-[20px] aspect-square rotate-45 absolute lg:-bottom-[20px] -bottom-[10px] lg:left-2 left-1 z-10" /> */}
                               <p
                                 className="lg:text-2xl text-base leading-tight"
                                 style={{
@@ -157,7 +157,7 @@ const Testimonials = () => {
                                 {testimonial.text}
                               </p>{" "}
                             </div>
-                            <div className="flex items-center pb-4 w-full lg:mt-6 mt-2 ml-4">
+                            <div className="flex items-center py-2 w-full pl-2 border-l-2 border-primary">
                               <img
                                 src={testimonial.user.profile.picture}
                                 alt="author image"

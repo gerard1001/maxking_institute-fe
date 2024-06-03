@@ -55,6 +55,7 @@ import {
   fetchUserById,
   updatePublicDisplay,
 } from "@/lib/redux/slices/userSlice/thunks";
+import { BsFillTrashFill } from "react-icons/bs";
 
 const options = [
   {
@@ -69,7 +70,7 @@ const options = [
     key: "delete",
     content: (
       <div className="flex items-center gap-3">
-        <FaTrashCan /> Delete
+        <BsFillTrashFill className="text-accent-foreground text-base" /> Delete
       </div>
     ),
   },
@@ -860,7 +861,7 @@ const MembersTable = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

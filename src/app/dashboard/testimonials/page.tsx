@@ -148,57 +148,60 @@ const Testimonials = () => {
           Write something about us
         </Button>
       </div>
-      <div className="flex flex-wrap gap-2 h-auto pt-6">
+      <div className="flex flex-wrap justify-center gap-2 h-auto pt-6">
         {/* <div className="columns-3 gap-3 overflow-y-scroll"> */}
-        {testimonialState.allTestimonials.map((testimonial) => (
-          <div
-            key={testimonial.id}
-            className={`shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-md p-6 w-full max-w-[320px] mb-4 
+        {testimonialState?.allTestimonials
+          ?.slice()
+          ?.sort((a, b) => (a === b ? 0 : b ? -1 : 1))
+          ?.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className={`shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-md sm:p-6 p-2 w-full max-w-[320px] mb-4 
             ${userId !== testimonial.user.id ? "bg-secondary/20" : "bg-white"}
             `}
-          >
-            <div className="flex items-center">
-              <div className="flex items-center pb-4 w-full">
-                <img
-                  src={testimonial.user.profile.picture}
-                  alt="author image"
-                  className="w-7 aspect-square rounded-full object-cover cursor-pointer"
-                />
-                <div className="ml-2">
-                  <h1 className="text-accent text-lg font-semibold">
-                    {testimonial.user.firstName} {testimonial.user.lastName}
-                  </h1>
-                  <p className="text-muted text-xs">
-                    {new Date(testimonial.createdAt).toDateString()}
-                  </p>
+            >
+              <div className="flex items-center">
+                <div className="flex items-center pb-4 w-full">
+                  <img
+                    src={testimonial.user.profile.picture}
+                    alt="author image"
+                    className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                  />
+                  <div className="ml-2">
+                    <h1 className="text-accent text-lg font-semibold">
+                      {testimonial.user.firstName} {testimonial.user.lastName}
+                    </h1>
+                    <p className="text-muted text-xs">
+                      {new Date(testimonial.createdAt).toDateString()}
+                    </p>
+                  </div>
                 </div>
+                {!isClient && (
+                  <IconButton
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      setTestimonialId(testimonial.id);
+                      handleClick(event);
+                    }}
+                  >
+                    <MdOutlineMoreVert className="text-accent text-lg" />
+                  </IconButton>
+                )}
               </div>
-              {!isClient && (
-                <IconButton
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                    setTestimonialId(testimonial.id);
-                    handleClick(event);
-                  }}
-                >
-                  <MdOutlineMoreVert className="text-accent text-lg" />
-                </IconButton>
+              {testimonial.isPinned && (
+                <GiPin className="text-2xl mb-2 text-primary" />
               )}
+              {/* <h1>{testimonial.text}</h1> */}
+              <p className="text-sm leading-tight">
+                <span className="text-lg leading-none italic font-bold text-gray-400 mr-1">
+                  "
+                </span>
+                {testimonial.text}
+                <span className="text-lg leading-none italic font-bold text-gray-400 ml-1">
+                  "
+                </span>
+              </p>
             </div>
-            {testimonial.isPinned && (
-              <GiPin className="text-2xl mb-2 text-primary" />
-            )}
-            {/* <h1>{testimonial.text}</h1> */}
-            <p className="text-sm leading-tight">
-              <span className="text-lg leading-none italic font-bold text-gray-400 mr-1">
-                "
-              </span>
-              {testimonial.text}
-              <span className="text-lg leading-none italic font-bold text-gray-400 ml-1">
-                "
-              </span>
-            </p>
-          </div>
-        ))}
+          ))}
       </div>
       <Modal
         open={openModal}
@@ -216,7 +219,7 @@ const Testimonials = () => {
             transform: "translate(-50%, -50%)",
             maxHeight: "98vh",
             width: {
-              sm: 1400,
+              md: 1400,
               xs: "95%",
             },
             maxWidth: 900,
@@ -233,7 +236,7 @@ const Testimonials = () => {
           }}
         >
           <Box className="flex items-center justify-between border-b mb-4">
-            <Typography className="text-2xl font-semibold text-accent">
+            <Typography className="md:text-2xl text-lg font-semibold text-accent">
               Add a testimonial
             </Typography>
             <IconButton onClick={handleCloseModal} size="medium">

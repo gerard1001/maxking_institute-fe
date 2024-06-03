@@ -142,14 +142,14 @@ const Tweets = () => {
       >
         Add New Tweet
       </Button>
-      <div className="flex items-start justify-center gap-2 flex-wrap pt-4">
+      <div className="flex items-start justify-center gap-2 flex-wrap pt-4 pb-10">
         {tweetState?.allTweets
           ?.slice()
           ?.sort((a: any, b: any) => b.isPinned - a.isPinned)
           ?.map((tweet) => (
             <div
-              className={`w-1/3 h-full text-xs p-4 pt-2 rounded-md ${
-                tweet.isPinned ? "bg-secondary/30" : "bg-white"
+              className={`w-fit 2xl:w-1/3 h-full text-xs xs:p-4 p-1 pt-2 rounded-md overflow-x-auto ${
+                tweet.isPinned ? "bg-primary-foreground" : "bg-white"
               }`}
             >
               <div className="tweet-class">
@@ -161,9 +161,9 @@ const Tweets = () => {
                     className="bg-slate-200"
                   >
                     {tweet?.isPinned ? (
-                      <RiPushpin2Fill className="text-accent" />
+                      <RiPushpin2Fill className="text-accent text-base" />
                     ) : (
-                      <RiPushpin2Line className="text-accent" />
+                      <RiPushpin2Line className="text-accent text-base" />
                     )}
                   </IconButton>
                   <IconButton
@@ -172,7 +172,7 @@ const Tweets = () => {
                     }}
                     className="bg-slate-200"
                   >
-                    <BsFillTrashFill className="text-accent max-w-md" />
+                    <BsFillTrashFill className="text-accent text-base" />
                   </IconButton>
                 </div>
                 <Tweet id={tweet.tweetId} />

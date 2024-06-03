@@ -10,7 +10,6 @@ import {
   Link,
   MenuItem,
   Select,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,7 +17,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import membershipData from "@/lib/data/membership.json";
 import Footer from "@/components/Footer";
-import { Controller, useForm } from "react-hook-form";
 import LoadinProgress from "@/components/LoadingProgess";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -28,6 +26,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { FaCamera, FaUserLarge } from "react-icons/fa6";
 import { requestMembership, updateProfile, useDispatch } from "@/lib/redux";
 import { enqueueSnackbar } from "notistack";
+import { Controller, useForm } from "react-hook-form";
 
 const schema = yup.object().shape({
   firstName: yup.string().required().min(4).max(40).label("First name"),
@@ -172,17 +171,17 @@ const MembershipPage = () => {
   };
   return (
     <>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto xl:p-6 p-3">
         {/* <Stack spacing={2} sx={{ my: 2 }}>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
           </Breadcrumbs>
         </Stack> */}
         <section className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 text-secondary-foreground text-center">
+          <h1 className="lg:text-4xl text-xl font-bold mb-4 text-secondary-foreground text-center">
             {membershipData.membership.title}
           </h1>
-          <ul className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mx-auto p-10 w-[80%] rounded-xl list-disc">
+          <ul className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mx-auto lg:p-10 lg:w-[80%] p-6 w-[95%] rounded-xl list-disc">
             {membershipData.membership.benefits.map(
               (benefit, index: number) => {
                 return (
@@ -199,10 +198,10 @@ const MembershipPage = () => {
         </section>
 
         <section className="my-8">
-          <h1 className="text-4xl font-bold mb-4 text-secondary-foreground text-center">
+          <h1 className="lg:text-4xl text-xl font-bold mb-4 text-secondary-foreground text-center">
             {membershipData.applicationRequirements.title}
           </h1>
-          <ul className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mx-auto p-10 w-[80%] rounded-xl list-decimal">
+          <ul className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] mx-auto lg:p-10 lg:w-[80%] p-6 w-[95%] rounded-xl list-decimal">
             {membershipData.applicationRequirements.requirements.map(
               (benefit) => {
                 return (
@@ -219,7 +218,7 @@ const MembershipPage = () => {
         </section>
 
         <section className="mb-8 mx-auto w-fit">
-          <h2 className="text-3xl font-bold mb-4 text-secondary-foreground">
+          <h2 className="lg:text-3xl text-xl font-bold mb-4 text-secondary-foreground">
             Fill in the Form to Request for Membership
           </h2>
 
@@ -237,7 +236,7 @@ const MembershipPage = () => {
               {picUrl ? (
                 <img className="w-24 h-24 object-cover" src={picUrl} alt="" />
               ) : (
-                <FaCamera className="text-4xl text-secondary-foreground/30" />
+                <FaCamera className="lg:text-4xl text-xl text-secondary-foreground/30" />
               )}
               <input
                 onChange={(e: any) => {

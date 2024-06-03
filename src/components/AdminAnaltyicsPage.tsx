@@ -65,11 +65,11 @@ const AdminAnalyticsGraphs = memo(
 
     return (
       <>
-        <h1 className="text-5xl text-accent underline font-bolds text-center">
+        <h1 className="md:text-5xl text-2xl text-accent-foreground font-bold text-center">
           Analytics Page
         </h1>
         <p></p>
-        <div className="bg-none rounded-md flex items-center justify-center gap-4 mb-5 p-10">
+        <div className="bg-none rounded-md flex flex-wrap items-center justify-center gap-4 mb-5 p-10">
           <div
             className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white hover:bg-slate-200 cursor-pointer flex flex-col items-center justify-center rounded-lg min-w-[250px] aspect-video"
             onClick={() => {

@@ -118,7 +118,11 @@ const sidebarItems = (activePage: string[]) => [
   },
 ];
 
-const DashboardSidebar: React.FC = ({}) => {
+type SidebarItemProps = {
+  shown: boolean;
+};
+
+const DashboardSidebar = () => {
   const router = useRouter();
   const pathName = usePathname();
   const [expanded, setExpanded] = useState(true);
@@ -165,7 +169,7 @@ const DashboardSidebar: React.FC = ({}) => {
   return (
     <ProtectedRoute>
       <aside
-        className={`h-screen bg-emerald-300 max-w-[250px] transition-all ${
+        className={`h-screen bg-emerald-300 max-w-[250px] transition-all lg:inline hidden ${
           expanded ? "w-full" : "w-fit"
         }`}
       >
@@ -217,7 +221,7 @@ const DashboardSidebar: React.FC = ({}) => {
                   />
                 </div>
               ))}
-              <li className={`bg-white text-white" rounded-md w-full`}>
+              <li className={`bg-white rounded-md w-full`}>
                 <div
                   className={`max-h-10 flex items-center py-2 px-3 my-1
         font-medium rounded-md cursor-pointer justify-between

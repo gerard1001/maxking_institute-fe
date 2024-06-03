@@ -37,6 +37,7 @@ import { TbTrash } from "react-icons/tb";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
 import { IoWarningOutline } from "react-icons/io5";
 import { set } from "date-fns";
+import { BsFillTrashFill } from "react-icons/bs";
 
 const dayjsDate = yup
   .mixed()
@@ -302,7 +303,7 @@ const Events = () => {
         Add New Event
       </Button>
 
-      <div className="flex gap-4 justify-center py-10">
+      <div className="flex flex-wrap gap-4 justify-center py-10">
         {eventState?.allEvents
           ?.filter((event) => event.type === "event")
           .map((event) => (
@@ -867,7 +868,7 @@ const Events = () => {
                             handleDeleteChoice(index);
                           }}
                         >
-                          <TbTrash />
+                          <BsFillTrashFill className="text-accent-foreground text-base" />
                         </IconButton>
                       </div>
                     </div>
@@ -892,7 +893,7 @@ const Events = () => {
         className=""
         anchor="right"
       >
-        <div className="max-w-[600px] min-w-[440px] w-full relative">
+        <div className="max-w-[600px] md:min-w-[440px] min-w-[250px] w-full relative">
           <div className="sticky top-0 left-0 right-0 flex justify-between items-center px-6 backdrop-blur-sm bg-white/30 border-b z-50">
             <h1 className="text-xl font-bold text-secondary-foreground">
               Event details
@@ -902,13 +903,13 @@ const Events = () => {
             </IconButton>
           </div>
           {eventState?.event && !objectIsEmpty(eventState?.event) && (
-            <div className="p-10 pt-4">
+            <div className="md:p-10 p-4 pt-4">
               <div className="flex gap-3 items-center pb-4">
                 <IconButton className="bg-black/20" onClick={handleOpenModal}>
                   <MdEdit className="text-blue-600 text-lg" />
                 </IconButton>
                 <IconButton className="bg-black/20" onClick={handleOpenDialog}>
-                  <FaTrashCan className="text-red-600 text-lg" />
+                  <BsFillTrashFill className="text-red-600 text-lg" />
                 </IconButton>
               </div>
               <h1 className="text-xl text-center font-bold text-secondary-foreground">
@@ -967,7 +968,7 @@ const Events = () => {
               <h1 className="text-xl font-bold text-secondary-foreground mt-4">
                 Requirements
               </h1>
-              <ul className="list-disc">
+              <ul className="list-disc pl-4">
                 {JSON.parse(eventState?.event?.requirements)?.map(
                   (requ: string) => (
                     <li>{requ}</li>
@@ -985,7 +986,7 @@ const Events = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

@@ -38,6 +38,7 @@ import { LuPlus } from "react-icons/lu";
 import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
+import BackIconButton from "@/components/BackIconButton";
 
 const ReactQuill = dynamic(() => import("@/components/ReactQuill"), {
   ssr: false,
@@ -173,14 +174,14 @@ const AddNewArticle = () => {
 
   return (
     <div>
-      {" "}
+      <BackIconButton />{" "}
       <Box
         component="form"
         noValidate
         onSubmit={handleSubmit(handleCreateArticle)}
         className="mb-12"
       >
-        <div className="flex gap-6">
+        <div className="flex md:flex-row flex-col gap-6">
           <div className="flex flex-col">
             <h1 className="text-xl font-semibold ml-1 text-accent">
               Upload Cover Image
@@ -225,7 +226,7 @@ const AddNewArticle = () => {
             <h1 className="text-xl font-semibold ml-1 text-accent">
               Title & Description
             </h1>
-            <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg">
+            <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 md:px-8 px-4 rounded-lg">
               <Controller
                 name="title"
                 control={control}
@@ -321,7 +322,7 @@ const AddNewArticle = () => {
               <IoOptionsOutline className="text-accent font-bold text-[16px]" />
             </IconButton>{" "}
           </h1>
-          <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg">
+          <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 md:px-8 px-4 rounded-lg">
             <div className="flex items-center gap-2">
               <FormControl
                 fullWidth

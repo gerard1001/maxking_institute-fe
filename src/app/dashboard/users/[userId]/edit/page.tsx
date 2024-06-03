@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import "react-phone-input-2/lib/style.css";
 import UpdateUserInfo from "@/components/UpdateUserInfo";
 import UpdateUserProfile from "@/components/UpdateUserProfile";
+import BackIconButton from "@/components/BackIconButton";
 
 interface SingleUserProps {
   params: {
@@ -43,6 +44,7 @@ const EditUser = ({ params: { userId } }: SingleUserProps) => {
 
   return (
     <div className="flex flex-col gap-4 pb-20">
+      <BackIconButton />
       <div className="w-full max-w-[720px] mx-auto min-h-40 shadow-md bg-white p-4 rounded-md transition-all duration-150">
         <h1 className="text-accent text-xl font-semibold">
           Personal identifications

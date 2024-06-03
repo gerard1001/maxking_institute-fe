@@ -7,10 +7,14 @@ import { useRouter } from "next/navigation";
 const OpportunitiesSection = () => {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center lg:gap-4 gap-2 mt-10">
-      <h1 className="text-4xl font-bold mb-4 text-secondary-foreground text-center">
+    <div className="flex flex-col items-center lg:gap-4 gap-2 mt-10 2xl:pt-0 pt-8">
+      <h1 className="xl:text-4xl text-2xl font-bold mb-4 text-secondary-foreground text-center">
         Opportunities
       </h1>
+      <h2 className="mb-4 text-secondary-foreground text-center xl:text-3xl text-xl">
+        Explore Exciting Opportunities with Our App
+      </h2>
+
       <div className="flex items-center flex-wrap gap-8 justify-center w-full pt-6">
         {opportunities?.map((opportunity, index: number) => {
           return (

@@ -51,7 +51,7 @@ import * as yup from "yup";
 import { ITag } from "@/lib/interfaces/tag.interface";
 import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
-import { BsChevronDown } from "react-icons/bs";
+import { BsChevronDown, BsFillTrashFill } from "react-icons/bs";
 import Link from "next/link";
 // import { CreateCourseInputs } from "@/app/dashboard/courses/subject/[subject_id]/create-course/page";
 
@@ -487,7 +487,7 @@ const AdminCoursePage = ({ course_id }: any) => {
               className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
               onClick={handleOpenDialog}
             >
-              <TbTrash className="text-red-600" />
+              <BsFillTrashFill className="text-red-600" />
             </IconButton>
           </div>
         </div>
@@ -672,7 +672,7 @@ const AdminCoursePage = ({ course_id }: any) => {
                                         handleOpenDialog();
                                       }}
                                     >
-                                      <TbTrash className="text-red-600" />
+                                      <BsFillTrashFill className="text-red-600" />
                                     </IconButton>
                                   </div>
                                 </AccordionActions>
@@ -727,7 +727,7 @@ const AdminCoursePage = ({ course_id }: any) => {
                           className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
                           onClick={handleOpenModuleDialog}
                         >
-                          <TbTrash className="text-red-600" />
+                          <BsFillTrashFill className="text-red-600" />
                         </IconButton>
                       </div>
                     </AccordionActions>
@@ -1346,7 +1346,7 @@ const AdminCoursePage = ({ course_id }: any) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>
@@ -1391,7 +1391,7 @@ const AdminCoursePage = ({ course_id }: any) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

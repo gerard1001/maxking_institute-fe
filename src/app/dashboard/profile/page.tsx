@@ -66,7 +66,7 @@ const Profile = () => {
               Password
             </Button> */}
         </div>
-        <div className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mt-6 md: min-w-[720px]">
+        <div className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 sm:px-8 px-4 rounded-lg mt-6 md:min-w-[720px]">
           {activeIndex === 0 && (
             <UpdateUserInfo
               isAccountUser={true}

@@ -145,7 +145,7 @@ const UpdateUserInfo = ({
       onSubmit={handleSubmit(handleUpdateUser)}
       className=""
     >
-      <Box className="flex gap-4">
+      <Box className="flex sm:flex-row flex-col sm:gap-4">
         <Controller
           name="firstName"
           control={control}

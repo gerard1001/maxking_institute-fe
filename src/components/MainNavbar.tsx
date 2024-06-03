@@ -187,252 +187,263 @@ const MainNavbar = () => {
   }, [googleLoginError, googleLoginToken]);
 
   return (
-    <div
-      className={`lg:px-10 px-0 flex-col items-center ${
-        pathName === "/verify" ? "hidden" : "flex"
-      }`}
-    >
-      <div className="lg:flex hidden items-center justify-between w-full">
-        <div className="flex items-center justify-start">
-          <Link href="/" className="flex ml-2 md:mr-24">
-            <Image src="/logo.png" alt="logo" width={50} height={50} />
-          </Link>
-        </div>
-        <div className="flex items-center gap-10">
-          <div className={`flex items-center`}>
-            <div className={`flex items-center gap-2 pr-4`}>
-              <IconButton
-                size="small"
-                sx={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #D9D9D9",
-                }}
-              >
-                <FiPhone className="text-accent" />
-              </IconButton>
-              <p className="text-accent-foreground">+250 788 668 657</p>
-            </div>
-            <div
-              className={`flex items-center gap-2 border-l border-muted-foreground pl-4`}
-            >
-              <IconButton
-                size="small"
-                sx={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #D9D9D9",
-                }}
-              >
-                <HiOutlineMail className="text-accent" />
-              </IconButton>
-              <p className="text-accent-foreground">
-                info@maxkinginstitute.org
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <IconButton
-              size="small"
-              sx={{
-                backgroundColor: "transparent",
-                border: "1px solid #D9D9D9",
-              }}
-            >
-              <FaXTwitter className="text-secondary text-sm" />
-            </IconButton>
-            <IconButton
-              size="small"
-              sx={{
-                backgroundColor: "transparent",
-                border: "1px solid #D9D9D9",
-              }}
-            >
-              <FaLinkedinIn className="text-secondary text-sm" />
-            </IconButton>
-            <IconButton
-              size="small"
-              sx={{
-                backgroundColor: "transparent",
-                border: "1px solid #D9D9D9",
-              }}
-            >
-              <FaFacebookF className="text-secondary text-sm" />
-            </IconButton>
-          </div>
-        </div>
+    <div className="flex">
+      <div className={`${navBar ? "hidden" : "2xl:inline-block hidden"} `}>
+        <Link href="/" className="">
+          <Image src="/logo.png" alt="logo" width={150} height={150} />
+        </Link>
       </div>
-      {}
-      <nav
-        className={`bg-primary w-full py-4 px-6 lg:flex hidden items-center justify-between ${
-          navBar ? "navbar-animate" : "lg:rounded-[50px] rounded-none relative"
-        }  duration-150 ease-in-out`}
+      <div
+        className={`2xl:px-10 px-0 flex-col items-center w-full ${
+          pathName === "/verify" ? "hidden" : "flex"
+        }`}
       >
-        <ul className="flex items-center gap-5">
-          {navBarLinks.map((navLink, index: number) => (
-            <li
-              key={index}
-              className={`${
-                pathName === `${navLink.path.toLowerCase()}`
-                  ? "text-primary-foreground"
-                  : "text-white"
-              } uppercase`}
-            >
-              <Link href={`${navLink.path.toLowerCase()}`} prefetch={true}>
-                {navLink.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="flex items-center gap-5">
-          {courseState?.allCourses?.length > 0 && (
-            <IconButton
-              size="small"
-              sx={{
-                backgroundColor: "transparent",
-                border: "1px solid #D9D9D9",
-              }}
-              onClick={handleOpenSearchModal}
-            >
-              <IoSearch className="text-white" />
-            </IconButton>
-          )}
-
+        <div className="2xl:flex 2xl:flex-row-reverse hidden items-center justify-between w-full my-2">
+          {/* <div className="flex items-center justify-start ">
+            <Link href="/" className="flex ml-2 md:mr-24">
+              <Image src="/logo.png" alt="logo" width={50} height={50} />
+            </Link>
+          </div> */}
+          <div className="flex items-center gap-10">
+            <div className={`flex items-center`}>
+              <div className={`flex items-center gap-2 pr-4`}>
+                <IconButton
+                  size="small"
+                  sx={{
+                    backgroundColor: "transparent",
+                    border: "1px solid #D9D9D9",
+                  }}
+                >
+                  <FiPhone className="text-accent" />
+                </IconButton>
+                <p className="text-accent-foreground">+250 788 668 657</p>
+              </div>
+              <div
+                className={`flex items-center gap-2 border-l border-muted-foreground pl-4`}
+              >
+                <IconButton
+                  size="small"
+                  sx={{
+                    backgroundColor: "transparent",
+                    border: "1px solid #D9D9D9",
+                  }}
+                >
+                  <HiOutlineMail className="text-accent" />
+                </IconButton>
+                <p className="text-accent-foreground">
+                  info@maxkinginstitute.org
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
+                }}
+              >
+                <FaXTwitter className="text-secondary text-sm" />
+              </IconButton>
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
+                }}
+              >
+                <FaLinkedinIn className="text-secondary text-sm" />
+              </IconButton>
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
+                }}
+              >
+                <FaFacebookF className="text-secondary text-sm" />
+              </IconButton>
+            </div>
+          </div>
+        </div>
+        {}
+        <nav
+          className={`bg-primary w-full py-4 px-6 2xl:flex hidden items-center justify-between ${
+            navBar
+              ? "navbar-animate"
+              : "2xl:rounded-[50px] rounded-none relative"
+          }  duration-150 ease-in-out`}
+        >
           <ul className="flex items-center gap-5">
-            {secondaryNavLinks.map((link: string, index: number) => (
+            {navBarLinks.map((navLink, index: number) => (
               <li
                 key={index}
-                className={`text-white uppercase cursor-pointer`}
-                onClick={() => {
-                  !userLoggedIn && handleOpenModal();
-                  !userLoggedIn && index === 0
-                    ? setSignStep("in")
-                    : setSignStep("up");
-                  userLoggedIn && router.push("/dashboard");
-                }}
+                className={`${
+                  pathName === `${navLink.path.toLowerCase()}`
+                    ? "text-primary-foreground"
+                    : "text-white"
+                } uppercase`}
               >
-                {link}
+                <Link href={`${navLink.path.toLowerCase()}`} prefetch={true}>
+                  {navLink.name}
+                </Link>
               </li>
             ))}
           </ul>
-        </div>
-      </nav>
-      <nav
-        className={`lg:hidden flex items-center justify-between bg-primary w-full px-4 py-1 fixed top-0 left-0 right-0 z-50`}
-      >
-        <div>
-          <Image src="/pagelogo.png" alt="logo" width={40} height={40} />
-        </div>
-        <div className="flex items-center gap-2">
-          {courseState?.allCourses?.length > 0 && (
+          <div className="flex items-center gap-5">
+            {courseState?.allCourses?.length > 0 && (
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                  border: "1px solid #D9D9D9",
+                }}
+                onClick={handleOpenSearchModal}
+              >
+                <IoSearch className="text-white" />
+              </IconButton>
+            )}
+
+            <ul className="flex items-center gap-5">
+              {secondaryNavLinks.map((link: string, index: number) => (
+                <li
+                  key={index}
+                  className={`text-white uppercase cursor-pointer`}
+                  onClick={() => {
+                    !userLoggedIn && handleOpenModal();
+                    !userLoggedIn && index === 0
+                      ? setSignStep("in")
+                      : setSignStep("up");
+                    userLoggedIn && router.push("/dashboard");
+                  }}
+                >
+                  {link}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+        <nav
+          className={`2xl:hidden flex items-center justify-between bg-primary w-full px-4 py-1 fixed top-0 left-0 right-0 z-50`}
+        >
+          <div>
+            <Image src="/pagelogo.png" alt="logo" width={40} height={40} />
+          </div>
+          <div className="flex items-center gap-2">
+            {courseState?.allCourses?.length > 0 && (
+              <IconButton
+                size="small"
+                sx={{
+                  backgroundColor: "transparent",
+                }}
+                onClick={handleOpenSearchModal}
+              >
+                <IoSearch className="text-white text-xl" />
+              </IconButton>
+            )}
+
             <IconButton
               size="small"
               sx={{
                 backgroundColor: "transparent",
               }}
-              onClick={handleOpenSearchModal}
+              onClick={toggleDrawer(true)}
             >
-              <IoSearch className="text-white text-xl" />
+              <IoMenu className="text-white text-xl" />
             </IconButton>
-          )}
-
-          <IconButton
-            size="small"
-            sx={{
-              backgroundColor: "transparent",
-            }}
-            onClick={toggleDrawer(true)}
-          >
-            <IoMenu className="text-white text-xl" />
-          </IconButton>
-        </div>
-      </nav>
-      <Drawer open={open} onClose={toggleDrawer(false)} className="">
-        <div className="w-[250px] bg-white text-white">
-          <List>
-            <ListItem
-              disablePadding
-              className={``}
-              onClick={toggleDrawer(false)}
-            >
-              <ListItemButton>
-                <div className="w-full flex items-center justify-between">
-                  <Image
-                    src="/pagelogo.png"
-                    alt="logo"
-                    width={40}
-                    height={40}
-                  />
-                  <IconButton className="">
-                    <IoArrowForward className="" />
-                  </IconButton>
-                </div>
-              </ListItemButton>
-            </ListItem>
-          </List>
+          </div>
+        </nav>
+        <Drawer open={open} onClose={toggleDrawer(false)} className="">
+          <div className="w-[250px] bg-white text-white">
+            <List>
+              <ListItem
+                disablePadding
+                className={``}
+                onClick={toggleDrawer(false)}
+              >
+                <ListItemButton>
+                  <div className="w-full flex items-center justify-between">
+                    <Image
+                      src="/pagelogo.png"
+                      alt="logo"
+                      width={40}
+                      height={40}
+                    />
+                    <IconButton className="">
+                      <IoArrowForward className="" />
+                    </IconButton>
+                  </div>
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+          </div>
+          <nav>
+            <List>
+              {navBarLinks?.map((navLink, index: number) => {
+                return (
+                  <Link
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    href={`${navLink.path.toLowerCase()}`}
+                    key={index}
+                  >
+                    <ListItem
+                      disablePadding
+                      key={index}
+                      className={`${
+                        pathName === navLink.path.toLowerCase()
+                          ? "bg-primary text-primary-foreground"
+                          : ""
+                      }`}
+                    >
+                      <ListItemButton>
+                        <ListItemText primary={navLink.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                );
+              })}
+            </List>
+          </nav>
           <Divider />
-        </div>
-        <nav>
-          <List>
-            {navBarLinks?.map((navLink, index: number) => {
-              return (
-                <Link
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                  href={`${navLink.path.toLowerCase()}`}
-                  key={index}
-                >
+          <nav>
+            <List>
+              {secondaryNavLinks?.map((navLink, index: number) => {
+                return (
                   <ListItem
                     disablePadding
                     key={index}
-                    className={`${
-                      pathName === navLink.path.toLowerCase()
-                        ? "bg-primary text-primary-foreground"
-                        : ""
-                    }`}
+                    onClick={() => {
+                      !userLoggedIn && index === 0
+                        ? setSignStep("in")
+                        : setSignStep("up");
+                      !userLoggedIn && handleOpenModal();
+                      setOpen(false);
+                      userLoggedIn && router.push("/dashboard");
+                    }}
                   >
                     <ListItemButton>
-                      <ListItemText primary={navLink.name} />
+                      <ListItemText primary={navLink} />
                     </ListItemButton>
                   </ListItem>
-                </Link>
-              );
-            })}
-          </List>
-        </nav>
-        <Divider />
-        <nav>
-          <List>
-            {secondaryNavLinks?.map((navLink, index: number) => {
-              return (
-                <ListItem
-                  disablePadding
-                  key={index}
-                  onClick={() => {
-                    !userLoggedIn && index === 0
-                      ? setSignStep("in")
-                      : setSignStep("up");
-                    !userLoggedIn && handleOpenModal();
-                    setOpen(false);
-                    userLoggedIn && router.push("/dashboard");
-                  }}
-                >
-                  <ListItemButton>
-                    <ListItemText primary={navLink} />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </nav>
-      </Drawer>
-      <SignInModal openModal={openModal} handleCloseModal={handleCloseModal} />
+                );
+              })}
+            </List>
+          </nav>
+        </Drawer>
+        <SignInModal
+          openModal={openModal}
+          handleCloseModal={handleCloseModal}
+        />
 
-      <SearchModal
-        openModal={openSearchModal}
-        handleCloseModal={handleCloseSearchModal}
-      />
+        <SearchModal
+          openModal={openSearchModal}
+          handleCloseModal={handleCloseSearchModal}
+        />
 
-      {/* <Modal
+        {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -523,6 +534,7 @@ const MainNavbar = () => {
           </Box>
         </Box>
       </Modal> */}
+      </div>
     </div>
   );
 };

@@ -37,6 +37,7 @@ import * as yup from "yup";
 import PDFViewer from "@/lib/utils/pdfToImage";
 import { FaEye, FaTrashCan } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
+import { BsFillTrashFill } from "react-icons/bs";
 
 const schema = yup.object().shape({
   authorName: yup.string().required().min(3).max(100),
@@ -186,6 +187,12 @@ const Documents = () => {
         <div className="">
           <h1 className="text-accent text-2xl font-bold text-center">Books</h1>
           {documentState?.allDocuments?.filter((doc) => doc.type === "book")
+            ?.length === 0 && (
+            <h1 className="text-accent-foreground text-xl text-center mb-6">
+              No Books Available
+            </h1>
+          )}
+          {documentState?.allDocuments?.filter((doc) => doc.type === "book")
             ?.length > 0 && (
             <div className="flex gap-4 justify-center flex-wrap px-6 py-10">
               {documentState?.allDocuments
@@ -213,7 +220,7 @@ const Documents = () => {
                                 setDocId(document.id);
                               }}
                             >
-                              <FaTrashCan className="text-primary-foreground text-lg" />
+                              <BsFillTrashFill className="text-primary-foreground text-lg" />
                             </IconButton>
                           )}
                           <IconButton
@@ -240,6 +247,14 @@ const Documents = () => {
           <h1 className="text-accent text-2xl font-bold text-center">
             Publications
           </h1>
+          {documentState?.allDocuments?.filter(
+            (doc) => doc.type === "publication"
+          )?.length === 0 && (
+            <h1 className="text-accent-foreground text-xl text-center">
+              No Publications Available
+            </h1>
+          )}
+
           {documentState?.allDocuments?.filter(
             (doc) => doc.type === "publication"
           )?.length > 0 && (
@@ -269,7 +284,7 @@ const Documents = () => {
                                 setDocId(document.id);
                               }}
                             >
-                              <FaTrashCan className="text-primary-foreground text-lg" />
+                              <BsFillTrashFill className="text-primary-foreground text-lg" />
                             </IconButton>
                           )}
                           <IconButton
@@ -580,7 +595,7 @@ const Documents = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>

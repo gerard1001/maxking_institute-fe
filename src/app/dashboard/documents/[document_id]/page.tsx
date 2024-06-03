@@ -29,11 +29,12 @@ const DocumentPage = ({ params: { document_id } }: PageProps) => {
       .then((res) => {
         if (res.statusCode === 200) {
           enqueueSnackbar(res.message, { variant: "success" });
-        } else {
-          enqueueSnackbar("Document fetch failed", { variant: "error" });
         }
       })
       .catch((err) => {
+        if (err.statusCode === 404) {
+          router.push("/dashboard/documents");
+        }
         enqueueSnackbar("Document fetch failed", { variant: "error" });
       })
       .finally(() => {
@@ -42,7 +43,7 @@ const DocumentPage = ({ params: { document_id } }: PageProps) => {
   }, []);
   return (
     <div>
-      <div className="">
+      <div className="pb-10">
         <BackIconButton />
         <h1 className="text-3xl font-bold text-secondary-foreground text-center mb-8">
           {documentState.allDocuments && documentState?.document?.title}
@@ -57,7 +58,7 @@ const DocumentPage = ({ params: { document_id } }: PageProps) => {
           src={documentState?.document?.file}
           allow="autoplay"
           width="100%"
-          height="100"
+          height="100%"
           className="h-screen"
         />
       </div>

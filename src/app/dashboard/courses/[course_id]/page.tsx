@@ -62,7 +62,7 @@ import * as yup from "yup";
 import { ITag } from "@/lib/interfaces/tag.interface";
 import { IoOptionsOutline, IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
-import { BsChevronDown } from "react-icons/bs";
+import { BsChevronDown, BsFillTrashFill } from "react-icons/bs";
 import Link from "next/link";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { RiFilePaper2Line } from "react-icons/ri";
@@ -858,7 +858,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                 className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
                 onClick={handleOpenDialog}
               >
-                <TbTrash className="text-red-600" />
+                <BsFillTrashFill className="text-red-600" />
               </IconButton>
             </div>
           )}
@@ -1106,7 +1106,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                               handleOpenDialog();
                                             }}
                                           >
-                                            <TbTrash className="text-red-600" />
+                                            <BsFillTrashFill className="text-red-600" />
                                           </IconButton>
                                         </>
                                       )}
@@ -1166,7 +1166,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                               className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
                               onClick={handleOpenModuleDialog}
                             >
-                              <TbTrash className="text-red-600" />
+                              <BsFillTrashFill className="text-red-600" />
                             </IconButton>
                           </div>
                         </AccordionActions>
@@ -1825,7 +1825,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>
@@ -1870,7 +1870,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>
@@ -1908,7 +1908,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-green-200">
             <MdPayment className="text-green-500 text-3xl font-semibold" />
           </div>

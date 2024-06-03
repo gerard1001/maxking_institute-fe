@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { Box, Button, Dialog, IconButton } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Box, Button, Chip, Dialog, IconButton } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
 import {
   deleteArticle,
   featureArticle,
@@ -26,7 +26,9 @@ const SavedArticles = () => {
   const router = useRouter();
   const state = useSelector(selectArticles);
   const { enqueueSnackbar } = useSnackbar();
+  const pathName = usePathname();
 
+  const [page, setPage] = useState<"main" | "saved">("main");
   const articles = state.savedArticles;
 
   const saveArticle = (id: string) => {
@@ -53,6 +55,16 @@ const SavedArticles = () => {
     dispatch(fetchUserSavedArticles());
   }, []);
 
+  const splits = pathName.split("/");
+  console.log(splits, "****");
+  React.useEffect(() => {
+    if (splits[2] === "articles" && splits[3] === "saved") {
+      setPage("saved");
+    } else {
+      setPage("main");
+    }
+  }, [pathName]);
+
   return (
     <div>
       {" "}
@@ -60,6 +72,27 @@ const SavedArticles = () => {
         <h1 className="text-xl font-semibold ml-1 text-accent">
           Your Saved Articles
         </h1>
+        <div className="flex items-center gap-2 pb-2">
+          <Chip
+            label="All"
+            className={`cursor-pointer ${
+              page === "main" && " bg-muted text-white"
+            }`}
+            onClick={() => {
+              setPage("main");
+              router.push("/dashboard/articles");
+            }}
+          />
+          <Chip
+            label="Saved"
+            className={`cursor-pointer ${
+              page === "saved" && " bg-muted text-white"
+            }`}
+            onClick={() => {
+              setPage("saved");
+            }}
+          />
+        </div>
         {articles?.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center py-8 rounded-lg bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
             <h1 className="text-lg font-semibold text-black/75">

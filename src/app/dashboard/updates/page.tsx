@@ -39,7 +39,9 @@ const UpdatesPage = () => {
           onChange={handleChange}
           textColor="primary"
           indicatorColor="primary"
-          aria-label="primary tabs example"
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
         >
           <Tab
             value="tweets"

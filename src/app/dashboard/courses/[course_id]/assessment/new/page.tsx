@@ -54,7 +54,7 @@ import { FaPlus, FaRegEye } from "react-icons/fa6";
 import { TbTrash } from "react-icons/tb";
 import { IoWarningOutline } from "react-icons/io5";
 import LoadinProgress from "@/components/LoadingProgess";
-import { BsChevronDown } from "react-icons/bs";
+import { BsChevronDown, BsFillTrashFill } from "react-icons/bs";
 // import ReactQuill from "@/components/ReactQuill";
 import { set } from "date-fns";
 import { Choice } from "@/lib/interfaces/question.interface";
@@ -228,7 +228,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
                       handleDeleteChoice(index);
                     }}
                   >
-                    <TbTrash />
+                    <BsFillTrashFill className="text-accent-foreground text-base" />
                   </IconButton>
                 </div>
               </div>
@@ -301,7 +301,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
                     setTrueAnswer("");
                   }}
                 >
-                  <TbTrash />
+                  <BsFillTrashFill className="text-accent-foreground text-base" />
                 </IconButton>
               </div>
             </div> */}
@@ -437,7 +437,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
                       handleOpenModuleDialog(), setQuestionId(question.id);
                     }}
                   >
-                    <TbTrash className="text-red-600" />
+                    <BsFillTrashFill className="text-red-600" />
                   </IconButton>
                 </div>
               </AccordionActions>
@@ -450,7 +450,7 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Box className="flex flex-col items-center justify-center gap-2 w-[440px] mx-auto p-4">
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
           <div className="w-fit p-4 rounded-full bg-red-200">
             <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
           </div>
