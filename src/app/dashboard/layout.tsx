@@ -20,6 +20,7 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   } = useContext(LoginContext);
   const [navBar, setNavBar] = useState<boolean>(false);
   const [onLearning, setOnLearning] = useState<boolean>(false);
+  const [takingAssessment, setTakingAssessment] = useState<boolean>(false);
 
   const scrollDiv = (e: any) => {
     if (e.target.scrollTop >= 40) {
@@ -36,12 +37,25 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     } else {
       setOnLearning(false);
     }
+    if (
+      splits[2] === "courses" &&
+      splits[4] === "assessment" &&
+      splits[5] === "take"
+    ) {
+      setTakingAssessment(true);
+    } else {
+      setTakingAssessment(false);
+    }
   }, [pathName]);
   return (
     <ProtectedRoute>
       <div className="flex h-screen overflow-hidden">
         <div className="">
-          {onLearning ? <DashboardLearningSidebar /> : <DashboardSidebar />}
+          {onLearning ? (
+            <DashboardLearningSidebar />
+          ) : (
+            !takingAssessment && <DashboardSidebar />
+          )}
           {/* <DashboardSidebar /> */}
         </div>
         <div className="w-full overflow-y-auto" onScroll={scrollDiv}>

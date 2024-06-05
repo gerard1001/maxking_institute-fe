@@ -702,26 +702,81 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                     <>
                       <Box
                         sx={{ width: "100%", px: "10px" }}
-                        className="flex items-center gap-2"
+                        className="flex flex-col"
                       >
-                        <LinearProgressWithLabel value={100} /> Complete
+                        <Box
+                          sx={{ width: "100%", px: "10px" }}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="text-accent-foreground font-semibold">
+                            Progress:
+                          </span>{" "}
+                          <LinearProgressWithLabel value={100} />
+                          <span className="text-sm text-slate-500">
+                            (Completed)
+                          </span>
+                        </Box>
+                        <Box
+                          sx={{ width: "100%", px: "10px" }}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="text-accent-foreground font-semibold">
+                            Rank:
+                          </span>{" "}
+                          <span
+                            className={`${
+                              Number(
+                                loggedInUser?.courses?.find(
+                                  (course) => course.id === course_id
+                                )?.user_course?.rank
+                              ) < 60
+                                ? "text-red-600"
+                                : "text-accent-foreground"
+                            }`}
+                          >
+                            {
+                              loggedInUser?.courses?.find(
+                                (course) => course.id === course_id
+                              )?.user_course?.rank
+                            }{" "}
+                            %
+                          </span>{" "}
+                        </Box>
                       </Box>
-                      <Button
-                        className="bg-secondary text-white w-[180px]"
-                        onClick={() => {
-                          if (
-                            loggedInUser?.courses?.find(
-                              (course) => course.id === course_id
-                            )
-                          ) {
-                            router.push(
-                              `/dashboard/courses/${course_id}/learning/1/1`
-                            );
-                          }
-                        }}
-                      >
-                        Review course
-                      </Button>
+                      <Box className="flex flex-col items-center gap-2">
+                        <Button
+                          className="bg-secondary text-white w-[180px]"
+                          onClick={() => {
+                            if (
+                              loggedInUser?.courses?.find(
+                                (course) => course.id === course_id
+                              )
+                            ) {
+                              router.push(
+                                `/dashboard/courses/${course_id}/learning/1/1`
+                              );
+                            }
+                          }}
+                        >
+                          Review course
+                        </Button>
+                        <Button
+                          className="bg-red-500 text-white w-[180px]"
+                          onClick={() => {
+                            if (
+                              loggedInUser?.courses?.find(
+                                (course) => course.id === course_id
+                              )
+                            ) {
+                              router.push(
+                                `/dashboard/courses/${course_id}/learning/1/1`
+                              );
+                            }
+                          }}
+                        >
+                          Restart Course
+                        </Button>
+                      </Box>
                     </>
                   ) : (
                     <>
@@ -1965,6 +2020,44 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </Button>
         </Box>
       </Dialog>
+      {/* <Dialog
+        open={openRestartDialog}
+        onClose={handleCloseRestartDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
+          <div className="w-fit p-4 rounded-full bg-red-200">
+            <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
+          </div>
+          <h1 className="text-xl font-semibold">Attention</h1>
+          <p className="text-center">
+            This action will completely restart your history with this course
+            and erase all related data in the process. Still wish to proceed?
+          </p>
+          <Button
+            fullWidth
+            onClick={() => {}}
+            className="bg-red-500 text-white hover:bg-red-400 !h-9"
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? (
+              <LoadinProgress className="!h-8 !w-8" />
+            ) : (
+              "Delete"
+            )}
+          </Button>
+          <Button
+            fullWidth
+            onClick={handleCloseRestartDialog}
+            autoFocus
+            variant="contained"
+            className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Dialog> */}
     </>
   );
 };

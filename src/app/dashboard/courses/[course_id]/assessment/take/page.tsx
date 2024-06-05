@@ -74,6 +74,7 @@ import ReactQuill from "@/components/ReactQuill";
 import { set } from "date-fns";
 import { Choice } from "@/lib/interfaces/question.interface";
 import BackIconButton from "@/components/BackIconButton";
+import DashboardFooter from "@/components/DashboardFooter";
 
 interface PageProps {
   params: {
@@ -223,10 +224,11 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
   };
 
   return (
-    <div>
+    <div className="pb-10">
+      <BackIconButton />
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)}
-        className="block bg-white p-4 shadow-md rounded-md"
+        className="block bg-white p-4 shadow-md rounded-md max-w-[1200px] mx-auto"
       >
         <h1 className="text-accent font-semibold text-2xl mt-3">
           {courseState?.course?.title}
@@ -260,6 +262,9 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
                         key={index2}
                         value={choice.choice}
                         disabled={submitted}
+                        sx={{
+                          mt: 1,
+                        }}
                         control={
                           <Radio
                             sx={{
@@ -317,12 +322,12 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
         {userState?.user?.courses?.find((course) => course.id === course_id)
           ?.user_course?.rank ? (
           <Button
-            type="submit"
             variant="contained"
             disabled={submitted}
             startIcon={<FaArrowLeft />}
             sx={{ mb: 3, mt: 10 }}
             className="bg-primary text-white w-[180px]"
+            onClick={() => router.back()}
           >
             Back
           </Button>

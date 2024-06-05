@@ -426,9 +426,9 @@ const ModuleLearning = ({
               })
               .catch((error: any) => {});
           } else {
-            enqueueSnackbar("You made it to this module", {
-              variant: "info",
-            });
+            // enqueueSnackbar("You made it to this module", {
+            //   variant: "info",
+            // });
           }
           if (
             actualUserPosition <
@@ -472,9 +472,9 @@ const ModuleLearning = ({
               })
               .catch((error: any) => {});
           } else {
-            enqueueSnackbar("You have made it to this chapter", {
-              variant: "info",
-            });
+            // enqueueSnackbar("You have made it to this chapter", {
+            //   variant: "info",
+            // });
           }
         }
       } else {
@@ -536,9 +536,9 @@ const ModuleLearning = ({
               })
               .catch((error: any) => {});
           } else {
-            enqueueSnackbar("You have not completed the previous chapter", {
-              variant: "error",
-            });
+            // enqueueSnackbar("You have not completed the previous chapter", {
+            //   variant: "error",
+            // });
           }
         }
       }

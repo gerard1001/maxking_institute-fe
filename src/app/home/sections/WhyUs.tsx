@@ -1,7 +1,11 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import SectionTitle from "../../../components/SectionTitle";
 import { TiInfoOutline } from "react-icons/ti";
+import Certificate from "@/components/Certificate";
+import { useReactToPrint } from "react-to-print";
 
 const benefits = [
   {
@@ -43,6 +47,11 @@ const benefits = [
 ];
 
 const WhyUs = () => {
+  const certificateRef: any = React.useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => certificateRef.current,
+  });
   return (
     <div className="lg:p-10 p-2" id="why-us">
       <SectionTitle title="Why choose us?" icon={TiInfoOutline} />
@@ -79,6 +88,13 @@ const WhyUs = () => {
           );
         })}
       </div>
+      <Certificate
+        ref={certificateRef}
+        name="NSANZIMANA Jean Pierre"
+        course="Introduction to Javascript"
+        link="https://mki/certificate/MKI-728827"
+      />
+      <button onClick={handlePrint}>Print as PDF</button>
     </div>
   );
 };

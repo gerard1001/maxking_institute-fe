@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 @import url("../../animations/animations.css");
 @import url("https://fonts.googleapis.com/css2?family=Amarante&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amarante&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lobster&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP:wght@200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -188,4 +190,20 @@ tbody tr {
 .rpv-thumbnail__cover-image {
   height: 258px;
   width: 200px;
+}
+
+.certificate {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 900px;
+  height: 608px;
+  margin: auto;
+  padding: 1em;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  padding: 5%;
 }
