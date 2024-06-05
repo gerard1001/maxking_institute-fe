@@ -165,6 +165,21 @@ export const updateUserCourse = createAppAsyncThunk(
   }
 );
 
+export const deleteUserCourse = createAppAsyncThunk(
+  "userModule/deleteUserCourse",
+  async (
+    { userId, courseId }: { userId: string; courseId: string },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.delete(`/user-course/${userId}/${courseId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const togglePublishCourse = createAppAsyncThunk(
   "course/togglePublishCourse",
   async (id: string, { rejectWithValue }): Promise<any> => {

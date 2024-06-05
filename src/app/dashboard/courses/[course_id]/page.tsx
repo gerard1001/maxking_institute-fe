@@ -6,6 +6,7 @@ import {
   deleteChapter,
   deleteCourse,
   deleteModule,
+  deleteUserCourse,
   fetchAllTags,
   fetchAllUsers,
   fetchOneCourse,
@@ -140,6 +141,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openPayDialog, setOpenPayDialog] = React.useState(false);
   const [openModuleDialog, setOpenModuleDialog] = React.useState(false);
+  const [openRestartDialog, setOpenRestartDialog] = React.useState(false);
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
   const [payLoading, setPayLoading] = React.useState<boolean>(false);
   const [moduleId, setModuleId] = React.useState<string>("");
@@ -201,6 +203,13 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   };
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOpenRestartDialog = () => {
+    setOpenRestartDialog(true);
+  };
+  const handleCloseRestartDialog = () => {
+    setOpenRestartDialog(false);
   };
 
   const handleOpenPayDialog = () => {
@@ -686,6 +695,52 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       });
   };
 
+  const restartCourse = () => {
+    setDeleteLoading(true);
+    dispatch(
+      deleteUserCourse({
+        userId: userId,
+        courseId: course_id,
+      })
+    )
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          handleCloseRestartDialog();
+          dispatch(fetchUserById(loginData.id))
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+
+          dispatch(fetchOneCourse(course_id))
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
+      .finally(() => {
+        setDeleteLoading(false);
+      });
+  };
+
   return (
     <>
       <div className="pb-10">
@@ -768,9 +823,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                 (course) => course.id === course_id
                               )
                             ) {
-                              router.push(
-                                `/dashboard/courses/${course_id}/learning/1/1`
-                              );
+                              handleOpenRestartDialog();
                             }
                           }}
                         >
@@ -2020,7 +2073,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </Button>
         </Box>
       </Dialog>
-      {/* <Dialog
+      <Dialog
         open={openRestartDialog}
         onClose={handleCloseRestartDialog}
         aria-labelledby="alert-dialog-title"
@@ -2037,14 +2090,16 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           </p>
           <Button
             fullWidth
-            onClick={() => {}}
+            onClick={() => {
+              restartCourse();
+            }}
             className="bg-red-500 text-white hover:bg-red-400 !h-9"
             disabled={deleteLoading}
           >
             {deleteLoading ? (
               <LoadinProgress className="!h-8 !w-8" />
             ) : (
-              "Delete"
+              "Proceed"
             )}
           </Button>
           <Button
@@ -2057,7 +2112,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             Cancel
           </Button>
         </Box>
-      </Dialog> */}
+      </Dialog>
     </>
   );
 };
