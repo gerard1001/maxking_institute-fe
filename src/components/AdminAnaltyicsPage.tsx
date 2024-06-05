@@ -4,6 +4,7 @@ import courseDurationAnalytics from "@/lib/analytics/courseDurationAnalytics";
 import coursePricesAnalytics from "@/lib/analytics/coursePricesAnalytics";
 import mostLearnedCoursesAnalytics from "@/lib/analytics/mostLearnedCoursesAnalytics";
 import userRoleAnalytics from "@/lib/analytics/userRoleAnalytics";
+import { Article } from "@/lib/interfaces/article.interface";
 import { ICourse } from "@/lib/interfaces/course.interface";
 import { User } from "@/lib/interfaces/user.interface";
 import { Box, styled, Typography } from "@mui/material";
@@ -43,11 +44,12 @@ const GraphBox = styled(
 interface AdminAnalyticsGraphsProps {
   users: User[];
   courses: ICourse[];
+  articles: Article[];
   range?: string;
 }
 
 const AdminAnalyticsGraphs = memo(
-  ({ users, courses }: AdminAnalyticsGraphsProps) => {
+  ({ users, courses, articles }: AdminAnalyticsGraphsProps) => {
     const router = useRouter();
     const userRolesData = useMemo(() => userRoleAnalytics(users), [users]);
     const mostLearnedCoursesData = useMemo(
@@ -98,7 +100,9 @@ const AdminAnalyticsGraphs = memo(
               router.push("/dashboard/articles");
             }}
           >
-            <div className="text-6xl text-accent/40 font-bold">10</div>
+            <div className="text-6xl text-accent/40 font-bold">
+              {articles?.length}
+            </div>
             <div className="text-muted">Total Articles</div>
           </div>
         </div>

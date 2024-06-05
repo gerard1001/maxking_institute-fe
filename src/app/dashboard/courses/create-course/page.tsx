@@ -45,6 +45,7 @@ import { IoChevronBackOutline, IoOptionsOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import BackIconButton from "@/components/BackIconButton";
 import courseDurations from "@/lib/data/courseDurations.json";
+import { LoginContext } from "@/lib/context/LoginContext";
 
 const createCourseSchema = yup.object().shape({
   title: yup.string().required().min(5).max(150),
@@ -83,6 +84,7 @@ const CreateCourse = () => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const { isClient } = React.useContext(LoginContext);
 
   const openServiceDrawer = () => {
     setOpenDrawer(true);
@@ -145,6 +147,10 @@ const CreateCourse = () => {
           preventDuplicate: true,
         });
       });
+
+    if (isClient) {
+      router.push("/dashboard/courses");
+    }
   }, []);
 
   React.useEffect(() => {
@@ -224,7 +230,7 @@ const CreateCourse = () => {
         component="form"
         noValidate
         onSubmit={handleSubmit(handleCreateCourse)}
-        className="mb-12"
+        className="pb-12"
       >
         <div className="flex  flex-col gap-6">
           <div className="flex flex-col">

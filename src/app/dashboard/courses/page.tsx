@@ -121,7 +121,7 @@ const Courses = () => {
 
   return (
     <div className="">
-      <Box className="flex items-center justify-between">
+      <Box className="flex items-center flex-wrap gap-3 justify-between">
         <Box className="">
           <Tabs
             value={value}
@@ -198,19 +198,21 @@ const Courses = () => {
               <h1 className="text-center text-xl text-accent font-bold">
                 No courses here yet
               </h1>
-              <p
-                className="text-center text-accent/50 hover:underline  hover:text-accent/80 cursor-pointer"
-                onClick={() => {
-                  router.push("/dashboard/courses/create-course");
-                }}
-              >
-                Add New
-              </p>
+              {!isClient && (
+                <p
+                  className="text-center text-accent/50 hover:underline  hover:text-accent/80 cursor-pointer"
+                  onClick={() => {
+                    router.push("/dashboard/courses/create-course");
+                  }}
+                >
+                  Add New
+                </p>
+              )}
             </div>
           ) : (
             <>
-              <div className="w-full flex gap-4 mb-8">
-                <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] p-8">
+              <div className="w-full flex gap-4 pb-8">
+                <div className="min-h-[30vh] sm:inline hidden bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] md:p-8 p-2">
                   <div className="flex items-center gap-2 border-b">
                     <h1 className="text-accent text-xl font-semibold">
                       Filters
@@ -271,16 +273,16 @@ const Courses = () => {
                     {filteredData?.map((course) => (
                       <div
                         key={course.id}
-                        className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-4"
+                        className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 md:px-8 sm:px-4 px-2 rounded-lg mb-4 overflow-x-hidden"
                       >
-                        <div className="flex gap-2 border-b border-muted-foreground pb-4">
+                        <div className="flex gap-2 border-b border-muted-foreground pb-4 lg:flex-row flex-col">
                           <img
                             src={course.coverImage}
                             alt=""
                             className="w-[320px] aspect-video rounded-lg object-cover"
                           />
                           <div className="w-full">
-                            <h1 className="text-xl text-secondary font-bold">
+                            <h1 className="text-xl text-secondary font-bold line-clamp-1">
                               {course.title}
                             </h1>
                             <div className="flex items-center gap-2 py-1">
@@ -291,7 +293,9 @@ const Courses = () => {
                                 {course?.estimatedDuration}
                               </p>
                             </div>
-                            <p className="line-clamp-4">{course.description}</p>
+                            <p className="md:line-clamp-4 line-clamp-2">
+                              {course.description}
+                            </p>
                             <div className={`w-fit bg-white px-1`}>
                               {course.price === 0 || !course.price ? (
                                 <h1 className="text-secondary font-semibold">

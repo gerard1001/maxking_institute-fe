@@ -28,6 +28,7 @@ const CourseCategories = () => {
         setLoading(false);
       });
   }, []);
+
   return (
     <div className="p-10" id="categories">
       <SectionTitle title="OUR COURSE CATEGORIES" image="/icons/category.svg" />
@@ -61,7 +62,11 @@ const CourseCategories = () => {
                       </h1>
                       <p className="text-muted text-base">
                         {category.subjects?.reduce(
-                          (acc, curr) => acc + curr.courses.length,
+                          (acc, curr) =>
+                            acc +
+                            curr.courses.filter(
+                              (course) => course.isPublished === true
+                            ).length,
                           0
                         )}{" "}
                         Course(s)

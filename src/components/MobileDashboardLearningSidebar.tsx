@@ -9,7 +9,7 @@ import { FiBookOpen } from "react-icons/fi";
 import { TbCertificate } from "react-icons/tb";
 import { HiOutlineUsers } from "react-icons/hi";
 import { MdOutlineArticle } from "react-icons/md";
-import { CgProfile } from "react-icons/cg";
+import { CgClose, CgProfile } from "react-icons/cg";
 import { AiOutlineLogout } from "react-icons/ai";
 import ProtectedRoute from "./ProtectedRoute";
 import { usePathname, useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ import { ModuleLearningProps } from "@/app/dashboard/courses/[course_id]/module/
 import { useSnackbar } from "notistack";
 import {
   Collapse,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -38,7 +39,7 @@ import { FaRegCirclePlay } from "react-icons/fa6";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
 
-const DashboardLearningSidebar = () => {
+const MobileDashboardLearningSidebar = ({ handleCloseDrawer }: any) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathName = usePathname();
@@ -99,8 +100,8 @@ const DashboardLearningSidebar = () => {
 
   return (
     <ProtectedRoute>
-      <aside
-        className={`bg-white w-fit max-w-[440px] transition-all h-screen overflow-auto lg:inline-block hidden`}
+      <div
+        className={`bg-white w-fit max-w-[440px] transition-all h-screen overflow-auto inline-block lg:hidden`}
       >
         {/* <nav className="h-full flex flex-col bg-white border-r shadow-sm overflow-auto"> */}
         <div className="pt-4 pb-2 flex items-start gap-4 w-full border-b sticky top-0 z-50 bg-white">
@@ -114,6 +115,9 @@ const DashboardLearningSidebar = () => {
           <p className="line-clamp-2 text-base font-semibold">
             {courseState?.course?.title}
           </p>
+          <IconButton onClick={handleCloseDrawer}>
+            <CgClose />
+          </IconButton>
         </div>
         {/*  <div className="bg-green-600 h-2"></div> */}
         <div className="pb-2 pr-0 flex items-center gap-4 w-full">
@@ -227,9 +231,9 @@ const DashboardLearningSidebar = () => {
             ))}
           </List>
         </div>
-      </aside>
+      </div>
     </ProtectedRoute>
   );
 };
 
-export default DashboardLearningSidebar;
+export default MobileDashboardLearningSidebar;

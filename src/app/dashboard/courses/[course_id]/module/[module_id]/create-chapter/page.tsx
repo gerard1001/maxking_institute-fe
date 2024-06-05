@@ -104,7 +104,7 @@ const CreateChapter = ({ params: { module_id, course_id } }: ModuleProps) => {
         component="form"
         noValidate
         onSubmit={handleSubmit(handleCreateChapter)}
-        className="mb-12"
+        className="pb-12"
       >
         <div className="flex gap-6">
           <div className="w-full h-fit flex flex-col items-start">

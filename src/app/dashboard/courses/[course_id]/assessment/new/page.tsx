@@ -219,9 +219,13 @@ const AddCourseAssessment = ({ params: { course_id } }: PageProps) => {
         <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-7 px-8 rounded-lg">
           <div className="w-full flex flex-col items-start">
             {choices.map((choice, index) => (
-              <div className="w-full flex items-center justify-between">
-                <p className="text-lg font-medium">{index + 1}.</p>
-                <p className="text-lg font-medium">{choice}</p>
+              <div className="w-full flex items-center gap-3 justify-between">
+                <p className="text-sm text-accent-foreground font-semibold">
+                  {index + 1}.
+                </p>
+                <p className="text-sm text-accent-foreground font-medium">
+                  {choice}
+                </p>
                 <div className="flex items-center space-x-2">
                   <IconButton
                     onClick={() => {

@@ -43,6 +43,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
 import { LoginContext } from "@/lib/context/LoginContext";
 import BackIconButton from "@/components/BackIconButton";
+import Footer from "@/components/Footer";
 
 // const schema = yup.object().shape({
 //   name: yup.string().required().min(3).max(40),
@@ -191,52 +192,57 @@ const Categories = () => {
   // }, [picture]);
 
   return (
-    <div className="p-10">
-      <BackIconButton />
-      <Box className={`w-full flex gap-4 ${isClient && "mt-10"}`}>
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px]">
-          {state?.allCategories?.length === 0 ? (
-            <div className="p-4">
-              <h1 className="text-center text-xl text-accent font-bold">
-                No categories yet
-              </h1>
-            </div>
-          ) : (
-            <div>
-              <h1 className="text-center text-accent font-semibold text-lg">
-                Categories
-              </h1>
-              {state?.allCategories?.map((category) => {
-                return (
-                  <div key={category.id} className={`py-1`}>
-                    <div
-                      className={`p-1 pl-3 ${
-                        categoryId === category.id ||
-                        state?.category?.id === category.id
-                          ? "bg-slate-300"
-                          : "hover:bg-slate-200"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div
-                          className="flex items-center gap-2 w-full cursor-pointer"
-                          onClick={() => {
-                            // setParentDeleted(false);
-                            setCategoryId(category.id);
-                          }}
-                        >
-                          <img
-                            src={category.image}
-                            alt=""
-                            className="w-[40px] p-1 aspect-square object-cover rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] fill-lime-700 bg-whhite bg-blend-multiply"
-                          />
-                          <p className="text-accent line-clamp-2 leading-4">
-                            {category.name}
-                          </p>
-                        </div>
-                        {/* {!isClient && (
+    <>
+      <div className="md:p-10 xs:p-4 p-2 xl:mt-0 mt-12">
+        <BackIconButton />
+        <Box
+          className={`w-full flex sm:flex-row flex-col gap-4 ${
+            isClient && "mt-5"
+          }`}
+        >
+          <div className="sm:min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:w-[320px] w-[100%] sm:h-full h-56 overflow-y-auto">
+            {state?.allCategories?.length === 0 ? (
+              <div className="p-4">
+                <h1 className="text-center text-xl text-accent font-bold">
+                  No categories yet
+                </h1>
+              </div>
+            ) : (
+              <div>
+                <h1 className="text-xl font-semibold text-accent text-center sticky top-0 py-2 bg-white z-40 border-b">
+                  All Categories
+                </h1>
+                {state?.allCategories?.map((category) => {
+                  return (
+                    <div key={category.id} className={`py-1`}>
+                      <div
+                        className={`p-1 pl-3 ${
+                          categoryId === category.id ||
+                          state?.category?.id === category.id
+                            ? "bg-slate-300"
+                            : "hover:bg-slate-200"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div
+                            className="flex items-center gap-2 w-full cursor-pointer"
+                            onClick={() => {
+                              // setParentDeleted(false);
+                              setCategoryId(category.id);
+                            }}
+                          >
+                            <img
+                              src={category.image}
+                              alt=""
+                              className="w-[40px] p-1 aspect-square object-cover rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] fill-lime-700 bg-whhite bg-blend-multiply"
+                            />
+                            <p className="text-accent line-clamp-2 leading-4">
+                              {category.name}
+                            </p>
+                          </div>
+                          {/* {!isClient && (
                           <IconButton
-                            onClick={(
+                          onClick={(
                               event: React.MouseEvent<HTMLButtonElement>
                             ) => {
                               handleClick(event);
@@ -246,25 +252,25 @@ const Categories = () => {
                             <HiDotsHorizontal />
                           </IconButton>
                         )} */}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
-          {state?.category &&
-          typeof category === "object" &&
-          !objectIsEmpty(category) &&
-          !parentDeleted ? (
-            <>
-              <div className="flex items-center gap-2 justify-center">
-                <h1 className="text-xl font-semibold text-accent text-center">
-                  {state?.category?.name}
-                </h1>
-                {/* {subjectState?.allSubjects?.length > 0 && (
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <div className="sm:min-h-[30vh] sm:h-full overflow-y-auto h-[55vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
+            {state?.category &&
+            typeof category === "object" &&
+            !objectIsEmpty(category) &&
+            !parentDeleted ? (
+              <>
+                <div className="flex items-center gap-2 justify-center">
+                  <h1 className="text-xl font-semibold text-accent text-center">
+                    {state?.category?.name}
+                  </h1>
+                  {/* {subjectState?.allSubjects?.length > 0 && (
                   <IconButton
                     onClick={handleOpenSubjectModal}
                     className="bg-slate-100 hover:bg-slate-200"
@@ -272,37 +278,58 @@ const Categories = () => {
                     <FaPlus className="text-sm" />
                   </IconButton>
                 )} */}
-              </div>
-              {subjectState?.allSubjects?.length === 0 ? (
-                <div className="p-4">
-                  <h1 className="text-center text-xl text-accent font-bold">
-                    No subjects here yet
-                  </h1>
                 </div>
-              ) : (
-                <div className="grid lg:grid-cols-2 xs:grid-cols-2 grid-cols-1 gap-2 pt-4 cursor-pointer">
-                  {subjectState?.allSubjects?.map((subject, index) => {
-                    return (
-                      <div
-                        key={subject.id}
-                        className={`py-1 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg`}
-                      >
-                        <div className={`p-1 pl-3`}>
-                          <div className="flex items-center justify-between">
-                            <div
-                              className="flex flex-col items-start gap-0 w-full cursor-pointer hover:bg-slate-200 p-2 rounded-lg"
-                              onClick={() => {
-                                router.push(`/courses/subject/${subject.id}`);
-                              }}
-                            >
-                              <p className="text-accent line-clamp-2">
-                                {subject.name}
-                              </p>
-                              <p className="text-secondary line-clamp-1 text-xs">
-                                ({subject?.courses?.length} Courses)
-                              </p>
-                            </div>
-                            {/* {!isClient ?? (
+                {subjectState?.allSubjects?.length === 0 ? (
+                  <div className="p-4">
+                    <h1 className="text-center text-xl text-accent font-bold">
+                      No subjects here yet
+                    </h1>
+                  </div>
+                ) : (
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-2 pt-4 cursor-pointer">
+                    {subjectState?.allSubjects?.map((subject, index) => {
+                      return (
+                        <div
+                          key={subject.id}
+                          className={`py-1 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg`}
+                        >
+                          <div className={`p-1 pl-3`}>
+                            <div className="flex items-center justify-between">
+                              <div
+                                className="flex flex-col items-start gap-0 w-full cursor-pointer hover:bg-slate-200 p-1 rounded-lg line-clamp-1"
+                                onClick={() => {
+                                  router.push(`/courses/subject/${subject.id}`);
+                                }}
+                              >
+                                <p className="text-accent line-clamp-2">
+                                  {subject.name}
+                                </p>
+                                <div className="flex items-center gap-1">
+                                  <p className="text-secondary line-clamp-1 text-xs">
+                                    (
+                                    {
+                                      subject?.courses?.filter(
+                                        (course) => course.isPublished
+                                      )?.length
+                                    }{" "}
+                                    Courses)
+                                  </p>
+                                  {subject?.courses?.filter(
+                                    (course) => !course.isPublished
+                                  )?.length > 0 && (
+                                    <p className="text-secondary line-clamp-1 text-xs">
+                                      (
+                                      {
+                                        subject?.courses?.filter(
+                                          (course) => !course.isPublished
+                                        )?.length
+                                      }{" "}
+                                      Upcoming)
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              {/* {!isClient ?? (
                               <IconButton
                                 onClick={(
                                   event: React.MouseEvent<HTMLButtonElement>
@@ -314,26 +341,28 @@ const Categories = () => {
                                 <HiDotsHorizontal />
                               </IconButton>
                             )} */}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div>
+                <div className="p-4">
+                  <h1 className="text-center text-xl text-accent font-bold">
+                    Select a category from the left
+                  </h1>
                 </div>
-              )}
-            </>
-          ) : (
-            <div>
-              <div className="p-4">
-                <h1 className="text-center text-xl text-accent font-bold">
-                  Select a category from the left
-                </h1>
               </div>
-            </div>
-          )}
-        </div>
-      </Box>
-    </div>
+            )}
+          </div>
+        </Box>
+      </div>
+      <Footer />
+    </>
   );
 };
 

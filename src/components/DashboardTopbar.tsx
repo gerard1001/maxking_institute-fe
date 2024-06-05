@@ -5,7 +5,7 @@ import LoadinProgress from "./LoadingProgess";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { FaRegBell } from "react-icons/fa6";
 import { IoArrowForward, IoMenu, IoSearch } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Divider,
   Drawer,
@@ -21,12 +21,18 @@ import { AiOutlineLogout } from "react-icons/ai";
 import DashboardSidebar from "./DashboardSidebar";
 import Image from "next/image";
 import MobileDashboardSidebar from "./MobileDahboardSidebar";
+import MobileDashboardLearningSidebar from "./MobileDashboardLearningSidebar";
 
 const DashboardTopbar = ({ navBar }: any) => {
   const router = useRouter();
+  const pathName = usePathname();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const [open, setOpen] = React.useState<boolean>(false);
+  const [openLearnig, setOpenLearning] = React.useState<boolean>(false);
+  const [onLearning, setOnLearning] = React.useState<boolean>(false);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,8 +49,25 @@ const DashboardTopbar = ({ navBar }: any) => {
   } = useContext(LoginContext);
 
   const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+    if (onLearning) {
+      setOpenLearning(newOpen);
+    } else {
+      setOpen(newOpen);
+    }
   };
+
+  const toggleLearningDrawer = (newOpen: boolean) => () => {
+    setOpenLearning(newOpen);
+  };
+
+  const splits = pathName.split("/");
+  React.useEffect(() => {
+    if (splits[2] === "courses" && splits[4] === "learning") {
+      setOnLearning(true);
+    } else {
+      setOnLearning(false);
+    }
+  }, [pathName]);
 
   return (
     <>
@@ -118,6 +141,18 @@ const DashboardTopbar = ({ navBar }: any) => {
       >
         <div className="w-[250px]">
           <MobileDashboardSidebar handleCloseDrawer={toggleDrawer(false)} />
+        </div>
+      </Drawer>
+      <Drawer
+        open={openLearnig}
+        onClose={toggleLearningDrawer(false)}
+        className=""
+        anchor="left"
+      >
+        <div className="w-[350px] overflow-hidden">
+          <MobileDashboardLearningSidebar
+            handleCloseDrawer={toggleLearningDrawer(false)}
+          />
         </div>
       </Drawer>
     </>

@@ -132,7 +132,7 @@ const PopularCourses = () => {
                     </div>
 
                     <div className="p-2 pt-0 pb-1">
-                      <h1 className="text-accent font-bold text-base line-clamp-3 min-h-[72px]">
+                      <h1 className="text-accent font-bold text-base line-clamp-2 min-h-[48px]">
                         {course.title}
                       </h1>
                       {/* <p className="line-clamp-3 my-2 text-sm">{course.description}</p> */}

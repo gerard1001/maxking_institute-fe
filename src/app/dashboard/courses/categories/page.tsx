@@ -496,9 +496,9 @@ const Categories = () => {
         </Tabs>
       </Box>
       {!isClient && (
-        <Box className={`w-full flex flex-row-reverse py-4`}>
+        <Box className={`w-full flex py-4`}>
           <Button
-            className="bg-secondary text-white"
+            className="bg-primary text-white"
             startIcon={<FaPlus />}
             onClick={() => {
               setCategoryId("");
@@ -514,8 +514,12 @@ const Categories = () => {
         </Box>
       )}
 
-      <Box className={`w-full flex gap-4 ${isClient && "mt-10"}`}>
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px]">
+      <Box
+        className={`w-full flex sm:flex-row flex-col gap-4 ${
+          isClient && "mt-10"
+        } pb-10`}
+      >
+        <div className="sm:min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:w-[320px] w-[100%] sm:h-full h-56 overflow-y-auto">
           {state?.allCategories?.length === 0 ? (
             <div className="p-4">
               <h1 className="text-center text-xl text-accent font-bold">
@@ -529,10 +533,13 @@ const Categories = () => {
               </p>
             </div>
           ) : (
-            <div>
+            <div className="relative pt-1">
+              <h1 className="text-xl font-semibold text-accent text-center sticky top-0 py-2 bg-white z-40 border-b">
+                All Categories
+              </h1>
               {state?.allCategories?.map((category) => {
                 return (
-                  <div key={category.id} className={`py-1`}>
+                  <div key={category.id} className={`py-1 mt-2`}>
                     <div
                       className={`p-1 pl-3 ${
                         categoryId === category.id ||
@@ -579,16 +586,17 @@ const Categories = () => {
             </div>
           )}
         </div>
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
+        <div className="sm:min-h-[30vh] sm:h-full overflow-y-auto h-[55vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full p-4">
           {state?.category &&
           typeof category === "object" &&
           !objectIsEmpty(category) &&
           !parentDeleted ? (
             <>
-              <div className="flex items-center gap-2 justify-center">
+              <div className="flex flex-col items-center justify-center">
                 <h1 className="text-xl font-semibold text-accent text-center">
                   {state?.category?.name}
                 </h1>
+                <p className="text-slate-400 text-center">(Subjects)</p>
                 {/* {subjectState?.allSubjects?.length > 0 && (
                   <IconButton
                     onClick={handleOpenSubjectModal}
@@ -611,17 +619,17 @@ const Categories = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid lg:grid-cols-2 xs:grid-cols-2 grid-cols-1 gap-2 pt-4 cursor-pointer">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-2 pt-4 cursor-pointer">
                   {subjectState?.allSubjects?.map((subject, index) => {
                     return (
                       <div
                         key={subject.id}
                         className={`py-1 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-lg`}
                       >
-                        <div className={`p-1 pl-3`}>
+                        <div className={`p-1 pl-2`}>
                           <div className="flex items-center justify-between">
                             <div
-                              className="flex flex-col items-start gap-0 w-full cursor-pointer hover:bg-slate-200 p-2 rounded-lg"
+                              className="flex flex-col items-start gap-0 w-full cursor-pointer hover:bg-slate-200 p-1 rounded-lg line-clamp-1"
                               onClick={() => {
                                 router.push(
                                   `/dashboard/courses/subject/${subject.id}`
@@ -631,9 +639,30 @@ const Categories = () => {
                               <p className="text-accent line-clamp-2">
                                 {subject.name}
                               </p>
-                              <p className="text-secondary line-clamp-1 text-xs">
-                                ({subject?.courses?.length} Courses)
-                              </p>
+                              <div className="flex items-center gap-1">
+                                <p className="text-secondary line-clamp-1 text-xs">
+                                  (
+                                  {
+                                    subject?.courses?.filter(
+                                      (course) => course.isPublished
+                                    )?.length
+                                  }{" "}
+                                  Courses)
+                                </p>
+                                {subject?.courses?.filter(
+                                  (course) => !course.isPublished
+                                )?.length > 0 && (
+                                  <p className="text-secondary line-clamp-1 text-xs">
+                                    (
+                                    {
+                                      subject?.courses?.filter(
+                                        (course) => !course.isPublished
+                                      )?.length
+                                    }{" "}
+                                    Upcoming)
+                                  </p>
+                                )}
+                              </div>
                             </div>
                             {!isClient && (
                               <IconButton

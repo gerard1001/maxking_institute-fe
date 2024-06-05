@@ -287,7 +287,6 @@ const MembersTable = () => {
         ),
         size: 20,
         cell: (info) => {
-          console.log(info.getValue(), "info");
           return (
             <div className="pl-2 pr-2">
               <p className="line-clamp-1">

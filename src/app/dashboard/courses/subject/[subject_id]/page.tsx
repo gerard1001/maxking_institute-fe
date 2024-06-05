@@ -140,8 +140,8 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
           </Button>
         )}
       </div>
-      <div className="w-full flex gap-4 mb-8">
-        <div className="min-h-[30vh] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] p-8">
+      <div className="w-full flex gap-4 pb-8">
+        <div className="min-h-[30vh] sm:inline hidden bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-[320px] md:p-8 p-2">
           <div className="flex items-center gap-2 border-b">
             <h1 className="text-accent text-xl font-semibold">Filters</h1>
             <HiOutlineAdjustmentsHorizontal className="text-xl" />
@@ -215,16 +215,16 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
               {filteredData?.map((course) => (
                 <div
                   key={course.id}
-                  className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-4"
+                  className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 md:px-8 sm:px-4 px-2 rounded-lg mb-4 overflow-x-hidden"
                 >
-                  <div className="flex gap-2 border-b border-muted-foreground pb-4">
+                  <div className="flex gap-2 border-b border-muted-foreground pb-4 lg:flex-row flex-col">
                     <img
                       src={course.coverImage}
                       alt=""
                       className="w-[320px] aspect-video rounded-lg object-cover"
                     />
                     <div className="w-full">
-                      <h1 className="text-xl text-secondary font-bold">
+                      <h1 className="text-xl text-secondary font-bold line-clamp-1">
                         {course.title}
                       </h1>
                       <div className="flex items-center gap-2 py-1">
@@ -235,7 +235,9 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
                           {course?.estimatedDuration}
                         </p>
                       </div>
-                      <p className="line-clamp-4">{course.description}</p>
+                      <p className="md:line-clamp-4 line-clamp-2">
+                        {course.description}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-1">
@@ -262,14 +264,29 @@ const SubjectCourses = ({ params: { subject_id } }: SubjectProps) => {
                     </div>
                     <div className="">
                       {" "}
-                      <Button
-                        className="bg-secondary text-white"
-                        onClick={() => {
-                          router.push(`/dashboard/courses/${course.id}`);
-                        }}
-                      >
-                        Go to Course
-                      </Button>
+                      {course?.isPublished ? (
+                        <Button
+                          className="bg-secondary text-white"
+                          onClick={() => {
+                            router.push(`/dashboard/courses/${course.id}`);
+                          }}
+                        >
+                          Go to Course
+                        </Button>
+                      ) : !isClient ? (
+                        <Button
+                          className="bg-secondary text-white"
+                          onClick={() => {
+                            router.push(`/dashboard/courses/${course.id}`);
+                          }}
+                        >
+                          Go to Course
+                        </Button>
+                      ) : (
+                        <p className="text-accent-foreground">
+                          ⚠️ This course is still in preparation process
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -56,7 +56,6 @@ const SavedArticles = () => {
   }, []);
 
   const splits = pathName.split("/");
-  console.log(splits, "****");
   React.useEffect(() => {
     if (splits[2] === "articles" && splits[3] === "saved") {
       setPage("saved");

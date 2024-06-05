@@ -6,8 +6,10 @@ import { IModule } from "@/lib/interfaces/module.interface";
 import {
   fetchAllCourses,
   fetchAllUsers,
+  fetchArticles,
   fetchUserById,
   fetchUserByToken,
+  selectArticles,
   selectCourses,
   selectUsers,
   useDispatch,
@@ -24,6 +26,7 @@ const Dashboard = () => {
   const { enqueueSnackbar } = useSnackbar();
   const userState = useSelector(selectUsers);
   const courseState = useSelector(selectCourses);
+  const articleState = useSelector(selectArticles);
 
   const [userActualModule, setUserActualModule] = React.useState<{
     [key: string]: number;
@@ -131,6 +134,13 @@ const Dashboard = () => {
           preventDuplicate: true,
         });
       });
+
+    dispatch(fetchArticles()).catch((err: any) => {
+      enqueueSnackbar(err.message, {
+        variant: "error",
+        preventDuplicate: true,
+      });
+    });
   }, []);
 
   React.useEffect(() => {
@@ -185,6 +195,7 @@ const Dashboard = () => {
           <AdminAnalyticsGraphs
             users={userState?.allUsers}
             courses={courseState?.allCourses}
+            articles={articleState?.articles}
           />
         </>
       ) : (

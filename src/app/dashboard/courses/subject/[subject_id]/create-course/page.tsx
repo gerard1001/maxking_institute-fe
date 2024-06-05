@@ -217,7 +217,7 @@ const CreateCourse = ({ params: { subject_id } }: SubjectProps) => {
         component="form"
         noValidate
         onSubmit={handleSubmit(handleCreateCourse)}
-        className="mb-12"
+        className="pb-12"
       >
         <div className="flex  flex-col gap-6">
           <div className="flex flex-col">

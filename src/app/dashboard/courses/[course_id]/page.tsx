@@ -689,7 +689,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   return (
     <>
       <div className="pb-10">
-        <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between">
+        <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between">
           {isClient ? (
             <>
               {loggedInUser?.courses?.find(
@@ -730,30 +730,44 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                       loggedInUser?.modules?.find(
                         (module) => module.courseId === course_id
                       ) ? (
-                        <Button
-                          className="bg-secondary text-white"
-                          onClick={() => {
-                            if (
-                              loggedInUser?.courses?.find(
-                                (course) => course.id === course_id
-                              )
-                            ) {
-                              router.push(
-                                `/dashboard/courses/${course_id}/learning/${
-                                  loggedInUser?.courses?.find(
-                                    (course) => course.id === course_id
-                                  )?.user_course?.currentModule
-                                }/${
-                                  loggedInUser?.modules?.find(
-                                    (module) => module.courseId === course_id
-                                  )?.user_module?.currentChapter
-                                }`
-                              );
-                            }
-                          }}
+                        <a
+                          target="_blank"
+                          href={`/dashboard/courses/${course_id}/learning/${
+                            loggedInUser?.courses?.find(
+                              (course) => course.id === course_id
+                            )?.user_course?.currentModule
+                          }/${
+                            loggedInUser?.modules?.find(
+                              (module) => module.courseId === course_id
+                            )?.user_module?.currentChapter
+                          }`}
+                          rel="noopener noreferrer"
                         >
-                          Continue Learning
-                        </Button>
+                          <Button
+                            className="bg-secondary text-white"
+                            // onClick={() => {
+                            //   if (
+                            //     loggedInUser?.courses?.find(
+                            //       (course) => course.id === course_id
+                            //     )
+                            //   ) {
+                            //     router.push(
+                            //       `/dashboard/courses/${course_id}/learning/${
+                            //         loggedInUser?.courses?.find(
+                            //           (course) => course.id === course_id
+                            //         )?.user_course?.currentModule
+                            //       }/${
+                            //         loggedInUser?.modules?.find(
+                            //           (module) => module.courseId === course_id
+                            //         )?.user_module?.currentChapter
+                            //       }`
+                            //     );
+                            //   }
+                            // }}
+                          >
+                            Continue Learning
+                          </Button>
+                        </a>
                       ) : (
                         <Button
                           className="bg-secondary text-white"
@@ -864,7 +878,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           )}
         </div>
 
-        <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+        <div className="sm:p-6 p-2  max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
           {courseState.course && (
             <div className="w-full">
               <div className="flex gap-3 pt-6">
@@ -872,6 +886,11 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                   <h1 className="text-accent text-xl leading-6 font-semibold mb-2">
                     {courseState.course.title}
                   </h1>
+                  <img
+                    src={courseState.course.coverImage}
+                    alt=""
+                    className="w-[440px] aspect-video  object-cover md:hidden inline-block"
+                  />
                   <p className="text-accent leading-6">
                     {courseState.course.description}
                   </p>
@@ -882,13 +901,11 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                     </span>
                   </h1>
                 </div>
-                <div className="">
-                  <img
-                    src={courseState.course.coverImage}
-                    alt=""
-                    className="w-[440px] aspect-video  object-cover "
-                  />
-                </div>
+                <img
+                  src={courseState.course.coverImage}
+                  alt=""
+                  className="w-[440px] aspect-video  object-cover md:inline-block hidden"
+                />
               </div>
               {courseState.course && (
                 <div className="py-4 border-b border-b-slate-400 flex  items-center justify-between">
@@ -901,7 +918,9 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                   <Button
                     className="bg-secondary text-white"
                     onClick={() => {
-                      router.push(`/dashboard/courses/${course_id}/module`);
+                      router.push(
+                        `/dashboard/courses/${course_id}/#course-modules`
+                      );
                     }}
                   >
                     See modules
@@ -912,20 +931,22 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                 <h1 className="text-accent text-2xl font-semibold mb-4 border-b border-b-slate-400">
                   Preview
                 </h1>
-                {courseState?.course?.previewVideo ? (
+                {courseState?.course?.previewVideo && (
                   <div className="overflow-x-auto">
                     <iframe
-                      width="853"
-                      height="480"
+                      // width="853"
+                      // height="480"
                       src={`https://www.youtube.com/embed/${courseState?.course?.previewVideo}`}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       title="Embedded youtube"
+                      className="w-full md:h-[480px] md:aspect-auto aspect-video md:w-[853px]"
                     />
                   </div>
-                ) : (
-                  <p className="text-accent leading-6">
+                )}{" "}
+                {courseState?.course?.previewText && (
+                  <p className="text-accent leading-6 mt-6">
                     {courseState?.course?.previewText}
                   </p>
                 )}
@@ -935,7 +956,10 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         </div>
 
         {isClient ? (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
+          <div
+            className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10"
+            id="course-modules"
+          >
             {courseState.course?.modules?.length === 0 ? (
               <div className="w-full">
                 <h1 className="text-center text-xl text-accent font-bold">
@@ -980,7 +1004,10 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             )}
           </div>
         ) : (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10">
+          <div
+            className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between min-h-10"
+            id="course-modules"
+          >
             {courseState.course?.modules?.length === 0 ? (
               <div className="w-full">
                 <h1 className="text-center text-xl text-accent font-bold">
@@ -1192,7 +1219,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         )}
 
         {isClient ? (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+          <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
             <h1 className="text-lg font-semibold text-accent">
               End of course evaluation
             </h1>
@@ -1201,7 +1228,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             </p>
           </div>
         ) : (
-          <div className="p-6 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+          <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
             <h1 className="text-lg font-semibold text-accent">
               End of course evaluation{" "}
               <span className="text-muted text-base">
@@ -1241,10 +1268,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             maxHeight: "98vh",
-            width: {
-              sm: 1400,
-              xs: "95%",
-            },
+            width: "95%",
             maxWidth: 900,
             overflowY: "auto",
             bgcolor: "background.paper",
@@ -1913,11 +1937,11 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
             <MdPayment className="text-green-500 text-3xl font-semibold" />
           </div>
           <h1 className="text-xl font-semibold">Confirm Your payment?</h1>
-          <p className="text-center">
+          <div className="text-center">
             <p className="text-center">
               Please confirm your payment to unlock the course content.
             </p>
-          </p>
+          </div>
           <Button
             fullWidth
             onClick={payCourse}

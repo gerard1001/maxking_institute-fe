@@ -10,7 +10,7 @@ html {
   scroll-behavior: smooth;
   font-family: "Source Sans 3", sans-serif;
 }
-
+/* 
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -21,12 +21,11 @@ html {
 
 ::-webkit-scrollbar-thumb {
   background: #c0c0c0;
-  /* border-radius: 10px; */
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #bdbdbd;
-}
+} */
 
 html,
 body,
