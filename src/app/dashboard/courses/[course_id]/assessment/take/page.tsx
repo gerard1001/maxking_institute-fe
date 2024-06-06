@@ -323,7 +323,7 @@ const TakeAssessment = ({ params: { course_id } }: PageProps) => {
           ?.user_course?.rank ? (
           <Button
             variant="contained"
-            disabled={submitted}
+            // disabled={submitted}
             startIcon={<FaArrowLeft />}
             sx={{ mb: 3, mt: 10 }}
             className="bg-primary text-white w-[180px]"

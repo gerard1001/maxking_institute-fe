@@ -9,6 +9,7 @@ import {
   fetchRelatedArticles,
   fetchSingleArticle,
   fetchUserSavedArticles,
+  findByRelatedCourse,
   likePost,
   saveUserArticle,
 } from "./thunks";
@@ -139,6 +140,19 @@ export const articleSlice = createSlice({
         state.relatedArticles = action.payload;
       })
       .addCase(fetchRelatedArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(findByRelatedCourse.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(findByRelatedCourse.fulfilled, (state, action) => {
+        state.loading = false;
+        state.relatedArticles = action.payload;
+      })
+      .addCase(findByRelatedCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

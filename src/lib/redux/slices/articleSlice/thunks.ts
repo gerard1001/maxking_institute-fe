@@ -115,6 +115,18 @@ export const fetchRelatedArticles = createAppAsyncThunk(
   }
 );
 
+export const findByRelatedCourse = createAppAsyncThunk(
+  "article/findByRelatedCourse",
+  async (courseId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/article/${courseId}/related/course`);
+      return res.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteArticle = createAppAsyncThunk(
   "article/deleteArticle",
   async (articleId: string, { rejectWithValue }): Promise<any> => {

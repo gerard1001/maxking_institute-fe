@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { IoChevronBackOutline } from "react-icons/io5";
 import { MdCelebration } from "react-icons/md";
 
 function LinearProgressWithLabel(
@@ -600,6 +601,14 @@ const ModuleLearning = ({
 
   return (
     <div className="pb-12">
+      <IconButton
+        onClick={() => {
+          router.push(`/dashboard/courses/${course_id}`);
+        }}
+        className="my-3 bg-muted/20 hover:bg-muted/50"
+      >
+        <IoChevronBackOutline className="text-accent" />
+      </IconButton>
       <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg mb-6">
         <h1 className="text-accent font-semibold text-2xl mt-3">
           {currentChapter?.title}
@@ -704,8 +713,11 @@ const ModuleLearning = ({
           <div className="w-fit p-4 rounded-full bg-sky-200">
             <MdCelebration className="text-sky-500 text-3xl font-semibold" />
           </div>
-          <h1 className="text-xl font-semibold">Are you sure?</h1>
-          <p className="text-center"></p>
+          <h1 className="text-xl font-semibold">Congratulations!</h1>
+          <p className="text-center">
+            You have successfully completed this course; proceed with an
+            evaluation test?
+          </p>
           <Button
             fullWidth
             onClick={() => {

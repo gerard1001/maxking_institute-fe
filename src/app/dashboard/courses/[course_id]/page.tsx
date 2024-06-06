@@ -3,6 +3,7 @@
 import {
   createUserCourse,
   createUserModule,
+  deleteByUserAndModuleId,
   deleteChapter,
   deleteCourse,
   deleteModule,
@@ -12,6 +13,7 @@ import {
   fetchOneCourse,
   fetchOneModule,
   fetchUserById,
+  findByRelatedCourse,
   selectCourses,
   selectTags,
   selectUsers,
@@ -21,6 +23,7 @@ import {
   useDispatch,
   useSelector,
   userPayCourse,
+  selectArticles,
 } from "@/lib/redux";
 import {
   Accordion,
@@ -31,6 +34,7 @@ import {
   Button,
   Checkbox,
   Dialog,
+  Divider,
   FormControl,
   FormHelperText,
   IconButton,
@@ -68,6 +72,7 @@ import Link from "next/link";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { RiFilePaper2Line } from "react-icons/ri";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
+import { format } from "date-fns";
 
 const createModuleSchema = yup.object().shape({
   title: yup.string().required(),
@@ -129,6 +134,8 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
   const courseState = useSelector(selectCourses);
   const tagState = useSelector(selectTags);
   const userState = useSelector(selectUsers);
+  const articleState = useSelector(selectArticles);
+
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openModuleModal, setOpenModuleModal] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -283,6 +290,15 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
           });
         });
     }
+
+    dispatch(findByRelatedCourse(course_id))
+      .unwrap()
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
   }, []);
 
   React.useEffect(() => {
@@ -741,10 +757,12 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       });
   };
 
+  console.log(articleState?.relatedArticles);
+
   return (
     <>
       <div className="pb-10">
-        <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex items-center justify-between">
+        <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4 flex flex-wrap items-center justify-between">
           {isClient ? (
             <>
               {loggedInUser?.courses?.find(
@@ -756,7 +774,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                   )?.user_course?.completed ? (
                     <>
                       <Box
-                        sx={{ width: "100%", px: "10px" }}
+                        // sx={{ width: "100%", px: "10px" }}
                         className="flex flex-col"
                       >
                         <Box
@@ -771,52 +789,91 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                             (Completed)
                           </span>
                         </Box>
-                        <Box
-                          sx={{ width: "100%", px: "10px" }}
-                          className="flex items-center gap-2"
-                        >
-                          <span className="text-accent-foreground font-semibold">
-                            Rank:
-                          </span>{" "}
-                          <span
-                            className={`${
-                              Number(
+                        {loggedInUser?.courses?.find(
+                          (course) => course.id === course_id
+                        )?.user_course?.rank ? (
+                          <Box
+                            sx={{ width: "100%", px: "10px" }}
+                            className="flex items-center gap-2"
+                          >
+                            <span className="text-accent-foreground font-semibold">
+                              Rank:
+                            </span>{" "}
+                            <span
+                              className={`${
+                                Number(
+                                  loggedInUser?.courses?.find(
+                                    (course) => course.id === course_id
+                                  )?.user_course?.rank
+                                ) < 50
+                                  ? "text-red-600"
+                                  : "text-secondary"
+                              }`}
+                            >
+                              {
                                 loggedInUser?.courses?.find(
                                   (course) => course.id === course_id
                                 )?.user_course?.rank
-                              ) < 60
-                                ? "text-red-600"
-                                : "text-accent-foreground"
-                            }`}
-                          >
-                            {
-                              loggedInUser?.courses?.find(
-                                (course) => course.id === course_id
-                              )?.user_course?.rank
-                            }{" "}
-                            %
-                          </span>{" "}
-                        </Box>
+                              }{" "}
+                              %
+                            </span>{" "}
+                          </Box>
+                        ) : (
+                          <p className="text-sm text-slate-500 lg:mb-0 mb-4">
+                            ⚠️ You have not been ranked yet, attempt the course
+                            test to get your rank and certificate
+                          </p>
+                        )}{" "}
                       </Box>
-                      <Box className="flex flex-col items-center gap-2">
+                      <Box className="flex flex-col sm:w-fit w-full justify-center items-center gap-2">
                         <Button
-                          className="bg-secondary text-white w-[180px]"
+                          className="bg-secondary text-white w-[180px] mx-auto"
                           onClick={() => {
                             if (
-                              loggedInUser?.courses?.find(
+                              !loggedInUser?.courses?.find(
                                 (course) => course.id === course_id
-                              )
+                              )?.user_course.rank
                             ) {
-                              router.push(
-                                `/dashboard/courses/${course_id}/learning/1/1`
-                              );
+                              dispatch(fetchUserById(loggedInUser?.id))
+                                .unwrap()
+                                .then((res) => {
+                                  if (res.statusCode === 200) {
+                                    router.push(
+                                      `/dashboard/courses/${course_id}/learning/${
+                                        loggedInUser?.courses?.find(
+                                          (course) => course.id === course_id
+                                        )?.user_course?.currentModule
+                                      }/${
+                                        loggedInUser?.modules?.find(
+                                          (module) =>
+                                            module.courseId === course_id
+                                        )?.user_module?.currentChapter
+                                      }`
+                                    );
+                                  }
+                                })
+                                .catch((err) => {
+                                  enqueueSnackbar(err.message, {
+                                    variant: "error",
+                                  });
+                                });
+                            } else {
+                              if (
+                                loggedInUser?.courses?.find(
+                                  (course) => course.id === course_id
+                                )
+                              ) {
+                                router.push(
+                                  `/dashboard/courses/${course_id}/learning/1/1`
+                                );
+                              }
                             }
                           }}
                         >
                           Review course
                         </Button>
                         <Button
-                          className="bg-red-500 text-white w-[180px]"
+                          className="bg-red-500 text-white w-[180px] mx-auto"
                           onClick={() => {
                             if (
                               loggedInUser?.courses?.find(
@@ -838,45 +895,19 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                       loggedInUser?.modules?.find(
                         (module) => module.courseId === course_id
                       ) ? (
-                        <a
-                          target="_blank"
-                          href={`/dashboard/courses/${course_id}/learning/${
-                            loggedInUser?.courses?.find(
-                              (course) => course.id === course_id
-                            )?.user_course?.currentModule
-                          }/${
-                            loggedInUser?.modules?.find(
-                              (module) => module.courseId === course_id
-                            )?.user_module?.currentChapter
-                          }`}
-                          rel="noopener noreferrer"
-                        >
-                          <Button
-                            className="bg-secondary text-white"
-                            // onClick={() => {
-                            //   if (
-                            //     loggedInUser?.courses?.find(
-                            //       (course) => course.id === course_id
-                            //     )
-                            //   ) {
-                            //     router.push(
-                            //       `/dashboard/courses/${course_id}/learning/${
-                            //         loggedInUser?.courses?.find(
-                            //           (course) => course.id === course_id
-                            //         )?.user_course?.currentModule
-                            //       }/${
-                            //         loggedInUser?.modules?.find(
-                            //           (module) => module.courseId === course_id
-                            //         )?.user_module?.currentChapter
-                            //       }`
-                            //     );
-                            //   }
-                            // }}
-                          >
-                            Continue Learning
-                          </Button>
-                        </a>
-                      ) : (
+                        // <a
+                        //   target="_blank"
+                        //   href={`/dashboard/courses/${course_id}/learning/${
+                        //     loggedInUser?.courses?.find(
+                        //       (course) => course.id === course_id
+                        //     )?.user_course?.currentModule
+                        //   }/${
+                        //     loggedInUser?.modules?.find(
+                        //       (module) => module.courseId === course_id
+                        //     )?.user_module?.currentChapter
+                        //   }`}
+                        //   rel="noopener noreferrer"
+                        // >
                         <Button
                           className="bg-secondary text-white"
                           onClick={() => {
@@ -885,7 +916,56 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                                 (course) => course.id === course_id
                               )
                             ) {
-                              startCourse();
+                              dispatch(fetchUserById(loggedInUser?.id))
+                                .unwrap()
+                                .then((res) => {
+                                  if (res.statusCode === 200) {
+                                    router.push(
+                                      `/dashboard/courses/${course_id}/learning/${
+                                        loggedInUser?.courses?.find(
+                                          (course) => course.id === course_id
+                                        )?.user_course?.currentModule
+                                      }/${
+                                        loggedInUser?.modules?.find(
+                                          (module) =>
+                                            module.courseId === course_id
+                                        )?.user_module?.currentChapter
+                                      }`
+                                    );
+                                  }
+                                })
+                                .catch((err) => {
+                                  enqueueSnackbar(err.message, {
+                                    variant: "error",
+                                  });
+                                });
+                            }
+                          }}
+                        >
+                          Continue Learning
+                        </Button>
+                      ) : (
+                        // </a>
+                        <Button
+                          className="bg-secondary text-white"
+                          onClick={() => {
+                            if (
+                              loggedInUser?.courses?.find(
+                                (course) => course.id === course_id
+                              )
+                            ) {
+                              dispatch(fetchUserById(loggedInUser?.id))
+                                .unwrap()
+                                .then((res) => {
+                                  if (res.statusCode === 200) {
+                                    startCourse();
+                                  }
+                                })
+                                .catch((err) => {
+                                  enqueueSnackbar(err.message, {
+                                    variant: "error",
+                                  });
+                                });
                             }
                           }}
                         >
@@ -1327,14 +1407,77 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
         )}
 
         {isClient ? (
-          <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
-            <h1 className="text-lg font-semibold text-accent">
-              End of course evaluation
-            </h1>
-            <p className="">
-              {courseState?.course?.questions?.length} questions
-            </p>
-          </div>
+          <>
+            <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
+              <h1 className="text-lg font-semibold text-accent">
+                End of course evaluation
+              </h1>
+              <p className="">
+                {courseState?.course?.questions?.length} questions
+              </p>
+            </div>
+            {articleState?.relatedArticles?.length > 0 && (
+              <>
+                <h1 className="text-3xl text-accent-foreground font-semibold text-center mt-10">
+                  Course's related articles
+                </h1>
+                <div className="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 lg:p-10 lg:pt-4 p-4 gap-4">
+                  {articleState?.relatedArticles
+                    ?.slice(0, 8)
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((article) => {
+                      return (
+                        <div
+                          key={article.id}
+                          className="max-w-[300px] sm:pb-6 pb-2"
+                        >
+                          <div className="overflow-hidden bg-cover bg-no-repeat rounded-md w-full cursor-pointer">
+                            <img
+                              src={article.coverImage}
+                              alt=""
+                              className="w-full aspect-video transition duration-300 ease-in-out hover:scale-105 object-cover"
+                              onClick={() => {
+                                router.push(
+                                  `/dashboard/articles/${article.id}`
+                                );
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 py-2 text-slate-900 text-sm font-semibold">
+                              <img
+                                src={article.author.profile.picture}
+                                alt="author image"
+                                className="w-7 aspect-square rounded-full object-cover cursor-pointer"
+                              />
+                              <h1>
+                                {article.author.firstName}{" "}
+                                {article.author.lastName}
+                              </h1>
+                            </div>
+                            <p className="my-2 text-xs font-semibold text-primary">
+                              {format(article.createdAt, "PP")}
+                            </p>
+                          </div>
+                          <h1 className="text-accent font-bold text-md line-clamp-2 min-h-12">
+                            {article.title}
+                          </h1>
+                          <p className="line-clamp-3 my-2 text-sm">
+                            {article.description}
+                          </p>
+
+                          <Divider className="sm:hidden block mt-4" />
+                        </div>
+                      );
+                    })}
+                </div>
+              </>
+            )}
+          </>
         ) : (
           <div className="sm:p-6 p-2 max-w-[900px] mx-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white mb-4">
             <h1 className="text-lg font-semibold text-accent">

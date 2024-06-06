@@ -210,7 +210,7 @@ export const updateCurrentChapter = createAppAsyncThunk(
 export const deleteByUserAndModuleId = createAppAsyncThunk(
   "userModule/deleteByUserAndModuleId",
   async (
-    { userId, moduleId }: { userId: string; moduleId: string },
+    { userId, moduleId }: { userId: string; moduleId?: string },
     { rejectWithValue }
   ): Promise<any> => {
     try {
