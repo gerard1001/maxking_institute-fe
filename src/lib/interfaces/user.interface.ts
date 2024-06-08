@@ -1,3 +1,4 @@
+import { ICertificate, IUserCertificate } from "./certificate.interface";
 import { ICourse } from "./course.interface";
 import { IModule } from "./module.interface";
 import { IUserCourse } from "./user_course.interface";
@@ -38,11 +39,13 @@ export interface User {
   roles: Role[];
   courses?: ICourse[];
   modules?: IModule[];
+  certificates?: ICertificate[];
   isVerified: boolean;
   publicDisplay: boolean;
   approvalStatus: string;
   requestedMembership: boolean;
   user_course: IUserCourse;
+  user_certificate: IUserCertificate;
   createdAt: Date;
   updatedAt: Date;
 }

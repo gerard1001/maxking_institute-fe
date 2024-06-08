@@ -1,11 +1,13 @@
 import React, { use } from "react";
 import { useQRCode } from "next-qrcode";
+import { format } from "date-fns";
 
 const Certificate = React.forwardRef((props: any, ref: any) => {
   const { Canvas } = useQRCode();
+  console.log(props.issuers, "***********************&&");
   return (
     <div ref={ref} className="certificate bg-[url('/cert-bg.png')]">
-      <div className="w-full h-full bg-white border flex flex-col items-center justify-center p-4">
+      <div className="w-full h-full bg-gradient-to-b from-slate-100 to-white flex flex-col items-center justify-center p-4">
         <div className="w-full h-full border border-yellow-300 flex flex-col items-center justify-center p-4 relative">
           <img
             src="/logo.png"
@@ -104,9 +106,10 @@ const Certificate = React.forwardRef((props: any, ref: any) => {
               fontWeight: 900,
               color: "#111",
               textTransform: "capitalize",
-              fontSize: "1em",
+              fontSize: "1.5em",
               margin: 0,
             }}
+            className="line-clamp-1"
           >
             {props.course}
           </h3>
@@ -120,7 +123,7 @@ const Certificate = React.forwardRef((props: any, ref: any) => {
               fontWeight: 600,
             }}
           >
-            On 15 October, 2023
+            On {format(new Date(props.date), "dd MMMM, yyyy")}
           </p>
           <div
             className=""
@@ -132,7 +135,49 @@ const Certificate = React.forwardRef((props: any, ref: any) => {
               alignItems: "end",
             }}
           >
-            <div className="absolute bottom-2 left-2">
+            {props.issuers?.length === 2 && (
+              <div className="w-[200px]">
+                <div
+                  style={{
+                    borderBottom: "2px solid #000",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "0px auto",
+                    fontFamily: '"Lora", serif',
+                    color: "#bababa",
+                  }}
+                >
+                  <img
+                    src={props.issuers[1].signature}
+                    alt=""
+                    className="w-fit max-w-[120px] max-h-[50px] m-0"
+                  />
+                </div>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    color: "#111",
+                    fontFamily: '"Lora", serif',
+                    lineHeight: "14px",
+                    margin: 0,
+                    marginTop: "10px",
+                  }}
+                >
+                  {props.issuers[1].name}
+                </p>
+                <p
+                  style={{
+                    color: "#283361",
+                    fontFamily: '"Lora", serif',
+                    margin: 0,
+                  }}
+                >
+                  {props.issuers[1].position}
+                </p>
+              </div>
+            )}{" "}
+            <div>
               <Canvas
                 text={`${props.link}`}
                 options={{
@@ -146,42 +191,48 @@ const Certificate = React.forwardRef((props: any, ref: any) => {
                 }}
               />
             </div>
-            <div className="absolute bottom-2 right-2" style={{ width: "35%" }}>
-              <p
-                style={{
-                  borderBottom: "2px solid #000",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  margin: "0px auto",
-                  fontFamily: '"Lora", serif',
-                  color: "#bababa",
-                }}
-              >
-                Signature
-              </p>
-              <p
-                style={{
-                  fontWeight: "bold",
-                  color: "#111",
-                  fontFamily: '"Lora", serif',
-                  lineHeight: "14px",
-                  margin: 0,
-                  marginTop: "10px",
-                }}
-              >
-                Connor Mc. Gregor
-              </p>
-              <p
-                style={{
-                  color: "#283361",
-                  fontFamily: '"Lora", serif',
-                  margin: 0,
-                }}
-              >
-                Manager, Max King
-              </p>
-            </div>
+            {props.issuers?.length >= 1 && (
+              <div className="w-[200px]">
+                <div
+                  style={{
+                    borderBottom: "2px solid #000",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "0px auto",
+                    fontFamily: '"Lora", serif',
+                    color: "#bababa",
+                  }}
+                >
+                  <img
+                    src={props.issuers[0].signature}
+                    alt=""
+                    className="w-fit max-w-[120px] max-h-[50px] m-0"
+                  />
+                </div>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    color: "#111",
+                    fontFamily: '"Lora", serif',
+                    lineHeight: "14px",
+                    margin: 0,
+                    marginTop: "10px",
+                  }}
+                >
+                  {props.issuers[0].name}
+                </p>
+                <p
+                  style={{
+                    color: "#283361",
+                    fontFamily: '"Lora", serif',
+                    margin: 0,
+                  }}
+                >
+                  {props.issuers[0].position}
+                </p>
+              </div>
+            )}{" "}
           </div>
         </div>
       </div>

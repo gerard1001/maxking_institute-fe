@@ -218,7 +218,7 @@ const Dashboard = () => {
                       No added courses yet
                     </h1>
                   ) : (
-                    <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4">
+                    <div className="flex flex-wrap lg:p-10 p-4 lg:pt-2 pt-2 gap-4 md:justify-normal justify-center">
                       {courseState?.allCourses
                         ?.filter(
                           (course) =>
@@ -275,7 +275,7 @@ const Dashboard = () => {
                   )}
                 </div>
               ) : (
-                <div className="flex flex-wrap lg:p-10 p-4 gap-4">
+                <div className="flex flex-wrap lg:p-10 p-4 gap-4 md:justify-normal justify-center">
                   {userState?.user?.courses?.map((course) => {
                     return (
                       <div className="bg-white w-[250px]">
@@ -283,6 +283,9 @@ const Dashboard = () => {
                           src={course?.coverImage}
                           alt=""
                           className="w-full aspect-video"
+                          onClick={() => {
+                            router.push(`/dashboard/courses/${course.id}`);
+                          }}
                         />
                         {course?.user_course?.completed ? (
                           <Chip

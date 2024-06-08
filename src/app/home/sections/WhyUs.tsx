@@ -88,13 +88,13 @@ const WhyUs = () => {
           );
         })}
       </div>
-      <Certificate
+      {/* <Certificate
         ref={certificateRef}
         name="NSANZIMANA Jean Pierre"
         course="Introduction to Javascript"
         link="https://mki/certificate/MKI-728827"
       />
-      <button onClick={handlePrint}>Print as PDF</button>
+      <button onClick={handlePrint}>Print as PDF</button> */}
     </div>
   );
 };

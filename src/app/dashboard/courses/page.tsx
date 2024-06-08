@@ -43,9 +43,7 @@ const Courses = () => {
   const [courseType, setCourseType] = React.useState<
     "all" | "completed" | "ongoing"
   >("all");
-  const [typedCourses, setTypedCourses] = React.useState<ICourse[]>(
-    courseState?.allCourses?.filter((course) => course?.isPublished)
-  );
+  const [typedCourses, setTypedCourses] = React.useState<ICourse[]>([]);
   const [isFreeCoursesSet, setIsFreeCoursesSet] =
     React.useState<boolean>(false);
   const [isCertifiedCoursesSet, setIsCertifiedCoursesSet] =
@@ -54,6 +52,9 @@ const Courses = () => {
   const { userId, setGoToPage, isClient } = React.useContext(LoginContext);
   const [filteredData, setFilteredData] = React.useState<ICourse[]>([]);
 
+  console.log(courseState?.allCourses, "*************************");
+  console.log(typedCourses, "*************************");
+
   React.useEffect(() => {
     dispatch(fetchAllCourses())
       .unwrap()
@@ -61,13 +62,38 @@ const Courses = () => {
       .catch((err) => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
+
+    console.log(isClient, "*************************");
+    if (!isClient) {
+      setTypedCourses(courseState?.allCourses);
+    } else {
+      setTypedCourses(courseState?.allCourses);
+      // setTypedCourses(
+      //   courseState?.allCourses?.filter((course) => course?.isPublished)
+      // );
+    }
   }, []);
 
   React.useEffect(() => {
+    if (isClient) {
+      setTypedCourses(courseState?.allCourses);
+    } else {
+      setTypedCourses(courseState?.allCourses);
+      // setTypedCourses(
+      //   courseState?.allCourses?.filter((course) => course?.isPublished)
+      // );
+    }
+  }, [isClient]);
+
+  React.useEffect(() => {
     if (courseType === "all") {
-      setTypedCourses(
-        courseState?.allCourses?.filter((course) => course?.isPublished)
-      );
+      if (!isClient) {
+        setTypedCourses(courseState?.allCourses);
+      } else {
+        setTypedCourses(
+          courseState?.allCourses?.filter((course) => course?.isPublished)
+        );
+      }
     } else if (courseType === "completed") {
       // const completedCourses = courseState?.allCourses?.filter((course) =>
       //   course?.users?.filter((user) => user?.user_course?.completed)
@@ -339,6 +365,11 @@ const Courses = () => {
                               <></>
                             )}
                           </div>
+                          {!isClient && !course?.isPublished && (
+                            <p className="text-accent/50 text-sm">
+                              ⚠️ Course not published
+                            </p>
+                          )}
                           <div className="">
                             {" "}
                             <Button

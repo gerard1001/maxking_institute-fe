@@ -1,3 +1,4 @@
+import { ICertificate } from "./certificate.interface";
 import { IModule } from "./module.interface";
 import { IQuestion } from "./question.interface";
 import { ISubject } from "./subject.interface";
@@ -23,16 +24,12 @@ export interface ICourse {
   modules: IModule[];
   questions: IQuestion[];
   subject: ISubject;
+  certificate: ICertificate;
   tags: ITag[];
   user_course: IUserCourse;
   createdAt: Date;
   updatedAt: Date;
 }
-
-// export interface ICreateCourse {
-//   name: string;
-//   image: string;
-// }
 
 export interface CourseSliceState {
   allCourses: ICourse[];

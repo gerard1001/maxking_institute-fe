@@ -15,6 +15,7 @@ import {
   testimonialSlice,
   tweetSlice,
   eventSlice,
+  certificateSlice,
 } from "./slices";
 
 export const reducer = {
@@ -34,4 +35,5 @@ export const reducer = {
   tweet: tweetSlice.reducer,
   document: documentSlice.reducer,
   event: eventSlice.reducer,
+  certificate: certificateSlice.reducer,
 };

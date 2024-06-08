@@ -775,7 +775,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                     <>
                       <Box
                         // sx={{ width: "100%", px: "10px" }}
-                        className="flex flex-col"
+                        className="flex flex-col sm:w-fit w-full sm:justify-normal justify-center sm:items-start items-center sm:mb-0 mb-6"
                       >
                         <Box
                           sx={{ width: "100%", px: "10px" }}
@@ -872,6 +872,30 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                         >
                           Review course
                         </Button>
+                        {Number(
+                          loggedInUser?.courses?.find(
+                            (course) => course.id === course_id
+                          )?.user_course?.rank
+                        ) > 50 &&
+                          courseState?.course?.certificate && (
+                            <Button
+                              className="bg-primary text-white w-[180px] mx-auto"
+                              onClick={() => {
+                                if (
+                                  loggedInUser?.courses?.find(
+                                    (course) => course.id === course_id
+                                  )
+                                ) {
+                                  router.push(
+                                    `/dashboard/certificates/student/${course_id}`
+                                  );
+                                }
+                              }}
+                            >
+                              get certificate
+                            </Button>
+                          )}
+
                         <Button
                           className="bg-red-500 text-white w-[180px] mx-auto"
                           onClick={() => {

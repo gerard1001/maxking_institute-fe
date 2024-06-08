@@ -594,8 +594,9 @@ const ModuleLearning = ({
       })
       .finally(() => {
         setLoading(false);
-        setOpenModuleDialog(true);
-        // router.push(`/dashboard/courses`);
+        if (courseState?.course?.questions?.length > 0) {
+          setOpenModuleDialog(true);
+        }
       });
   };
 
@@ -662,7 +663,8 @@ const ModuleLearning = ({
                     {" "}
                     {userState?.user?.courses?.find(
                       (course) => course?.id === course_id
-                    )?.user_course?.completed ? (
+                    )?.user_course?.completed &&
+                    courseState?.course?.questions?.length > 0 ? (
                       <Button
                         className="bg-secondary text-white w-[180px]"
                         onClick={() => {
@@ -672,15 +674,32 @@ const ModuleLearning = ({
                         Attempt test
                       </Button>
                     ) : (
-                      <Button
-                        className="bg-secondary text-white w-[180px]"
-                        onClick={() => {
-                          handleOpenModuleDialog();
-                          handleCompleteUserCourse();
-                        }}
-                      >
-                        Finish Course
-                      </Button>
+                      <>
+                        {!userState?.user?.courses?.find(
+                          (course) => course?.id === course_id
+                        )?.user_course?.completed ? (
+                          <Button
+                            className="bg-secondary text-white w-[180px]"
+                            onClick={() => {
+                              if (courseState?.course?.questions?.length > 0) {
+                                handleOpenModuleDialog();
+                              }
+                              handleCompleteUserCourse();
+                            }}
+                          >
+                            Finish Course
+                          </Button>
+                        ) : (
+                          <Button
+                            className="bg-secondary text-white w-[180px]"
+                            onClick={() => {
+                              router.push(`/dashboard/courses/${course_id}`);
+                            }}
+                          >
+                            Go Back
+                          </Button>
+                        )}
+                      </>
                     )}
                   </>
                 )}
