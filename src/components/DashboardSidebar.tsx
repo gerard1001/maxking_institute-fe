@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect, useContext } from "react";
-import { LuCalendarClock, LuChevronFirst, LuChevronLast } from "react-icons/lu";
-import { TfiArrowsVertical } from "react-icons/tfi";
+import { LuChevronFirst, LuChevronLast } from "react-icons/lu";
 import SidebarItem from "./SidebarItem";
 import { FaRegChartBar } from "react-icons/fa";
 import { FiBookOpen } from "react-icons/fi";
@@ -14,10 +13,10 @@ import { AiOutlineLogout } from "react-icons/ai";
 import ProtectedRoute from "./ProtectedRoute";
 import { usePathname, useRouter } from "next/navigation";
 import { LoginContext } from "@/lib/context/LoginContext";
-import { GrUpdate } from "react-icons/gr";
 import { RxUpdate } from "react-icons/rx";
 import { BsChatSquareQuote } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { FaRegHandshake } from "react-icons/fa6";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -103,6 +102,13 @@ const sidebarItems = (activePage: string[]) => [
     to: "/dashboard/updates",
   },
   {
+    listkey: "collaborators",
+    icon: <FaRegHandshake className="text-xl" />,
+    text: "Collaborators",
+    active: false,
+    to: "/dashboard/collaborators",
+  },
+  {
     listkey: "Testimonials",
     icon: <BsChatSquareQuote className="text-xl" />,
     text: "testimonials",
@@ -149,14 +155,16 @@ const DashboardSidebar = () => {
       setActiveIndex(5);
     } else if (activePage[2] === "updates") {
       setActiveIndex(6);
+    } else if (activePage[2] === "collaborators") {
+      setActiveIndex(7);
     } else if (activePage[2] === "users") {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
       setActiveIndex(2);
     } else if (activePage[2] === "testimonials") {
-      setActiveIndex(7);
-    } else if (activePage[2] === "profile") {
       setActiveIndex(8);
+    } else if (activePage[2] === "profile") {
+      setActiveIndex(9);
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }

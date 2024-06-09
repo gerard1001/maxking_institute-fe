@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import TawkTo from "next-tawkto";
 import React from "react";
 import { usePathname } from "next/navigation";
+import LatestUpdates from "./sections/LatestUpdates";
 
 const HomePage = () => {
   const pathName = usePathname();
@@ -39,7 +40,8 @@ const HomePage = () => {
   // process.env.NEXT_PUBLIC_TAWK_ID);
   // }, []);
   return (
-    <div className="pt-4">
+    <div className="pt-0">
+      <LatestUpdates />
       <ImageSlider />
       <WhyUs />
       <CourseCategories />

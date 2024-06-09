@@ -206,6 +206,30 @@ const Categories = () => {
     }
   }, [picture]);
 
+  React.useEffect(() => {
+    if (picture) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        setPicUrl(e.target.result);
+      };
+      reader.readAsDataURL(picture);
+    }
+  }, [picture]);
+
+  React.useEffect(() => {
+    if (!openModal) {
+      setOnEdit(false);
+      setCategoryValue("name", "");
+      setPicUrl(null);
+    }
+  }, [openModal]);
+
+  React.useEffect(() => {
+    if (!openSubjectModal) {
+      setOnEditSub(false);
+    }
+  }, [openSubjectModal]);
+
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 

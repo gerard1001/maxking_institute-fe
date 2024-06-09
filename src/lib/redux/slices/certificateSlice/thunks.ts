@@ -28,6 +28,18 @@ export const fetchAllCertificates = createAppAsyncThunk(
   }
 );
 
+export const fetchOneCertificate = createAppAsyncThunk(
+  "certificate/fetchOneCertificate",
+  async (certificateId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(`/certificate/${certificateId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const createUserCertificate = createAppAsyncThunk(
   "certificate/createUserCertificate",
   async (certificateId: string, { rejectWithValue }): Promise<any> => {
@@ -49,6 +61,20 @@ export const findByUserIdAndCertificateId = createAppAsyncThunk(
     try {
       const res = await axios.get(
         `/user-certificate/user/${userId}/certificate/${certificateId}`
+      );
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const findByUserCertificateId = createAppAsyncThunk(
+  "certificate/findByUserCertificateId",
+  async (userCertificateId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.get(
+        `/user-certificate/userCertificateId/${userCertificateId}`
       );
       return res.data;
     } catch (error: any) {

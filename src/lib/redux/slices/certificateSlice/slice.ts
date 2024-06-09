@@ -4,6 +4,8 @@ import {
   createUserCertificate,
   deleteCertificate,
   fetchAllCertificates,
+  fetchOneCertificate,
+  findByUserCertificateId,
   findByUserIdAndCertificateId,
 } from "./thunks";
 import {
@@ -51,6 +53,19 @@ export const certificateSlice = createSlice({
       });
 
     builder
+      .addCase(fetchOneCertificate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchOneCertificate.fulfilled, (state, action) => {
+        state.loading = false;
+        state.certificate = action.payload.data;
+      })
+      .addCase(fetchOneCertificate.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
       .addCase(createUserCertificate.pending, (state) => {
         state.loading = true;
       })
@@ -71,6 +86,19 @@ export const certificateSlice = createSlice({
         state.userCertificate = action.payload.data;
       })
       .addCase(findByUserIdAndCertificateId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(findByUserCertificateId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(findByUserCertificateId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCertificate = action.payload.data;
+      })
+      .addCase(findByUserCertificateId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
