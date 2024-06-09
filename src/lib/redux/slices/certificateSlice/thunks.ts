@@ -56,3 +56,15 @@ export const findByUserIdAndCertificateId = createAppAsyncThunk(
     }
   }
 );
+
+export const deleteCertificate = createAppAsyncThunk(
+  "certificate/deleteCertificate",
+  async (certificateId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.delete(`/certificate/${certificateId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

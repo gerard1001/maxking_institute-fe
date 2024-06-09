@@ -1,6 +1,7 @@
 "use client";
 
 import Certificate from "@/components/Certificate";
+import { SuspenseLoading } from "@/components/SuspenseLoading";
 import { LoginContext } from "@/lib/context/LoginContext";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
 import {
@@ -48,10 +49,17 @@ const GetCertificate = ({ params: { course_id } }: PageProps) => {
     ? userState.loggedInUser
     : userState.user;
 
+  console.log(certificateState.userCertificate, "dada");
+
+  console.log("loggedInUser", loggedInUser);
+
   React.useEffect(() => {
     if (loginData && !objectIsEmpty(loginData)) {
       dispatch(fetchUserById(loginData.id))
         .unwrap()
+        .then((res: any) => {
+          console.log(res, "dadat");
+        })
         .catch((err: any) => {
           enqueueSnackbar(err.message, {
             variant: "error",
@@ -63,6 +71,9 @@ const GetCertificate = ({ params: { course_id } }: PageProps) => {
     if (userId) {
       dispatch(fetchUserById(userId))
         .unwrap()
+        .then((res: any) => {
+          console.log(res, "dadat");
+        })
         .catch((err: any) => {
           enqueueSnackbar(err.message, {
             variant: "error",
@@ -70,28 +81,82 @@ const GetCertificate = ({ params: { course_id } }: PageProps) => {
           });
         });
     }
-    // if (!isClient) {
-    //   router.push("/dashboard/certificates");
-    // }
+
+    // dispatch(fetchOneCourse(course_id))
+    //   .unwrap()
+    //   .then((res: any) => {
+    //     console.log(res, "dada");
+    //     console.log(userId, "dada");
+    //     console.log(loginData.id, "dada");
+    //     if (res.statusCode === 200) {
+    //       dispatch(
+    //         findByUserIdAndCertificateId({
+    //           userId: userId || loginData.id,
+    //           certificateId: res.data.certificate.id,
+    //         })
+    //       )
+    //         .unwrap()
+    //         .then((res: any) => {
+    //           console.log(res, "dadares");
+    //         })
+    //         .catch((err: any) => {
+    //           enqueueSnackbar(err.message, {
+    //             variant: "error",
+    //             preventDuplicate: true,
+    //           });
+    //         });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     enqueueSnackbar(err.message, { variant: "error" });
+    //   });
   }, []);
 
   React.useEffect(() => {
     if (!objectIsEmpty(userState.user) && !objectIsEmpty(courseState.course)) {
       dispatch(
         findByUserIdAndCertificateId({
-          userId: userState?.user?.id,
+          userId: loggedInUser.id,
           certificateId: courseState?.course?.certificate?.id,
         })
       )
         .unwrap()
         .catch((err: any) => {
-          enqueueSnackbar(err.message, {
-            variant: "error",
-            preventDuplicate: true,
-          });
+          if (err.statusCode !== 500)
+            enqueueSnackbar(err.message, {
+              variant: "error",
+              preventDuplicate: true,
+            });
         });
     }
   }, [userState, courseState]);
+
+  React.useEffect(() => {
+    dispatch(fetchOneCourse(course_id))
+      .unwrap()
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          dispatch(
+            findByUserIdAndCertificateId({
+              userId: loggedInUser.id,
+              certificateId: res.data.certificate.id,
+            })
+          )
+            .unwrap()
+            .then((res: any) => {})
+            .catch((err: any) => {
+              if (err.statusCode !== 500)
+                enqueueSnackbar(err.message, {
+                  variant: "error",
+                  preventDuplicate: true,
+                });
+            });
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
+  }, [loggedInUser]);
 
   React.useEffect(() => {
     dispatch(fetchOneCourse(course_id))
@@ -144,17 +209,18 @@ const GetCertificate = ({ params: { course_id } }: PageProps) => {
 
           dispatch(
             findByUserIdAndCertificateId({
-              userId: userState.user.id,
+              userId: res.data.userId || userState.user.id,
               certificateId: courseState.course.certificate.id,
             })
           )
             .unwrap()
             .catch((err: any) => {
               if (err.statusCode !== 404) {
-                enqueueSnackbar(err.message, {
-                  variant: "error",
-                  preventDuplicate: true,
-                });
+                if (err.statusCode !== 500)
+                  enqueueSnackbar(err.message, {
+                    variant: "error",
+                    preventDuplicate: true,
+                  });
               }
             });
         }
@@ -166,46 +232,56 @@ const GetCertificate = ({ params: { course_id } }: PageProps) => {
       });
   };
 
-  console.log(certificateState.userCertificate);
+  console.log(certificateState.userCertificate, "dada");
 
   return (
     <div>
-      {!certificateState.userCertificate ||
-        (objectIsEmpty(certificateState.userCertificate) && (
-          <Button
-            variant="contained"
-            className="bg-secondary hover:bg-primary/90 w-fit my-4 !h-[46px]"
-            onClick={getCertificate}
-          >
-            generate certificate
-          </Button>
-        ))}{" "}
-      {certificateState.userCertificate &&
-        !objectIsEmpty(certificateState.userCertificate) && (
-          <div className="">
-            <div className="w-full max-w-[100vw] overflow-x-auto">
-              <Certificate
-                ref={certificateRef}
-                name={`${loggedInUser?.firstName} ${loggedInUser?.lastName}`}
-                course={`${courseState?.course?.title}`}
-                issuers={
-                  certificate?.issuers ? JSON.parse(certificate?.issuers) : []
-                }
-                link={`http://localhost:3000/certificate/${certificateState?.userCertificate?.userCertificateId}`}
-                date={certificateState?.userCertificate?.createdAt}
-              />
-            </div>
-            <div className="w-full p-6">
+      {!loggedInUser || objectIsEmpty(loggedInUser) ? (
+        <div>
+          <SuspenseLoading />
+        </div>
+      ) : (
+        <div>
+          {!certificateState.userCertificate ||
+            (objectIsEmpty(certificateState.userCertificate) && (
               <Button
                 variant="contained"
-                className="bg-primary hover:bg-primary/90 w-full max-w-32 mt-4 !h-[46px]"
-                onClick={handlePrint}
+                className="bg-secondary hover:bg-primary/90 w-fit my-4 !h-[46px]"
+                onClick={getCertificate}
               >
-                Print as PDF
+                generate certificate
               </Button>
-            </div>
-          </div>
-        )}
+            ))}{" "}
+          {certificateState.userCertificate &&
+            !objectIsEmpty(certificateState.userCertificate) && (
+              <div className="">
+                <div className="w-full max-w-[100vw] overflow-x-auto">
+                  <Certificate
+                    ref={certificateRef}
+                    name={`${loggedInUser?.firstName} ${loggedInUser?.lastName}`}
+                    course={`${courseState?.course?.title}`}
+                    issuers={
+                      certificate?.issuers
+                        ? JSON.parse(certificate?.issuers)
+                        : []
+                    }
+                    link={`http://localhost:3000/certificate/${certificateState?.userCertificate?.userCertificateId}`}
+                    date={certificateState?.userCertificate?.createdAt}
+                  />
+                </div>
+                <div className="w-full p-6">
+                  <Button
+                    variant="contained"
+                    className="bg-primary hover:bg-primary/90 w-full max-w-32 mt-4 !h-[46px]"
+                    onClick={handlePrint}
+                  >
+                    Print as PDF
+                  </Button>
+                </div>
+              </div>
+            )}
+        </div>
+      )}
     </div>
   );
 };

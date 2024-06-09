@@ -80,8 +80,6 @@ const ArticlesPage = () => {
     React.useContext(LoginContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
-  const [loadingFetchComment, setLoadingFetchComment] =
-    React.useState<boolean>(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

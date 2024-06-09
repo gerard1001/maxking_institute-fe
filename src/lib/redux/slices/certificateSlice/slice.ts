@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   createCertificate,
   createUserCertificate,
+  deleteCertificate,
   fetchAllCertificates,
   findByUserIdAndCertificateId,
 } from "./thunks";
@@ -70,6 +71,18 @@ export const certificateSlice = createSlice({
         state.userCertificate = action.payload.data;
       })
       .addCase(findByUserIdAndCertificateId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(deleteCertificate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteCertificate.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteCertificate.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });
