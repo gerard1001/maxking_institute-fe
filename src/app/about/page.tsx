@@ -16,6 +16,7 @@ import {
   useSelector,
 } from "@/lib/redux";
 import { useSnackbar } from "notistack";
+import { objectIsEmpty } from "@/lib/functions/object_check.function";
 
 const members = [
   {
@@ -566,25 +567,6 @@ const AboutUs = () => {
                                   </p>
                                 </div>
                               )}
-
-                              {/* <div className="mt-2">
-                          <h1 className="text-lg font-bold text-accent">
-                            Hobbies
-                          </h1>
-                          <ul className="">
-                            {members[clickedPerson].hobbies.map(
-                              (hobby, index) => (
-                                <li
-                                  key={index}
-                                  className="text-accent-foreground flex items-center gap-1"
-                                >
-                                  <BsDot className="text-2xl text-accent" />
-                                  <span>{hobby}</span>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </div> */}
                             </div>
                           </Menu>
                         </div>
@@ -594,7 +576,7 @@ const AboutUs = () => {
               </div>
             )}{" "}
           </div>
-          {tweetState?.tweet && (
+          {tweetState?.tweet && !objectIsEmpty(tweetState?.tweet) && (
             <div className="w-[22%] 2xl:block hidden max-h-[100px] light text-xs pt-12">
               <div className="tweet-class">
                 <Tweet id={tweetState?.tweet?.tweetId} />

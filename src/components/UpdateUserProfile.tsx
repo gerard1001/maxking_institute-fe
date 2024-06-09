@@ -232,7 +232,7 @@ const UpdateUserProfile = ({
       component="form"
       noValidate
       onSubmit={handleSubmitProfile(handleUpdateProfile)}
-      className=""
+      className="py-6"
     >
       <Box className="p-10 w-fit bg-[#e8f0fe] relative overflow-hidden cursor-pointer">
         {(picUrl || userState?.profile?.picture) && (
@@ -550,7 +550,7 @@ const UpdateUserProfile = ({
                 },
               }}
               inputProps={{ style: { height: 18 } }}
-              label="Specialty"
+              label="Profession"
               placeholder="What is your profession?"
               variant="outlined"
               fullWidth

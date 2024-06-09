@@ -211,3 +211,42 @@ export const updatePublicDisplay = createAppAsyncThunk(
     }
   }
 );
+
+export const requestPasswordToken = createAppAsyncThunk(
+  "user/requestPasswordToken",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.post(`/auth/forgot-password`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const resetPassword = createAppAsyncThunk(
+  "user/resetPassword",
+  async (
+    { token, data }: { token: string; data: any },
+    { rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const res = await axios.post(`/auth/reset-password/${token}`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const changePassword = createAppAsyncThunk(
+  "user/changePassword",
+  async (data: any, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.patch(`/auth/change-password`, data);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

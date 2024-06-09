@@ -1,6 +1,7 @@
 "use client";
 
 import UpdateUserInfo from "@/components/UpdateUserInfo";
+import UpdateUserPassword from "@/components/UpdateUserPassword";
 import UpdateUserProfile from "@/components/UpdateUserProfile";
 import { LoginContext } from "@/lib/context/LoginContext";
 import {
@@ -44,7 +45,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div>
+    <div className="pb-10">
       <div className="w-fit mx-auto">
         <div className="w-full flex items-center gap-8 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 px-8 rounded-lg">
           <Button
@@ -59,12 +60,12 @@ const Profile = () => {
           >
             Profile Info
           </Button>
-          {/* <Button
-              className={`${activeIndex === 2 ? "bg-secondary/10" : "bg-none"}`}
-              onClick={() => setActiveIndex(2)}
-            >
-              Password
-            </Button> */}
+          <Button
+            className={`${activeIndex === 2 ? "bg-secondary/10" : "bg-none"}`}
+            onClick={() => setActiveIndex(2)}
+          >
+            Password
+          </Button>
         </div>
         <div className="bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-3 sm:px-8 px-4 rounded-lg mt-6 md:min-w-[720px]">
           {activeIndex === 0 && (
@@ -79,6 +80,13 @@ const Profile = () => {
               isAccountUser={true}
               userState={userState}
               userId={userState.id}
+            />
+          )}
+          {activeIndex === 2 && (
+            <UpdateUserPassword
+            // isAccountUser={true}
+            // userState={userState}
+            // userId={userState.id}
             />
           )}
         </div>

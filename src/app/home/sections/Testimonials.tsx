@@ -73,7 +73,10 @@ const Testimonials = () => {
 
   return (
     <>
-      {testimonialState.allTestimonials.length === 0 ? null : (
+      {testimonialState.allTestimonials &&
+      testimonialState.allTestimonials.filter(
+        (testimonial) => testimonial.isPinned
+      ).length === 0 ? null : (
         <>
           <div className="lg:p-10 p-2" id="testimonials">
             <SectionTitle title="WHAT PEOPLE SAY" icon={GrBlockQuote} />

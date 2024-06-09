@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, verifyUser } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
@@ -12,14 +12,16 @@ const VerifyPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const searchParams = useSearchParams();
+  const pathName = usePathname();
 
   const [verifyLoading, setVerifyLoading] = React.useState<boolean>(false);
   const [alreadyVerified, setAlreadyVerified] = React.useState<boolean>(false);
 
   const token = searchParams.get("token");
+  const splits = pathName.split("/");
 
   React.useEffect(() => {
-    if (token) {
+    if (token && splits[1] === "verify") {
       dispatch(verifyUser(token))
         .then((res) => {
           if (res.payload.statusCode === 200) {

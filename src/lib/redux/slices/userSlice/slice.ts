@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  changePassword,
   createUser,
   deleteUser,
   fetchAllUserWithMembers,
@@ -11,6 +12,8 @@ import {
   loginUser,
   registerUser,
   requestMembership,
+  requestPasswordToken,
+  resetPassword,
   updateProfile,
   updatePublicDisplay,
   updateUser,
@@ -216,6 +219,42 @@ export const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(updatePublicDisplay.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(requestPasswordToken.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(requestPasswordToken.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(requestPasswordToken.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

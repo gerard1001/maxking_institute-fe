@@ -143,7 +143,7 @@ const UpdateUserInfo = ({
       component="form"
       noValidate
       onSubmit={handleSubmit(handleUpdateUser)}
-      className=""
+      className="py-6"
     >
       <Box className="flex sm:flex-row flex-col sm:gap-4">
         <Controller

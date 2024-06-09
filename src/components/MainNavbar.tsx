@@ -93,9 +93,7 @@ const MainNavbar = () => {
     goToPage,
   } = useContext(LoginContext);
 
-  const secondaryNavLinks = userLoggedIn
-    ? ["DASHBOARD"]
-    : ["SIGN IN", "SIGN UP"];
+  const secondaryNavLinks = userLoggedIn ? ["DASHBOARD"] : ["SIGN IN"];
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
