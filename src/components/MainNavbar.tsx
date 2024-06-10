@@ -269,7 +269,7 @@ const MainNavbar = () => {
           className={`bg-primary w-full py-4 px-6 2xl:flex hidden items-center justify-between ${
             navBar
               ? "navbar-animate"
-              : "2xl:rounded-[50px] rounded-none relative"
+              : "2xl:rounded-[50px] rounded-none relative 2xl:px-10"
           }  duration-150 ease-in-out`}
         >
           <ul className="flex items-center gap-5">

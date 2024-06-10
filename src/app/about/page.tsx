@@ -105,7 +105,7 @@ const AboutUs = () => {
 
   return (
     <div>
-      <div className="lg:py-10 py-14">
+      <div className="xl:py-10 py-20">
         <div className="w-full 2xl:px-10 px-4 flex gap-8 items-start">
           <div className="2xl:w-[78%] w-full flex flex-col items-center justify-start gap-5">
             <h1 className="text-center text-2xl text-accent font-bold">
