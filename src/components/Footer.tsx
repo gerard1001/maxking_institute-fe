@@ -36,49 +36,88 @@ const Footer = () => {
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold text-white">Our Main Menu</h1>
           <div className="text-white pt-4">
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Contact Us
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              About Us
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Training Center
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Programs
-            </p>
+            <div className="">
+              <a
+                href="/about"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                About Us
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/training-center"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Training Center
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/programs"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Programs
+              </a>
+            </div>
           </div>
         </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold text-white">Connect With Us</h1>
           <div className="text-white pt-4">
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              All Learners
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Alumni
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Our Staff
-            </p>
+            <div className="">
+              <a
+                href="/contact-us"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Contact Us
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/about#about-section-3"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Our Staff
+              </a>
+            </div>
           </div>
         </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold text-white">Resources</h1>
           <div className="text-white pt-4">
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Opportunities
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Services
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Courses
-            </p>
-            <p className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground">
-              Articles
-            </p>
+            <div className="">
+              <a
+                href="/community#opportunities"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Opportunities
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/services"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Services
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/courses"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Courses
+              </a>
+            </div>
+            <div className="">
+              <a
+                href="/articles"
+                className="underline text-zinc-200 cursor-pointer hover:text-primary-foreground"
+              >
+                Articles
+              </a>
+            </div>
           </div>
         </div>
       </div>

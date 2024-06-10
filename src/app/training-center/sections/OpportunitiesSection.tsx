@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 const OpportunitiesSection = () => {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center lg:gap-4 gap-2 mt-10 2xl:pt-0 pt-8">
+    <div
+      className="flex flex-col items-center lg:gap-4 gap-2 mt-10 2xl:pt-0 pt-8"
+      id="opportunities"
+    >
       <h1 className="xl:text-4xl text-2xl font-bold mb-4 text-secondary-foreground text-center">
         Opportunities
       </h1>
