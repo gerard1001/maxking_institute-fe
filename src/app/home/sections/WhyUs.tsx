@@ -70,7 +70,7 @@ const WhyUs = () => {
 
   return (
     <div className="lg:p-10 p-2" id="why-us">
-      <SectionTitle title="Why choose us?" icon={TiInfoOutline} />
+      <SectionTitle title="Be with us" icon={TiInfoOutline} />
       <div className="flex flex-wrap gap-3 h-fit 2xl:justify-normal justify-center">
         <div
           className="flex flex-wrap content-center pt-16 max-w-[900px] w-fit mx-auto gap-2"

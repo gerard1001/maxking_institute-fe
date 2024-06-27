@@ -10,5 +10,5 @@ export default function IndexPage() {
 }
 
 export const metadata: Metadata = {
-  title: "MaxKing Institute",
+  title: "Max King's Institute",
 };

@@ -6,6 +6,7 @@ import {
   Button,
   FormControl,
   FormHelperText,
+  Input,
   InputLabel,
   Link,
   MenuItem,
@@ -24,7 +25,12 @@ import PhoneInput from "react-phone-input-2";
 import countries from "@/lib/data/countries.json";
 import Checkbox from "@mui/material/Checkbox";
 import { FaCamera, FaUserLarge } from "react-icons/fa6";
-import { requestMembership, updateProfile, useDispatch } from "@/lib/redux";
+import {
+  deleteUser,
+  requestMembership,
+  updateProfile,
+  useDispatch,
+} from "@/lib/redux";
 import { enqueueSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
 
@@ -56,6 +62,7 @@ const MembershipPage = () => {
   const [picUrl, setPicUrl] = React.useState<any>(null);
   const [checked, setChecked] = React.useState<boolean>(false);
   const [imageError, setImageError] = React.useState<string | null>(null);
+  const [file, setFile] = React.useState(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -78,6 +85,10 @@ const MembershipPage = () => {
       bio: "",
     },
   });
+
+  const handleFileChange = (event: any) => {
+    setFile(event.target.files[0]);
+  };
 
   React.useEffect(() => {
     if (picture) {
@@ -111,6 +122,10 @@ const MembershipPage = () => {
   ];
 
   const onSubmit = (data: IFormInputs) => {
+    if (!file) {
+      alert("Please select a PDF file first.");
+      return;
+    }
     if (!picture && !picUrl) {
       router.push("/community/membership/#profile-picture");
       return setImageError("Please select a cover image");
@@ -132,6 +147,7 @@ const MembershipPage = () => {
             formData.append("country", data.country);
             formData.append("bio", data.bio);
             formData.append("picture", picture);
+            formData.append("coverLetter", file);
             setLoading(true);
             dispatch(
               updateProfile({
@@ -144,6 +160,7 @@ const MembershipPage = () => {
                 if (res.statusCode === 200) {
                   reset();
                   setPicUrl(null);
+                  setFile(null);
                   setPicture("");
                   setChecked(false);
                   enqueueSnackbar("Membership request sent successfully", {
@@ -155,6 +172,13 @@ const MembershipPage = () => {
                 enqueueSnackbar("Failed to send membership request", {
                   variant: "error",
                 });
+                dispatch(deleteUser(res.data?.id))
+                  .unwrap()
+                  .catch((err) => {
+                    enqueueSnackbar(err.message, {
+                      variant: "error",
+                    });
+                  });
               })
               .finally(() => {
                 setLoading(false);
@@ -177,7 +201,7 @@ const MembershipPage = () => {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack> */}
-        <section className="mb-8">
+        {/* <section className="mb-8">
           <h1 className="lg:text-4xl text-xl font-bold mb-4 text-secondary-foreground text-center">
             {membershipData.membership.title}
           </h1>
@@ -215,7 +239,7 @@ const MembershipPage = () => {
               }
             )}
           </ul>
-        </section>
+        </section> */}
 
         <section className="mb-8 mx-auto w-fit">
           <h2 className="lg:text-3xl text-xl font-bold mb-4 text-secondary-foreground">
@@ -533,6 +557,16 @@ const MembershipPage = () => {
                 />
               )}
             />
+            <div className="mb-5 mt-4">
+              <Input
+                type="file"
+                onChange={handleFileChange}
+                inputProps={{ accept: "application/pdf" }}
+              />
+              <p className="text-slate-400 font-semibold">
+                Upload cover letter
+              </p>
+            </div>
             <div>
               {/* <label className="block text-gray-700 font-bold mb-2">
                 Accept Terms and Conditions:

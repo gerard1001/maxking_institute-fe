@@ -62,6 +62,7 @@ export interface Profile {
   city: string;
   addressLine: string;
   bio: string;
+  coverLetter?: string;
   createdAt: Date;
   updatedAt: Date;
 }

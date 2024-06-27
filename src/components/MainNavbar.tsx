@@ -50,11 +50,11 @@ const navBarLinks = [
     path: "/about",
   },
   {
-    name: "TRAINING CENTER",
+    name: "E-CAMPUS",
     path: "/training-center",
   },
   {
-    name: "MKI PROGRAMS",
+    name: "PROGRAMS",
     path: "/programs",
   },
   {
@@ -62,7 +62,7 @@ const navBarLinks = [
     path: "/services",
   },
   {
-    name: "MKI COMMUNITY",
+    name: "COMMUNITY",
     path: "/community",
   },
   {
@@ -185,18 +185,18 @@ const MainNavbar = () => {
   }, [googleLoginError, googleLoginToken]);
 
   return (
-    <div className="flex">
-      <div className={`${navBar ? "hidden" : "2xl:inline-block hidden"} `}>
+    <div className={`flex items-end pb-2 ${navBar ? "pl-0" : "pl-4"}`}>
+      <div className={`${navBar ? "hidden" : "lg:inline-block hidden"} `}>
         <Link href="/" className="">
-          <Image src="/logo.png" alt="logo" width={150} height={150} />
+          <Image src="/logo.png" alt="logo" width={80} height={80} />
         </Link>
       </div>
       <div
-        className={`2xl:px-10 px-0 flex-col items-center w-full ${
+        className={`lg:px-10 px-0 flex-col items-center w-full ${
           pathName === "/verify" ? "hidden" : "flex"
         }`}
       >
-        <div className="2xl:flex 2xl:flex-row-reverse hidden items-center justify-between w-full my-2">
+        <div className="lg:flex lg:flex-row-reverse hidden items-center justify-between w-full my-2">
           {/* <div className="flex items-center justify-start ">
             <Link href="/" className="flex ml-2 md:mr-24">
               <Image src="/logo.png" alt="logo" width={50} height={50} />
@@ -266,10 +266,10 @@ const MainNavbar = () => {
         </div>
         {}
         <nav
-          className={`bg-primary w-full py-4 px-6 2xl:flex hidden items-center justify-between ${
+          className={`bg-primary w-full py-4 px-6 lg:flex hidden items-center justify-between ${
             navBar
               ? "navbar-animate"
-              : "2xl:rounded-[50px] rounded-none relative 2xl:px-10"
+              : "lg:rounded-[50px] rounded-none relative lg:px-10"
           }  duration-150 ease-in-out`}
         >
           <ul className="flex items-center gap-5">
@@ -322,7 +322,7 @@ const MainNavbar = () => {
           </div>
         </nav>
         <nav
-          className={`2xl:hidden flex items-center justify-between bg-primary w-full px-4 py-1 fixed top-0 left-0 right-0 z-50`}
+          className={`lg:hidden flex items-center justify-between bg-primary w-full px-4 py-1 fixed top-0 left-0 right-0 z-50`}
         >
           <div>
             <Image src="/pagelogo.png" alt="logo" width={40} height={40} />

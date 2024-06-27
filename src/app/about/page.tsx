@@ -112,41 +112,52 @@ const AboutUs = () => {
               Welcome to Maxking Institute
             </h1>
             <div className="w-full mx-auto border-t" id="about-section-1">
-              <h1 className="text-xl text-accent font-bold py-2">
-                About Max King
-              </h1>
+              <h1 className="text-xl text-accent font-bold py-2">Who we are</h1>
               <p className="text-accent-foreground">
-                Max King’s Institute (MKI), is a nonprofit organization
-                dedicated to building and helping communities achieve
-                sustainable development operating over three dimensions of the
-                community such as health, wealth and education.
+                Max King’s Institute (MKI) is a dedicated nongovernmental
+                organization committed to fostering sustainable development
+                within communities by focusing on three critical dimensions:
+                health, wealth, and education.
               </p>
               <h1 className="text-xl text-accent font-bold py-2">
-                Our Mission Through our different programs and strategies:
+                Our comprehensive programs and strategic initiatives include:
               </h1>
               <ul className="flex flex-col items-start gap-3">
                 <li className="text-accent-foreground flex items-center gap-2">
-                  <BsDot className="text-2xl text-accent" />
-                  <span>
-                    We offer teaching and training to communities about health,
-                    wealth and welfare; leadership, and technology.
-                  </span>
+                  <p className="">
+                    <span className="font-bold">
+                      {" "}
+                      • Teaching and Training:{" "}
+                    </span>{" "}
+                    We provide communities with education and training on
+                    health, economic prosperity, welfare, leadership, and
+                    technology, empowering individuals with the knowledge and
+                    skills necessary for growth.
+                  </p>
                 </li>
                 <li className="text-accent-foreground flex items-center gap-2">
-                  <BsDot className="text-2xl text-accent" />
-                  <span>
-                    We do research and advocacy to promote, improve and develop
-                    the community’s health, wealth and education and ensure
-                    quality of life.
-                  </span>
+                  <p className="">
+                    <span className="font-bold">
+                      {" "}
+                      • Research and Advocacy:{" "}
+                    </span>{" "}
+                    Our efforts in research and advocacy aim to enhance and
+                    develop community health, economic prosperity, and
+                    educational opportunities, ensuring an improved quality of
+                    life for all.
+                  </p>
                 </li>
                 <li className="text-accent-foreground flex items-center gap-2">
-                  <BsDot className="text-2xl text-accent" />
-                  <span>
-                    We do Support vulnerable communities to improve
-                    socio-economic growth and ensure the quality of life and
-                    development as well.
-                  </span>
+                  <p className="">
+                    <span className="font-bold">
+                      {" "}
+                      • Support for Vulnerable Communities:{" "}
+                    </span>{" "}
+                    We actively support vulnerable populations to drive
+                    socio-economic growth and development, ensuring that every
+                    community member has the opportunity to thrive and improve
+                    their quality of life.
+                  </p>
                 </li>
               </ul>
               <div className="mt-8"></div>
@@ -169,7 +180,7 @@ const AboutUs = () => {
                     setStructure(0);
                   }}
                 >
-                  Mission & Vision
+                  Mission
                 </h1>
                 <h1
                   className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 py-3 xs:border-b-none border-b ${
@@ -181,7 +192,7 @@ const AboutUs = () => {
                     setStructure(1);
                   }}
                 >
-                  Division
+                  Vision
                 </h1>
                 <h1
                   className={`cursor-pointer hover:bg-primary/80 hover:text-zinc-50 flex flex-col items-center justify-center transition-all ease-in-out duration-150 py-3 xs:border-b-none border-b ${
@@ -203,19 +214,14 @@ const AboutUs = () => {
                       Our Mission
                     </h1>
                     <p className="text-accent-foreground">
-                      Maxking Institute is a leading provider of online
-                      education. We are dedicated to providing our students with
-                      the best online learning experience. Our mission is to
-                      provide high-quality education to students all over the
-                      world. We offer a wide range of courses that are designed
-                      to help students achieve their academic and career goals.
-                      Our courses are taught by experienced instructors who are
-                      experts in their fields. We are committed to providing our
-                      students with the skills and knowledge they need to
-                      succeed in today's competitive job market.
+                      Our mission is to foster community development and create
+                      positive change by promoting health, education, and
+                      economic prosperity. We are dedicated to working with
+                      communities to ultimately enhance the quality of life for
+                      all.
                     </p>
                   </div>
-                  <div className="w-[90%] mx-auto">
+                  {/* <div className="w-[90%] mx-auto">
                     <h1 className="text-xl text-accent font-bold py-2">
                       Our Vision
                     </h1>
@@ -231,8 +237,8 @@ const AboutUs = () => {
                       to providing our students with the skills and knowledge
                       they need to succeed in today's competitive job market.
                     </p>
-                  </div>
-                  <div className="w-[90%] mx-auto">
+                  </div> */}
+                  {/* <div className="w-[90%] mx-auto">
                     <h1 className="text-xl text-accent font-bold py-2">
                       Our Values
                     </h1>
@@ -248,12 +254,15 @@ const AboutUs = () => {
                       students with the skills and knowledge they need to
                       succeed in today's competitive job market.
                     </p>
-                  </div>
+                  </div> */}
                 </>
               )}
               {structure === 1 && (
                 <div className="w-[90%] mx-auto">
-                  <p className="text-accent-foreground">
+                  To cultivate sustainable community development in health,
+                  wealth, and education through research, teaching, training,
+                  advocacy, and support.
+                  {/* <p className="text-accent-foreground">
                     To carry out the mission, MKI developed a Comprehensive
                     working areas Strategy as listed below:
                   </p>
@@ -397,13 +406,32 @@ const AboutUs = () => {
                   <p className="text-accent-foreground">
                     To ensure successful outcomes we more engage communities and
                     participants in our education programs and activities.
-                  </p>
+                  </p> */}
                 </div>
               )}
               {structure === 2 && (
                 <>
                   <div className="w-[90%] mx-auto">
-                    <h1 className="text-xl text-accent font-bold py-2">
+                    <p className="mb-4">
+                      Max King’s Institute (MKI) offers membership opportunities
+                      to individuals and organizations interested in promoting
+                      sustainable community development. As a member, you become
+                      part of a dedicated network committed to fostering
+                      positive change in health, education, and economic
+                      prosperity within communities. Members have access to
+                      various benefits, including participation in research,
+                      teaching, and advocacy initiatives. MKI membership is
+                      ideal for those passionate about making a difference and
+                      improving the quality of life for all community members
+                      through collaborative and impactful projects.
+                    </p>
+                    <a
+                      href="/community/membership/#membership-form"
+                      className="text-[#D6882D] font-semibold"
+                    >
+                      Apply for membership
+                    </a>
+                    {/* <h1 className="text-xl text-accent font-bold py-2">
                       Membership categories
                     </h1>
                     <p className="text-accent-foreground">
@@ -446,7 +474,7 @@ const AboutUs = () => {
                       Executive board to a person who excelled in furthering our
                       objectives. Such a member may not hold office and has no
                       voting rights.
-                    </p>
+                    </p> */}
                   </div>
                 </>
               )}
