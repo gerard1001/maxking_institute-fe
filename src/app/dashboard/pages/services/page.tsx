@@ -1,9 +1,6 @@
 "use client";
 
-import React from "react";
-import Drawer from "@mui/material/Drawer";
-import { IconButton } from "@mui/material";
-import { MdOutlineClose } from "react-icons/md";
+import LoadinProgress from "@/components/LoadingProgess";
 import {
   fetchServices,
   fetchSingleService,
@@ -11,13 +8,18 @@ import {
   useDispatch,
   useSelector,
 } from "@/lib/redux";
+import { Button, Chip, Drawer, IconButton, Stack } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
-import LoadinProgress from "@/components/LoadingProgess";
+import React from "react";
+import { MdOutlineClose } from "react-icons/md";
 
-const ServicesSection = () => {
+const ServicesPage = () => {
   const dispatch = useDispatch();
-  const { services, singleService, loading } = useSelector(selectServices);
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const { services, singleService, loading } = useSelector(selectServices);
+
   const [open, setOpen] = React.useState(false);
   const divRef = React.useRef<HTMLDivElement>(null);
 
@@ -56,10 +58,28 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-start lg:gap-4 gap-2">
-      <h1 className="text-primary-foreground text-xl mx-auto font-bold uppercase">
-        Our services
-      </h1>
+    <div>
+      <Stack direction="row" spacing={1}>
+        <Chip label="Services" className={`cursor-default`} variant="filled" />
+        <Chip
+          label="Programs"
+          className={`cursor-pointer`}
+          variant="outlined"
+          onClick={() => {
+            router.push("/dashboard/pages/programs");
+          }}
+        />
+      </Stack>
+      <div className="my-5">
+        <Button
+          className="bg-primary text-white"
+          onClick={() => {
+            router.push(`/dashboard/pages/services/new`);
+          }}
+        >
+          Add Service
+        </Button>
+      </div>
       <div className="flex items-center flex-wrap gap-8 xl:justify-start justify-center w-full lg:pt-10 pt-2">
         {services?.map((service, index: number) => {
           return (
@@ -133,4 +153,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default ServicesPage;

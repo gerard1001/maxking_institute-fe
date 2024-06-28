@@ -17,6 +17,7 @@ import { RxUpdate } from "react-icons/rx";
 import { BsChatSquareQuote } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaRegHandshake } from "react-icons/fa6";
+import { RiPagesLine } from "react-icons/ri";
 
 export const SidebarContext = createContext({
   expanded: false,
@@ -116,6 +117,13 @@ const sidebarItems = (activePage: string[]) => [
     to: "/dashboard/testimonials",
   },
   {
+    listkey: "pages",
+    icon: <RiPagesLine className="text-xl" />,
+    text: "Pages",
+    active: false,
+    to: "/dashboard/pages",
+  },
+  {
     listkey: "Profile",
     icon: <CgProfile className="text-xl" />,
     text: "Profile",
@@ -157,6 +165,8 @@ const DashboardSidebar = () => {
       setActiveIndex(6);
     } else if (activePage[2] === "collaborators") {
       setActiveIndex(7);
+    } else if (activePage[2] === "pages") {
+      setActiveIndex(9);
     } else if (activePage[2] === "users") {
       setActiveIndex(3);
     } else if (activePage[2] === "certificates") {
@@ -164,7 +174,7 @@ const DashboardSidebar = () => {
     } else if (activePage[2] === "testimonials") {
       setActiveIndex(8);
     } else if (activePage[2] === "profile") {
-      setActiveIndex(9);
+      setActiveIndex(10);
     } else if (activePage[1] === "dashboard" && activePage[2] === undefined) {
       setActiveIndex(0);
     }
@@ -205,7 +215,9 @@ const DashboardSidebar = () => {
                 <div
                   className={`${
                     isClient &&
-                    (item.text === "Users" || item.text === "Updates")
+                    (item.text === "Users" ||
+                      item.text === "Updates" ||
+                      item.text === "Pages")
                       ? "hidden"
                       : "block"
                   }`}

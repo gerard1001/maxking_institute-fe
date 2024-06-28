@@ -16,3 +16,4 @@ export * from "./documentSlice";
 export * from "./eventSlice";
 export * from "./certificateSlice";
 export * from "./collaboratorSlice";
+export * from "./serviceSlice";

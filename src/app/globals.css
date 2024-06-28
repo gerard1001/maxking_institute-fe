@@ -226,3 +226,46 @@ tbody tr {
 .hover\:animation-paused:hover {
   animation-play-state: paused;
 }
+
+.ql-editor {
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.ql-font span[data-label="Ubuntu"]::before {
+  font-family: "Source Sans 3", sans-serif;
+}
+.ql-font .ql-font span[data-label="Raleway"]::before {
+  font-family: "Raleway";
+}
+.ql-font span[data-label="Roboto"]::before {
+  font-family: "Roboto" !important;
+}
+
+.ql-font-Raleway {
+  font-family: "Raleway";
+}
+.ql-font-Roboto {
+  font-family: "Roboto";
+}
+
+.ql-container {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  background: #fefcfc;
+}
+
+.ql-snow.ql-toolbar {
+  display: block;
+  background: #eaecec;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.ql-bubble .ql-editor {
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+}
+
+.ql-editor {
+  min-height: 18em;
+}
