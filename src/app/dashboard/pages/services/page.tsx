@@ -2,16 +2,27 @@
 
 import LoadinProgress from "@/components/LoadingProgess";
 import {
+  deleteService,
   fetchServices,
   fetchSingleService,
   selectServices,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
-import { Button, Chip, Drawer, IconButton, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  Drawer,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React from "react";
+import { BsFillTrashFill } from "react-icons/bs";
+import { IoWarningOutline } from "react-icons/io5";
 import { MdOutlineClose } from "react-icons/md";
 
 const ServicesPage = () => {
@@ -21,6 +32,9 @@ const ServicesPage = () => {
   const { services, singleService, loading } = useSelector(selectServices);
 
   const [open, setOpen] = React.useState(false);
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
   const divRef = React.useRef<HTMLDivElement>(null);
 
   const openServiceDrawer = () => {
@@ -28,6 +42,13 @@ const ServicesPage = () => {
   };
   const closeServiceDrawer = () => {
     setOpen(false);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   const handleFetchService = async (id: string) => {
@@ -56,6 +77,39 @@ const ServicesPage = () => {
         });
       });
   }, []);
+
+  const handleDeleteService = async () => {
+    setDeleteLoading(true);
+    dispatch(deleteService(singleService.id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, {
+            variant: "success",
+            preventDuplicate: true,
+          });
+          setOpenDialog(false);
+          dispatch(fetchServices())
+            .unwrap()
+            .catch((err: any) => {
+              enqueueSnackbar(err.message, {
+                variant: "error",
+                preventDuplicate: true,
+              });
+            });
+          closeServiceDrawer();
+        }
+      })
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      })
+      .finally(() => {
+        setDeleteLoading(false);
+      });
+  };
 
   return (
     <div>
@@ -124,6 +178,14 @@ const ServicesPage = () => {
                 {((): any => {
                   return (
                     <div className="py-14 px-4">
+                      <div className="bg-slate-100 p-3 my-2 rounded-lg flex items-center gap-5">
+                        <IconButton
+                          className="bg-muted-foreground/20 hover:bg-muted-foreground/50"
+                          onClick={handleOpenDialog}
+                        >
+                          <BsFillTrashFill className="text-red-600" />
+                        </IconButton>
+                      </div>
                       <img
                         src={singleService.coverImage}
                         alt={singleService.title}
@@ -149,6 +211,46 @@ const ServicesPage = () => {
           </>
         </div>
       </Drawer>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Box className="flex flex-col items-center justify-center gap-2 md:w-[440px] w-[90%] mx-auto md:p-4 p-2">
+          <div className="w-fit p-4 rounded-full bg-red-200">
+            <IoWarningOutline className="text-red-500 text-3xl font-semibold" />
+          </div>
+          <h1 className="text-xl font-semibold">Are you sure?</h1>
+          <p className="text-center">
+            This action will completely remove this service. Still wish to
+            proceed?
+          </p>
+          <Button
+            fullWidth
+            onClick={() => {
+              handleDeleteService();
+            }}
+            className="bg-red-500 text-white hover:bg-red-400 !h-9"
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? (
+              <LoadinProgress className="!h-8 !w-8" />
+            ) : (
+              "Delete"
+            )}
+          </Button>
+          <Button
+            fullWidth
+            onClick={handleCloseDialog}
+            autoFocus
+            variant="contained"
+            className="bg-slate-200 text-accent hover:bg-slate-100 !h-9"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Dialog>
     </div>
   );
 };

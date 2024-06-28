@@ -5,6 +5,12 @@ import programs from "@/lib/utils/programs.json";
 import Footer from "@/components/Footer";
 import { Breadcrumbs, Link, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
+import {
+  fetchProgramByShort,
+  selectPrograms,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
 
 interface PageProps {
   params: {
@@ -13,8 +19,12 @@ interface PageProps {
 }
 
 const ProgramPage = ({ params: { program_slug } }: PageProps) => {
+  const dispatch = useDispatch();
   const router = useRouter();
-  const program = programs.find((program) => program.slug === program_slug);
+  const { singleProgram } = useSelector(selectPrograms);
+  const divRef = React.useRef<HTMLDivElement>(null);
+
+  // const program = programs.find((program) => program.slug === program_slug);
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -28,34 +38,47 @@ const ProgramPage = ({ params: { program_slug } }: PageProps) => {
       Programs
     </Link>,
     <Typography key="3" color="text.primary">
-      {program ? program.slug : ""}
+      {singleProgram ? singleProgram.short : ""}
     </Typography>,
   ];
 
+  React.useEffect(() => {
+    dispatch(fetchProgramByShort(program_slug))
+      .unwrap()
+      .catch((err: any) => {
+        if (err.statusCode === 404) {
+          router.push("/programs");
+        }
+      });
+  }, []);
+
   return (
     <div>
-      {!program ? (
+      {!singleProgram ? (
         <h1>Program not found</h1>
       ) : (
-        <div className="p-10 pt-0">
+        <div className="p-10 lg:pt-0 pt-20">
           <h1 className="text-center text-3xl text-accent font-bold mt-6">
-            {program.title}
+            {singleProgram.title}
           </h1>
           <Stack spacing={2} sx={{ my: 2 }}>
             <Breadcrumbs separator="›" aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
           </Stack>
-          <div className="flex gap-6">
+          <div className="flex md:flex-row flex-col gap-6">
             <img
-              src={program.image}
+              src={singleProgram.coverImage}
               alt=""
               className="object-cover rounded-md w-full max-w-[440px] aspect-square"
             />
-            <div className="">
-              {program.descriptions?.map((desc) => {
-                return <p className="mb-2">{desc}</p>;
-              })}
+            <div className="py-3">
+              <div
+                ref={divRef}
+                dangerouslySetInnerHTML={{
+                  __html: singleProgram.description,
+                }}
+              />
             </div>
           </div>
         </div>

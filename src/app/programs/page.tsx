@@ -1,12 +1,32 @@
 "use client";
 
 import React from "react";
-import programs from "@/lib/utils/programs.json";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import {
+  fetchPrograms,
+  selectPrograms,
+  useDispatch,
+  useSelector,
+} from "@/lib/redux";
+import { useSnackbar } from "notistack";
 
 const Programs = () => {
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const { programs } = useSelector(selectPrograms);
+
+  React.useEffect(() => {
+    dispatch(fetchPrograms())
+      .unwrap()
+      .catch((err: any) => {
+        enqueueSnackbar(err.message, {
+          variant: "error",
+          preventDuplicate: true,
+        });
+      });
+  }, []);
   const router = useRouter();
   return (
     <>
@@ -29,20 +49,20 @@ const Programs = () => {
         </p>
         <div className="">
           <div className="grid md:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-4 mt-10">
-            {programs?.map((program, index: number) => {
+            {programs?.map((program) => {
               return (
                 <div
-                  key={program.slug}
+                  key={program.short}
                   className="overflow-hidden bg-cover bg-no-repeat rounded relative group w-full xlg:max-w-[440px] max-w-[440px] aspect-square"
                 >
                   <div className="absolute w-full m-auto left-0 right-0 top-0 bottom-0 flex flex-col items-center justify-center bg-black/30 group-hover:bg-black/0">
-                    <h1 className="text-center text-primary-foreground font-bold group-hover:hidden transition-all delay-300 text-4xl bg-secondary/40  shadow-2xl">
+                    <h1 className="text-center text-primary-foreground font-bold group-hover:hidden transition-all delay-300 text-4xl bg-secondary/40 uppercase shadow-2xl">
                       {" "}
-                      {program.slug}
+                      {program.short}
                     </h1>
                   </div>
                   <img
-                    src={program.image}
+                    src={program.coverImage}
                     alt=""
                     className="object-cover rounded-md transition-all duration-300 ease-in-out hover:scale-110 h-full w-full"
                   />
@@ -50,15 +70,10 @@ const Programs = () => {
                     <h1 className="uppercase text-white text-2xl font-bold text-center">
                       {program.title}
                     </h1>
-                    {/* <p className="text-center text-white lg:text-base text-sm">
-                    BAREFOOT NOMAD is a web app that empowers individuals with
-                    comprehensive medical information and resources for informed
-                    healthcare decisions.{" "}
-                  </p> */}
                     <Button
                       content="Explore"
                       className={`text-white font-normal opacity-100 bg-secondary`}
-                      onClick={() => router.push(`/programs/${program.slug}`)}
+                      onClick={() => router.push(`/programs/${program.short}`)}
                     >
                       Read more
                     </Button>

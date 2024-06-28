@@ -18,6 +18,7 @@ import {
   certificateSlice,
   collaboratorSlice,
   serviceSlice,
+  programSlice,
 } from "./slices";
 
 export const reducer = {
@@ -40,4 +41,5 @@ export const reducer = {
   certificate: certificateSlice.reducer,
   collaborator: collaboratorSlice.reducer,
   service: serviceSlice.reducer,
+  program: programSlice.reducer,
 };
