@@ -57,7 +57,7 @@ const ServicesSection = () => {
 
   return (
     <div className="flex flex-col items-start lg:gap-4 gap-2">
-      <h1 className="text-primary-foreground text-xl mx-auto font-bold uppercase">
+      <h1 className="text-secondary text-3xl mx-auto font-bold uppercase">
         Our services
       </h1>
       <div className="flex items-center flex-wrap gap-8 xl:justify-start justify-center w-full lg:pt-10 pt-2">
