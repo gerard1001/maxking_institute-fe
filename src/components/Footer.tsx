@@ -47,7 +47,7 @@ const Footer = () => {
               </div>
               <div className="">
                 <a
-                  href="/training-center"
+                  href="/e-campus"
                   className="text-zinc-200 cursor-pointer hover:text-primary-foreground"
                 >
                   E-campus

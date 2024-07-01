@@ -1,7 +1,7 @@
 import React from "react";
-import ServicesSection from "../training-center/sections/ServicesSection";
+import ServicesSection from "../e-campus/sections/ServicesSection";
 import Footer from "@/components/Footer";
-import DivisionsSection from "../training-center/sections/DivisionsSection";
+import DivisionsSection from "../e-campus/sections/DivisionsSection";
 
 const Services = () => {
   return (

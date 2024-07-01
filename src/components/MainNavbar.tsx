@@ -51,7 +51,7 @@ const navBarLinks = [
   },
   {
     name: "E-CAMPUS",
-    path: "/training-center",
+    path: "/e-campus",
   },
   {
     name: "PROGRAMS",
