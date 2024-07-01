@@ -205,62 +205,92 @@ const MainNavbar = () => {
           <div className="flex items-center gap-10">
             <div className={`flex items-center`}>
               <div className={`flex items-center gap-2 pr-4`}>
-                <IconButton
-                  size="small"
-                  sx={{
-                    backgroundColor: "transparent",
-                    border: "1px solid #D9D9D9",
-                  }}
+                <a
+                  href="tel:+250 788 303 708"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <FiPhone className="text-accent" />
-                </IconButton>
-                <p className="text-accent-foreground">+250 788 668 657</p>
+                  <IconButton
+                    size="small"
+                    sx={{
+                      backgroundColor: "transparent",
+                      border: "1px solid #D9D9D9",
+                    }}
+                  >
+                    <FiPhone className="text-accent" />
+                  </IconButton>
+                </a>
+                <p className="text-accent-foreground">+250 788 303 708</p>
               </div>
               <div
                 className={`flex items-center gap-2 border-l border-muted-foreground pl-4`}
               >
-                <IconButton
-                  size="small"
-                  sx={{
-                    backgroundColor: "transparent",
-                    border: "1px solid #D9D9D9",
-                  }}
+                <a
+                  href="mailto:info@maxkinginstitute.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <HiOutlineMail className="text-accent" />
-                </IconButton>
+                  <IconButton
+                    size="small"
+                    sx={{
+                      backgroundColor: "transparent",
+                      border: "1px solid #D9D9D9",
+                    }}
+                  >
+                    <HiOutlineMail className="text-accent" />
+                  </IconButton>
+                </a>
                 <p className="text-accent-foreground">
                   info@maxkinginstitute.org
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <IconButton
-                size="small"
-                sx={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #D9D9D9",
-                }}
+              <a
+                href="https://x.com/maxkinginstitut/"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaXTwitter className="text-secondary text-sm" />
-              </IconButton>
-              <IconButton
-                size="small"
-                sx={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #D9D9D9",
-                }}
+                <IconButton
+                  size="small"
+                  sx={{
+                    backgroundColor: "transparent",
+                    border: "1px solid #D9D9D9",
+                  }}
+                >
+                  <FaXTwitter className="text-secondary text-sm" />
+                </IconButton>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/max-king-s-institute-b72974314/"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaLinkedinIn className="text-secondary text-sm" />
-              </IconButton>
-              <IconButton
-                size="small"
-                sx={{
-                  backgroundColor: "transparent",
-                  border: "1px solid #D9D9D9",
-                }}
+                <IconButton
+                  size="small"
+                  sx={{
+                    backgroundColor: "transparent",
+                    border: "1px solid #D9D9D9",
+                  }}
+                >
+                  <FaLinkedinIn className="text-secondary text-sm" />
+                </IconButton>
+              </a>
+              <a
+                href="https://www.facebook.com/share/rB4org7SdPGkMBNC/?mibextid=qi2Omg"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <FaFacebookF className="text-secondary text-sm" />
-              </IconButton>
+                <IconButton
+                  size="small"
+                  sx={{
+                    backgroundColor: "transparent",
+                    border: "1px solid #D9D9D9",
+                  }}
+                >
+                  <FaFacebookF className="text-secondary text-sm" />
+                </IconButton>
+              </a>
             </div>
           </div>
         </div>
