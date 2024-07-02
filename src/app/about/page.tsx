@@ -17,6 +17,7 @@ import {
 } from "@/lib/redux";
 import { useSnackbar } from "notistack";
 import { objectIsEmpty } from "@/lib/functions/object_check.function";
+import DivisionsSection from "../e-campus/sections/DivisionsSection";
 
 const members = [
   {
@@ -109,7 +110,7 @@ const AboutUs = () => {
         <div className="w-full 2xl:px-10 px-4 flex gap-8 items-start">
           <div className="2xl:w-[78%] w-full flex flex-col items-center justify-start gap-5">
             <h1 className="text-center text-2xl text-accent font-bold">
-              Welcome to Maxking Institute
+              Welcome to Max king Institute
             </h1>
             <div className="w-full mx-auto border-t" id="about-section-1">
               <h1 className="text-xl text-accent font-bold py-2">Who we are</h1>
@@ -243,7 +244,7 @@ const AboutUs = () => {
                       Our Values
                     </h1>
                     <p className="text-accent-foreground">
-                      At Maxking Institute, we are committed to providing our
+                      At Max King's Institute, we are committed to providing our
                       students with the best online learning experience. We are
                       dedicated to helping our students achieve their academic
                       and career goals. We are committed to providing our
@@ -603,6 +604,7 @@ const AboutUs = () => {
                 </div>
               </div>
             )}{" "}
+            <DivisionsSection />
           </div>
           {tweetState?.tweet && !objectIsEmpty(tweetState?.tweet) && (
             <div className="w-[22%] 2xl:block hidden max-h-[100px] light text-xs pt-12">

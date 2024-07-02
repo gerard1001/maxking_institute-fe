@@ -58,7 +58,7 @@ const navBarLinks = [
     path: "/programs",
   },
   {
-    name: "SERVICES",
+    name: "OUR SERVICES",
     path: "/services",
   },
   {
@@ -206,7 +206,7 @@ const MainNavbar = () => {
             <div className={`flex items-center`}>
               <div className={`flex items-center gap-2 pr-4`}>
                 <a
-                  href="tel:+250 788 303 708"
+                  href="tel:+250 788 387 888"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

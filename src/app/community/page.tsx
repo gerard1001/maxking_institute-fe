@@ -6,7 +6,7 @@ import OpportunitiesSection from "../e-campus/sections/OpportunitiesSection";
 const Community = () => {
   return (
     <>
-      {/* <OpportunitiesSection /> */}
+      <OpportunitiesSection />
       <MembershipPage />
       <Footer />
     </>

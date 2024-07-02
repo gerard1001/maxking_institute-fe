@@ -1,7 +1,7 @@
 import React from "react";
 import ServicesSection from "../e-campus/sections/ServicesSection";
 import Footer from "@/components/Footer";
-import DivisionsSection from "../e-campus/sections/DivisionsSection";
+// import DivisionsSection from "../e-campus/sections/DivisionsSection";
 
 const Services = () => {
   return (
@@ -9,7 +9,7 @@ const Services = () => {
       <div className="lg:p-10 p-4 py-14 max-w-[1400px] mx-auto">
         <ServicesSection />
         <div className="h-32" />
-        <DivisionsSection />
+        {/* <DivisionsSection /> */}
       </div>
       <Footer />
     </div>

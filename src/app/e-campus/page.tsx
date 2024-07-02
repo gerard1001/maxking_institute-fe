@@ -180,7 +180,7 @@ const TrainingCenter = () => {
             </div>
           </div>
         </div>
-        <OpportunitiesSection />
+        {/* <OpportunitiesSection /> */}
       </div>
       <Footer />
     </>
