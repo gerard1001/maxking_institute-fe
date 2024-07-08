@@ -82,7 +82,7 @@ const sidebarItems = (activePage: string[]) => [
       },
       {
         to: "/dashboard/articles/saved",
-        text: "saved Articles",
+        text: "Saved Articles",
         isFocused: activePage[2] === "articles" && activePage[3] === "saved",
       },
     ],

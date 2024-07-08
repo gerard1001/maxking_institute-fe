@@ -147,32 +147,46 @@ const ContactUs = () => {
           </Button>
         </Box>
         <div className="lg:w-[50%] w-fit bg-slate-200 rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] lg:p-10 sm:p-4 p-2 sm:mt-0 mt-10">
-          <h1 className="text-accent text-2xl font-semibold">Our Contacts</h1>
+          <h1 className="text-accent text-2xl font-semibold">Our Contact</h1>
           <div className="flex flex-col mt-4">
             <p className="text-muted">
-              <span className="font-bold">Phone 1:</span> +250 788 387 888
-            </p>
-            <p className="text-muted">
-              {" "}
-              <span className="font-bold">Phone 2:</span> +250 788 668 657
+              <span className="font-bold">Tel:</span> +250 788 387 888
             </p>
           </div>
           <h1 className="text-accent text-2xl font-semibold mt-8">
             Our Social Media
           </h1>
           <div className="w-full h-fit flex items-center gap-4 py-2 pt-4">
-            <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#316FF6]">
-              <FaFacebookSquare className="text-white text-2xl" />
-            </div>
-            <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#1DA1F2]">
-              <FaTwitter className="text-white text-2xl" />
-            </div>
+            <a
+              href="https://www.facebook.com/share/rB4org7SdPGkMBNC/?mibextid=qi2Omg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#316FF6]">
+                <FaFacebookSquare className="text-white text-2xl" />
+              </div>
+            </a>
+            <a
+              href="https://x.com/maxkinginstitut/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#1DA1F2]">
+                <FaTwitter className="text-white text-2xl" />
+              </div>
+            </a>
             <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#FF0000]">
               <FaYoutube className="text-white text-2xl" />
             </div>
-            <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#0072B1]">
-              <FaLinkedin className="text-white text-2xl" />
-            </div>
+            <a
+              href="https://www.linkedin.com/in/max-king-s-institute-b72974314/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#0072B1]">
+                <FaLinkedin className="text-white text-2xl" />
+              </div>
+            </a>
           </div>
           <h1 className="text-accent text-2xl font-semibold mt-6">Email Us</h1>
           <div className="flex flex-col mt-4">

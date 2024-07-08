@@ -373,17 +373,24 @@ const Users = () => {
         ),
       }),
     ],
-    []
+    [state?.allUsers]
   );
 
   const focusUser = state.user;
 
-  const users = useMemo(() => state.allUsers, [state]);
+  const users = useMemo(() => {
+    if (!state?.allUsers) {
+      return [];
+    }
+    return state?.allUsers;
+  }, [state?.allUsers]);
+  console.log(users);
 
   const table = useReactTable({
     data: users,
     columns,
     debugTable: true,
+    debugAll: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });

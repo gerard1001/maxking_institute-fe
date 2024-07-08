@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import {
   FaFacebookSquare,
@@ -8,31 +11,42 @@ import {
 } from "react-icons/fa";
 
 const Footer = () => {
+  const router = useRouter();
   return (
     <div className="w-full bg-muted ">
       <div className="w-full bg-secondary-foreground/50 border-b h-fit flex items-center justify-center gap-4 py-2">
-        <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#316FF6]">
-          <FaFacebookSquare className="text-white text-2xl" />
-        </div>
-        <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#1DA1F2]">
-          <FaTwitter className="text-white text-2xl" />
-        </div>
+        <a
+          href="https://www.facebook.com/share/rB4org7SdPGkMBNC/?mibextid=qi2Omg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#316FF6]">
+            <FaFacebookSquare className="text-white text-2xl" />
+          </div>
+        </a>
+        <a
+          href="https://x.com/maxkinginstitut/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#1DA1F2]">
+            <FaTwitter className="text-white text-2xl" />
+          </div>
+        </a>
         <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#FF0000]">
           <FaYoutube className="text-white text-2xl" />
         </div>
-        <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#0072B1]">
-          <FaLinkedin className="text-white text-2xl" />
-        </div>
+        <a
+          href="https://www.linkedin.com/in/max-king-s-institute-b72974314/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="w-fit aspect-square p-2 rounded-full flex flex-col items-center justify-center bg-[#0072B1]">
+            <FaLinkedin className="text-white text-2xl" />
+          </div>
+        </a>
       </div>
       <div className="flex flex-wrap justify-evenly py-4 items-end">
-        <div className="flex flex-col">
-          {/* <img src="/logo.png" alt="LOGO" className="w-[120px] h-auto" /> */}
-          <div className="text-white">
-            <p>+250 788 387 888</p>
-            <p>+250 788 668 657</p>
-            <p>info@maxkinginstitute.org</p>
-          </div>
-        </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold text-white">Quick links</h1>
           <div className="flex flex-wrap justify-evenly gap-10">
@@ -73,12 +87,14 @@ const Footer = () => {
                   </a>
                 </div>
                 <div className="">
-                  <a
-                    href="/about#about-section-3"
+                  <p
+                    onClick={() => {
+                      router.push("/about/#staff");
+                    }}
                     className="text-zinc-200 cursor-pointer hover:text-primary-foreground"
                   >
                     Our Staff
-                  </a>
+                  </p>
                 </div>
               </div>
             </div>
@@ -118,6 +134,12 @@ const Footer = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="text-white">
+            <p>+250 788 387 888</p>
+            <p>info@maxkinginstitute.org</p>
           </div>
         </div>
       </div>

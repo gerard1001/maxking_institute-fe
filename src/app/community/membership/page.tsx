@@ -241,7 +241,7 @@ const MembershipPage = () => {
           </ul>
         </section> */}
 
-        <section className="mb-8 mx-auto w-fit">
+        <section className="mb-8 mx-auto w-fit pt-12">
           <h2 className="lg:text-3xl text-xl font-bold mb-4 text-secondary-foreground">
             Fill in the Form to Request for Membership
           </h2>

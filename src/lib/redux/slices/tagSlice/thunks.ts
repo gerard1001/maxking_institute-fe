@@ -28,3 +28,15 @@ export const fetchAllTags = createAppAsyncThunk(
     }
   }
 );
+
+export const deleteTag = createAppAsyncThunk(
+  "tag/deletetag",
+  async (tagId: string, { rejectWithValue }): Promise<any> => {
+    try {
+      const res = await axios.delete(`/tag/${tagId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

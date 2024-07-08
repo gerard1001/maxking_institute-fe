@@ -220,7 +220,7 @@ const MainNavbar = () => {
                     <FiPhone className="text-accent" />
                   </IconButton>
                 </a>
-                <p className="text-accent-foreground">+250 788 303 708</p>
+                <p className="text-accent-foreground">+250 788 387 888</p>
               </div>
               <div
                 className={`flex items-center gap-2 border-l border-muted-foreground pl-4`}

@@ -415,18 +415,21 @@ const MembersTable = () => {
         ),
       }),
     ],
-    []
+    [userState?.allUsers]
   );
 
   //   const users = userState.allUsers?.filter(
   //     (user) => user.requestedMembership === true
   //   );
 
-  const users = useMemo(
-    () =>
-      userState.allUsers?.filter((user) => user.requestedMembership === true),
-    [userState]
-  );
+  const users = useMemo(() => {
+    if (!userState?.allUsers) {
+      return [];
+    }
+    return userState.allUsers?.filter(
+      (user) => user.requestedMembership === true
+    );
+  }, [userState?.allUsers]);
   const focusUser = userState.user;
 
   const table = useReactTable({

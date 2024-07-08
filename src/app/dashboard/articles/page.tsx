@@ -2,16 +2,27 @@
 
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { Box, Button, Chip, Dialog, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import {
   deleteArticle,
+  deleteTag,
   featureArticle,
+  fetchAllTags,
   fetchArticles,
   fetchFeaturedArticles,
   fetchUserSavedArticles,
   saveUserArticle,
   selectArticles,
+  selectTags,
   useDispatch,
   useSelector,
 } from "@/lib/redux";
@@ -29,13 +40,18 @@ import { FaRegStar, FaStar } from "react-icons/fa6";
 import LoadinProgress from "@/components/LoadingProgess";
 import { useSnackbar } from "notistack";
 import Slider from "react-slick";
-import { MdOutlinePlaylistAdd, MdOutlinePlaylistRemove } from "react-icons/md";
+import {
+  MdOutlineClose,
+  MdOutlinePlaylistAdd,
+  MdOutlinePlaylistRemove,
+} from "react-icons/md";
 import { LoginContext } from "@/lib/context/LoginContext";
 
 const Articles = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const state = useSelector(selectArticles);
+  const { allTags } = useSelector(selectTags);
   const { enqueueSnackbar } = useSnackbar();
   const pathName = usePathname();
 
@@ -47,10 +63,12 @@ const Articles = () => {
   const [articleId, setArticleId] = useState<string>("");
   const { isClient } = React.useContext(LoginContext);
   const [page, setPage] = useState<"main" | "saved">("main");
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
 
   useEffect(() => {
     dispatch(fetchArticles());
     dispatch(fetchFeaturedArticles());
+    dispatch(fetchAllTags());
   }, []);
 
   const handleOpenDialog = () => {
@@ -60,6 +78,9 @@ const Articles = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleDeleteArticle = () => {
     if (articleId && articleId !== "") {
@@ -93,6 +114,20 @@ const Articles = () => {
           handleCloseDialog();
         });
     }
+  };
+
+  const handleDeleteTag = (id: string) => {
+    dispatch(deleteTag(id))
+      .unwrap()
+      .then((res) => {
+        if (res.statusCode === 200) {
+          enqueueSnackbar(res.message, { variant: "success" });
+          dispatch(fetchAllTags());
+        }
+      })
+      .catch((err) => {
+        enqueueSnackbar(err.message, { variant: "error" });
+      });
   };
 
   const handleFeatureArticle = (articleId: string) => {
@@ -418,6 +453,13 @@ const Articles = () => {
                 router.push("/dashboard/articles/saved");
               }}
             />
+            <Chip
+              label="Tags"
+              className={`cursor-pointer ${
+                page === "saved" && " bg-muted text-white"
+              }`}
+              onClick={handleOpenModal}
+            />
           </div>
 
           {articles?.length === 0 ? (
@@ -571,6 +613,69 @@ const Articles = () => {
           </Button>
         </Box>
       </Dialog>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          borderRadius: "30px",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxHeight: "98vh",
+            width: {
+              sm: 500,
+              xs: "95%",
+            },
+            maxWidth: 500,
+            overflowY: "auto",
+            bgcolor: "background.paper",
+            border: "none",
+            borderRadius: "10px",
+            boxShadow: 24,
+            p: {
+              md: 4,
+              sm: 2,
+              xs: 1,
+            },
+          }}
+        >
+          <Box className="flex items-center justify-between">
+            <Typography className="text-2xl font-semibold text-accent">
+              Manage Tags
+            </Typography>
+            <IconButton onClick={handleCloseModal} size="medium">
+              <MdOutlineClose />
+            </IconButton>
+          </Box>
+          {!allTags || allTags?.length === 0 ? (
+            <Box>
+              <Typography className="text-xl text-muted text-center my-8">
+                No Tags found
+              </Typography>
+            </Box>
+          ) : (
+            <Box className="flex items-center flex-wrap gap-4">
+              {allTags?.map((tag) => {
+                return (
+                  <Chip
+                    label={`${tag.name}`}
+                    onDelete={() => {
+                      handleDeleteTag(tag.id);
+                    }}
+                  />
+                );
+              })}
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </ProtectedRoute>
   );
 };

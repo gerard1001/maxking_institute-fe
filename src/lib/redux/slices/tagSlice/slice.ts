@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTag, fetchAllTags } from "./thunks";
+import { createTag, deleteTag, fetchAllTags } from "./thunks";
 import { ITag, TagSliceState } from "@/lib/interfaces/tag.interface";
 
 const initialState: TagSliceState = {
@@ -36,6 +36,18 @@ export const tagSlice = createSlice({
         state.allTags = action.payload.data;
       })
       .addCase(fetchAllTags.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(deleteTag.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteTag.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteTag.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       });

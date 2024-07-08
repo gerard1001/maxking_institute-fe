@@ -481,8 +481,8 @@ const AboutUs = () => {
               )}
             </div>
             {userState?.publicUsers?.length > 0 && (
-              <div className="w-full mx-auto mb-12" id="about-section-3">
-                <h1 className="text-4xl text-accent font-bold py-2 capitalize text-slate-500 text-center mb-8">
+              <div className="w-full mx-auto pb-12 pt-12" id="staff">
+                <h1 className="text-4xl text-accent font-bold mb-8 capitalize text-slate-500 text-center">
                   meet Our team
                 </h1>
                 <div className="min-h-[80px] w-full">
