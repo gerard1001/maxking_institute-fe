@@ -56,7 +56,7 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-start lg:gap-4 gap-2">
+    <div className="flex flex-col items-start lg:gap-4 gap-8 w-full max-w-[1200px] mx-auto">
       <h1 className="text-secondary text-3xl mx-auto font-bold uppercase">
         Our services
       </h1>
