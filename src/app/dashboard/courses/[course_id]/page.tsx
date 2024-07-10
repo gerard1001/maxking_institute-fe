@@ -333,6 +333,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       description,
       previewVideo,
       previewText,
+      price,
       estimatedDuration,
       users = [],
     } = courseState.course;
@@ -341,6 +342,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
     description && setValue("description", description);
     previewVideo && setValue("previewVideo", previewVideo);
     previewText && setValue("previewText", previewText);
+    price && setValue("price", price);
     estimatedDuration && setValue("estimatedDuration", estimatedDuration);
     users[0]?.id && setValue("tutor", users[0].id);
     setPicUrl(courseState.course.coverImage);
@@ -409,6 +411,7 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
       formData.append("estimatedDuration", data.estimatedDuration);
       formData.append("previewText", data.previewText ?? "");
       formData.append("previewVideo", data.previewVideo ?? "");
+      formData.append("price", String(data.price ?? 0) ?? "");
       formData.append("tutor", selectedTutor);
       if (picture && picture !== "") {
         formData.append("coverImage", picture);
@@ -1780,6 +1783,45 @@ const CoursePage = ({ params: { course_id } }: SubjectProps) => {
                           helperText={
                             errors.previewText ? errors.previewText.message : ""
                           }
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="price"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          sx={{
+                            input: {
+                              color: "#021527",
+                            },
+                            mt: 2,
+                            color: "#242E8F",
+                            "& label.Mui-focused": {
+                              color: "#242E8F",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                border: "1.5px solid #242E8F",
+                              },
+                            },
+                            "& .MuiOutlinedInput-input": {
+                              py: "14px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              mt: "3px",
+                            },
+                          }}
+                          inputProps={{ style: { height: 18 } }}
+                          label="Price (eg: 1000) in $"
+                          variant="outlined"
+                          fullWidth
+                          size="small"
+                          className="text-xs"
+                          type="number"
+                          error={!!errors.price}
+                          helperText={errors.price ? errors.price.message : ""}
                         />
                       )}
                     />

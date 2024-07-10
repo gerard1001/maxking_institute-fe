@@ -473,7 +473,7 @@ const AdminCertificates = React.memo(() => {
                       },
                     }}
                     inputProps={{ style: { height: 18 } }}
-                    label="Names"
+                    label="Full name"
                     variant="outlined"
                     fullWidth
                     size="small"
@@ -511,7 +511,7 @@ const AdminCertificates = React.memo(() => {
                       },
                     }}
                     inputProps={{ style: { height: 18 } }}
-                    label="Names"
+                    label="Position/Role"
                     variant="outlined"
                     fullWidth
                     size="small"
@@ -584,7 +584,7 @@ const AdminCertificates = React.memo(() => {
                       },
                     }}
                     inputProps={{ style: { height: 18 } }}
-                    label="Names"
+                    label="Full name"
                     variant="outlined"
                     fullWidth
                     size="small"
@@ -622,7 +622,7 @@ const AdminCertificates = React.memo(() => {
                       },
                     }}
                     inputProps={{ style: { height: 18 } }}
-                    label="Names"
+                    label="Position/Role"
                     variant="outlined"
                     fullWidth
                     size="small"

@@ -128,103 +128,118 @@ const DashboardLearningSidebar = () => {
             // component="nav"
             aria-labelledby="nested-list-subheader"
           >
-            {courseState?.course?.modules?.map((module) => (
-              <div key={module?.id}>
-                <ListItemButton className="bg-[#f4f4f5]">
-                  <ListItemIcon
-                    sx={{
-                      minWidth: "35px",
-                    }}
-                  >
-                    <FaRegDotCircle
-                      className={`${
-                        moduleNumber === module.moduleNumber.toString()
-                          ? "text-primary"
-                          : "text-accent"
-                      }`}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <p
-                        className={`line-clamp-1 ${
+            {courseState?.course?.modules
+              ?.slice()
+              ?.sort((a, b) => a.moduleNumber - b.moduleNumber)
+              ?.map((module) => (
+                <div key={module?.id}>
+                  <ListItemButton className="bg-[#f4f4f5]">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: "35px",
+                      }}
+                    >
+                      <FaRegDotCircle
+                        className={`${
                           moduleNumber === module.moduleNumber.toString()
-                            ? "text-primary font-bold"
-                            : "text-accent font-semibold"
-                        } text-xl`}
-                      >
-                        {module.title}
-                      </p>
-                    }
-                  />
-                  {/* {open ? <BsChevronBarDown /> : <BsChevronDown />} */}
-                </ListItemButton>
-                {module?.chapters?.map((chapter) => (
-                  <Collapse
-                    in={open}
-                    timeout="auto"
-                    unmountOnExit
-                    onClick={() => {
-                      if (
-                        Number(moduleNumber + chapterNumber) >=
-                        Number(
-                          module.moduleNumber.toString() +
-                            chapter.chapterNumber.toString()
-                        )
-                      ) {
-                        router.push(
-                          `/dashboard/courses/${courseId}/learning/${module.moduleNumber}/${chapter.chapterNumber}`
-                        );
-                      } else if (
-                        Number(
-                          module.moduleNumber.toString() +
-                            chapter.chapterNumber.toString()
-                        ) <= actualUserPosition
-                      ) {
-                        router.push(
-                          `/dashboard/courses/${courseId}/learning/${module.moduleNumber}/${chapter.chapterNumber}`
-                        );
-                      }
-                    }}
-                  >
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon
-                          sx={{
-                            minWidth: "35px",
-                          }}
+                            ? "text-primary"
+                            : "text-accent"
+                        }`}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <p
+                          className={`line-clamp-1 ${
+                            moduleNumber === module.moduleNumber.toString()
+                              ? "text-primary font-bold"
+                              : "text-accent font-semibold"
+                          } text-xl`}
                         >
-                          <FaRegCirclePlay
-                            className={`${
-                              moduleNumber === module.moduleNumber.toString() &&
-                              chapterNumber === chapter.chapterNumber.toString()
-                                ? "text-primary"
-                                : "text-accent"
-                            }`}
-                          />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <p
-                              className={`line-clamp-1 ${
-                                moduleNumber ===
-                                  module.moduleNumber.toString() &&
-                                chapterNumber ===
-                                  chapter.chapterNumber.toString()
-                                  ? "text-primary font-bold"
-                                  : "text-accent font-normal"
-                              }`}
-                            >
-                              {chapter.title}
-                            </p>
+                          {module.title}
+                        </p>
+                      }
+                    />
+                    {/* {open ? <BsChevronBarDown /> : <BsChevronDown />} */}
+                  </ListItemButton>
+                  {module?.chapters
+                    ?.slice()
+                    ?.sort((a, b) => a.chapterNumber - b.chapterNumber)
+                    ?.map((chapter) => (
+                      <Collapse
+                        in={open}
+                        timeout="auto"
+                        unmountOnExit
+                        onClick={() => {
+                          if (
+                            Number(moduleNumber + chapterNumber) >=
+                            Number(
+                              module.moduleNumber.toString() +
+                                chapter.chapterNumber.toString()
+                            )
+                          ) {
+                            router.push(
+                              `/dashboard/courses/${courseId}/learning/${module.moduleNumber}/${chapter.chapterNumber}`
+                            );
+                          } else if (
+                            Number(
+                              module.moduleNumber.toString() +
+                                chapter.chapterNumber.toString()
+                            ) <= actualUserPosition
+                          ) {
+                            router.push(
+                              `/dashboard/courses/${courseId}/learning/${module.moduleNumber}/${chapter.chapterNumber}`
+                            );
                           }
-                        />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-                ))}
-              </div>
-            ))}
+                        }}
+                      >
+                        <List component="div" disablePadding>
+                          <ListItemButton sx={{ pl: 4 }}>
+                            <ListItemIcon
+                              sx={{
+                                minWidth: "35px",
+                              }}
+                            >
+                              <FaRegCirclePlay
+                                className={`${
+                                  moduleNumber ===
+                                    module.moduleNumber.toString() &&
+                                  chapterNumber ===
+                                    chapter.chapterNumber.toString()
+                                    ? "text-primary"
+                                    : "text-accent"
+                                }
+                                ${
+                                  Number(
+                                    module.moduleNumber.toString() +
+                                      chapter.chapterNumber.toString()
+                                  ) <= actualUserPosition && "text-primary"
+                                }    
+                                `}
+                              />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                <p
+                                  className={`line-clamp-1 ${
+                                    moduleNumber ===
+                                      module.moduleNumber.toString() &&
+                                    chapterNumber ===
+                                      chapter.chapterNumber.toString()
+                                      ? "text-primary font-bold"
+                                      : "text-accent font-normal"
+                                  }`}
+                                >
+                                  {chapter.title}
+                                </p>
+                              }
+                            />
+                          </ListItemButton>
+                        </List>
+                      </Collapse>
+                    ))}
+                </div>
+              ))}
           </List>
         </div>
       </aside>
