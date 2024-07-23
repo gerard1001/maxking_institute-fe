@@ -129,10 +129,12 @@ const Dashboard = () => {
     dispatch(fetchAllUsers())
       .unwrap()
       .catch((err: any) => {
-        enqueueSnackbar(err.message, {
-          variant: "error",
-          preventDuplicate: true,
-        });
+        if (err.statusCode !== 401) {
+          enqueueSnackbar(err.message, {
+            variant: "error",
+            preventDuplicate: true,
+          });
+        }
       });
 
     dispatch(fetchArticles()).catch((err: any) => {

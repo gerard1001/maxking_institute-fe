@@ -39,6 +39,7 @@ import CreateTagForm from "@/components/CreateTagForm";
 import { IoOptionsOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
 import BackIconButton from "@/components/BackIconButton";
+import { QuillContext } from "@/lib/context/QuillContext";
 
 const ReactQuill = dynamic(() => import("@/components/ReactQuill"), {
   ssr: false,
@@ -69,6 +70,7 @@ const AddNewArticle = () => {
   const [selectedTags, setSelectedTags] = React.useState<ITag[]>([]);
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = React.useState(false);
+  const { uploadError, uploadLoading } = React.useContext(QuillContext);
 
   const openServiceDrawer = () => {
     setOpenDrawer(true);
@@ -98,6 +100,15 @@ const AddNewArticle = () => {
       // body: "",
     },
   });
+
+  React.useEffect(() => {
+    if (uploadError) {
+      enqueueSnackbar(uploadError, {
+        variant: "error",
+        preventDuplicate: true,
+      });
+    }
+  }, [uploadError]);
 
   React.useEffect(() => {
     dispatch(fetchAllTags())
@@ -388,6 +399,7 @@ const AddNewArticle = () => {
           </h1>
           <div className="w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] py-7 px-8 rounded-lg">
             <ReactQuill setBody={setBody} body={body} />
+            {uploadLoading ? <LoadinProgress /> : null}
           </div>
         </div>
 

@@ -1,9 +1,12 @@
+"use client";
+
 import React, { useEffect, useRef, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch } from "react-redux";
 import { checkImage, imageUpload } from "@/lib/utils/ImageUpload";
 import { ALERT } from "@/lib/interfaces/alert.interface";
+import { QuillContext } from "@/lib/context/QuillContext";
 
 interface IProps {
   setBody: (value: string) => void;
@@ -11,6 +14,7 @@ interface IProps {
 }
 
 const Quill: React.FC<IProps> = ({ setBody, body }) => {
+  const { setUploadError, setUploadLoading } = React.useContext(QuillContext);
   const dispatch = useDispatch();
   const quillRef = useRef<ReactQuill>(null);
 
@@ -25,26 +29,36 @@ const Quill: React.FC<IProps> = ({ setBody, body }) => {
 
     input.onchange = async () => {
       const files = input.files;
-      if (!files)
+      if (!files) {
+        setUploadError("File does not exist.");
         return dispatch({
           type: ALERT,
           payload: { errors: "File does not exist." },
         });
-
+      }
       const file = files[0];
       const check = checkImage(file);
-      if (check) return dispatch({ type: ALERT, payload: { errors: check } });
+      if (check) {
+        setUploadError(check);
+        return dispatch({ type: ALERT, payload: { errors: check } });
+      }
 
       dispatch({ type: ALERT, payload: { loading: true } });
-      const photo = await imageUpload(file);
+      setUploadLoading(true);
+      const photo = await imageUpload(file).catch((err) => {
+        console.error(err, "Image upload failed");
+        dispatch({ type: ALERT, payload: { errors: "Image upload failed" } });
+        setUploadError("Image upload failed");
+      });
 
       const quill = quillRef.current;
       const range = quill?.getEditor().getSelection()?.index;
       if (range !== undefined) {
-        quill?.getEditor().insertEmbed(range, "image", `${photo.url}`);
+        quill?.getEditor().insertEmbed(range, "image", `${photo?.url}`);
       }
 
       dispatch({ type: ALERT, payload: { loading: false } });
+      setUploadLoading(false);
     };
   }, [dispatch]);
 

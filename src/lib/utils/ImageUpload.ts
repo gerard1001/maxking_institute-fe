@@ -1,5 +1,5 @@
 export const checkImage = (file: File) => {
-  const types = ["image/png", "image/jpeg"];
+  const types = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
   let err = "";
   if (!file) return (err = "File does not exist.");
 
@@ -15,6 +15,9 @@ export const imageUpload = async (file: File) => {
   formData.append("file", file);
   formData.append("upload_preset", "ml_default");
   formData.append("cloud_name", "rutagerard");
+
+  if (file.size > 2 * 1024 * 1024)
+    return { error: "The largest image size is 2mb" };
 
   const res = await fetch(
     "https://api.cloudinary.com/v1_1/rutagerard/image/upload",

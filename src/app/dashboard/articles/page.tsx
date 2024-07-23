@@ -453,13 +453,15 @@ const Articles = () => {
                 router.push("/dashboard/articles/saved");
               }}
             />
-            <Chip
-              label="Tags"
-              className={`cursor-pointer ${
-                page === "saved" && " bg-muted text-white"
-              }`}
-              onClick={handleOpenModal}
-            />
+            {!isClient && (
+              <Chip
+                label="Tags"
+                className={`cursor-pointer ${
+                  page === "saved" && " bg-muted text-white"
+                }`}
+                onClick={handleOpenModal}
+              />
+            )}
           </div>
 
           {articles?.length === 0 ? (

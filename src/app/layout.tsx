@@ -12,6 +12,7 @@ import "@/styles/home/slick.style.scss";
 import "@/styles/home/slick-theme.style.scss";
 import "@/styles/articles/slick.style.scss";
 import "@/styles/articles/slick-theme.style.scss";
+import QuillContextProvider from "@/lib/context/QuillContext";
 
 const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
 const source = Source_Sans_3({ subsets: ["latin"] });
@@ -28,12 +29,14 @@ export default function RootLayout(props: React.PropsWithChildren) {
           <TimeLocalProvider>
             <Providers>
               <LoginContextProvider>
-                <CustomThemeProvider>
-                  <SnackProvider>
-                    <NavBar />
-                    {props.children}
-                  </SnackProvider>
-                </CustomThemeProvider>
+                <QuillContextProvider>
+                  <CustomThemeProvider>
+                    <SnackProvider>
+                      <NavBar />
+                      {props.children}
+                    </SnackProvider>
+                  </CustomThemeProvider>
+                </QuillContextProvider>
               </LoginContextProvider>
             </Providers>
           </TimeLocalProvider>
