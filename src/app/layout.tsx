@@ -29,14 +29,14 @@ export default function RootLayout(props: React.PropsWithChildren) {
           <TimeLocalProvider>
             <Providers>
               <LoginContextProvider>
-                <QuillContextProvider>
-                  <CustomThemeProvider>
-                    <SnackProvider>
-                      <NavBar />
-                      {props.children}
-                    </SnackProvider>
-                  </CustomThemeProvider>
-                </QuillContextProvider>
+                {/* <QuillContextProvider> */}
+                <CustomThemeProvider>
+                  <SnackProvider>
+                    <NavBar />
+                    {props.children}
+                  </SnackProvider>
+                </CustomThemeProvider>
+                {/* </QuillContextProvider> */}
               </LoginContextProvider>
             </Providers>
           </TimeLocalProvider>
