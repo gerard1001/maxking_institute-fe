@@ -1,5 +1,0 @@
- ⚠ Invalid next.config.mjs options detected: 
- ⚠     Unrecognized key(s) in object: 'appDir' at "experimental"
- ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
- ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
-Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
