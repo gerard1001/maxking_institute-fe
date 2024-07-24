@@ -1,3 +1,5 @@
+"use client";
+
 import { Inria_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "../lib/providers/redux.provider";
@@ -8,14 +10,14 @@ import CustomThemeProvider from "@/lib/theme/mui.theme";
 import SnackProvider from "@/lib/providers/snack.provider";
 import LoginContextProvider from "@/lib/context/LoginContext";
 import TimeLocalProvider from "@/lib/providers/localization.provider";
+import QuillContextProvider from "@/lib/context/QuillContext";
 import "@/styles/home/slick.style.scss";
 import "@/styles/home/slick-theme.style.scss";
 import "@/styles/articles/slick.style.scss";
 import "@/styles/articles/slick-theme.style.scss";
-import QuillContextProvider from "@/lib/context/QuillContext";
 
-const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
-const source = Source_Sans_3({ subsets: ["latin"] });
+// const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
+const source = Source_Sans_3({ subsets: ["latin"], preload: true });
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
