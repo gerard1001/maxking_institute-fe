@@ -4,7 +4,6 @@ import { format } from "date-fns";
 
 const Certificate = React.forwardRef((props: any, ref: any) => {
   const { Canvas } = useQRCode();
-  console.log(props.issuers, "***********************&&");
   return (
     <div ref={ref} className="certificate bg-[url('/cert-bg.png')]">
       <div className="w-full h-full bg-gradient-to-b from-slate-100 to-white flex flex-col items-center justify-center p-4">

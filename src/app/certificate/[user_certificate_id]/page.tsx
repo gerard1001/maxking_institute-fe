@@ -36,7 +36,6 @@ const CertificatePage = ({ params: { user_certificate_id } }: PageProps) => {
     dispatch(findByUserCertificateId(user_certificate_id))
       .unwrap()
       .then((res) => {
-        console.log(res);
         if (res.statusCode === 200) {
           dispatch(fetchUserById(res.data.userId))
             .unwrap()

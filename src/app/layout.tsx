@@ -1,6 +1,6 @@
 "use client";
 
-import { Inria_Sans, Source_Sans_3 } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "../lib/providers/redux.provider";
 import NavBar from "@/components/NavBar";
@@ -16,8 +16,7 @@ import "@/styles/home/slick-theme.style.scss";
 import "@/styles/articles/slick.style.scss";
 import "@/styles/articles/slick-theme.style.scss";
 
-// const inria = Inria_Sans({ weight: "400", subsets: ["latin"] });
-const source = Source_Sans_3({ subsets: ["latin"], preload: true });
+const source = Source_Sans_3({ subsets: ["latin"], preload: false });
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (

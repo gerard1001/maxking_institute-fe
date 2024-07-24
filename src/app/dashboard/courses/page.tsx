@@ -52,9 +52,6 @@ const Courses = () => {
   const { userId, setGoToPage, isClient } = React.useContext(LoginContext);
   const [filteredData, setFilteredData] = React.useState<ICourse[]>([]);
 
-  console.log(courseState?.allCourses, "*************************");
-  console.log(typedCourses, "*************************");
-
   React.useEffect(() => {
     dispatch(fetchAllCourses())
       .unwrap()
@@ -63,7 +60,6 @@ const Courses = () => {
         enqueueSnackbar(err.message, { variant: "error" });
       });
 
-    console.log(isClient, "*************************");
     if (!isClient) {
       setTypedCourses(courseState?.allCourses);
     } else {
