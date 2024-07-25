@@ -1,5 +1,3 @@
-"use client";
-
 import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "../lib/providers/redux.provider";
@@ -16,7 +14,7 @@ import "@/styles/home/slick-theme.style.scss";
 import "@/styles/articles/slick.style.scss";
 import "@/styles/articles/slick-theme.style.scss";
 
-const source = Source_Sans_3({ subsets: ["latin"], preload: false });
+const source = Source_Sans_3({ subsets: ["latin"] });
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
